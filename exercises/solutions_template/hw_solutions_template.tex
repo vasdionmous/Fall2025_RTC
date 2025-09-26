@@ -1,0 +1,101 @@
+\documentclass[12pt,a4paper,reqno]{amsart}
+
+% language
+\usepackage[english,greek]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{alphabeta}
+
+% math 
+\usepackage{amsmath,amsthm,amssymb,amscd}
+
+% font
+\usepackage[cal=euler,frak=mt]{mathalfa}
+\usepackage{libertinus-type1}
+% \usepackage{txfonts} % for upright greek letters
+% \usepackage{bm} % for bold symbols
+% \usepackage{bbm} % for the simply-looking bb symbols
+
+% miscellaneous 
+\usepackage{changepage} %for indenting environments
+\usepackage{csquotes} % example: \textcquote{}
+
+% colors
+\usepackage{xcolor}
+\definecolor{darkcandyapplered}{rgb}{0.64, 0.0, 0.0}
+\definecolor{midnightblue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{mylightblue}{HTML}{336699}
+
+% hrefs
+\usepackage{hyperref}
+\usepackage[noabbrev,capitalize]{cleveref}
+\hypersetup{
+    pdftoolbar=true,        
+    pdfmenubar=true,        
+    pdffitwindow=false,     
+    pdfstartview={FitH},  % fits the width of the page to the window
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfnewwindow=true,  % links in new window
+    colorlinks=true,  % false: boxed links; true: colored links
+    linkcolor=darkcandyapplered,   % color of internal links
+    citecolor=midnightblue,  % color of links to bibliography
+    urlcolor=cyan,  % color of external links
+    linktocpage=true  % changes the links from the section body to the page number
+    }
+
+% geometry
+\textwidth=16cm 
+\textheight=21cm 
+\hoffset=-55pt 
+\footskip=25pt
+
+% environments
+\theoremstyle{definition}
+\newtheorem{exercise}{Άσκηση}
+\newtheorem*{solution}{Λύση}
+\numberwithin{exercise}{section}
+
+% math operators 
+\newcommand{\trace}{\mathrm{tr}}
+
+% titlepage
+\title[ΦΑ 1]{Θ2.04: Θεωρία Αναπαραστάσεων και Συνδυαστική \\ Λύσεις Φυλλαδίου Ασκήσεων 1}
+\author[Όνομα]{Όνομα \\ Ημερομηνία}
+
+
+\begin{document}
+\begingroup
+\def\uppercasenonmath#1{} % this disables uppercase title
+\let\MakeUppercase\relax % this disables uppercase authors
+\maketitle
+\endgroup
+
+% replace 1 with the corresponding number
+\setcounter{section}{1} 
+\thispagestyle{empty}
+
+\begin{exercise}
+    \label{ex:1.1}
+    Να υπολογίσετε την ορίζουσα και το ίχνος του πίνακα 
+    \[
+    A = 
+    \begin{pmatrix}
+        1 & 0 & 0 \\
+        0 & 2 & 0 \\
+        0 & 0 & 3
+    \end{pmatrix}.
+    \]
+\end{exercise}
+
+\begin{solution}
+Η ορίζουσα και το ίχνος του πίνακα είναι 
+
+\begin{alignat*}{2}
+    \det(A)   & = 1 \cdot 2 \cdot 3 && = 6 \\
+    \trace(A) & = 1 + 2 + 3         && = 6.
+\end{alignat*}
+
+\end{solution}
+\end{document}
