@@ -1,4 +1,5 @@
 This repository contains material (in Greek) for the course Representation Theory and Combinatorics, taught at the University of Crete in Fall 2025. 
+
 For more information, see the course website: https://sites.google.com/view/vasmous/repcomb.
 
 This work is licensed under a [Creative Commons Attribution 4.0 International License][cc-by].
