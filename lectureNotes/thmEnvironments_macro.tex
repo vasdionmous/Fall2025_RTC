@@ -1,0 +1,23 @@
+% In this macro I define all the theorem environments
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Θεώρημα}
+\newtheorem{proposition}[theorem]{Πρόταση}
+\newtheorem{lemma}[theorem]{Λήμμα}
+\newtheorem{corollary}[theorem]{Πόρισμα}
+\newtheorem{conjecture}[theorem]{Εικασία}
+\newtheorem{problem}[theorem]{Πρόβλημα}
+\newtheorem*{claim}{Ισχυρισμός}
+\newtheorem{observation}[theorem]{Παρατήρηση}
+\newtheorem{definition}[theorem]{Ορισμός}
+\newtheorem{question}[theorem]{Ερώτηση}
+\newtheorem{example}[theorem]{Παράδειγμα}
+\newtheorem{exercise}{Άσκηση}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Παρατήρηση}
+
+% fixes the correct numbering of environments
+\numberwithin{theorem}{section}
+\numberwithin{exercise}{section}
+\numberwithin{equation}{section}

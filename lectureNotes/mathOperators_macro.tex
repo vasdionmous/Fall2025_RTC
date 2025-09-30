@@ -1,0 +1,190 @@
+% In this macro I define all of my math operators
+
+% fields
+\newcommand{\NN}{\mathbbmss{N}} 
+\newcommand{\ZZ}{\mathbbmss{Z}} 
+\newcommand{\QQ}{\mathbbmss{Q}} 
+\newcommand{\RR}{\mathbbmss{R}} 
+\newcommand{\CC}{\mathbbmss{C}} 
+\newcommand{\KK}{\mathbbmss{K}} 
+\newcommand{\FF}{\mathbbmss{F}} 
+
+% symmetric group
+\newcommand{\fS}{\mathfrak{S}}  
+
+% calligraphic 
+\newcommand{\aA}{\mathcal{A}} 
+\newcommand{\bB}{\mathcal{B}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\dD}{\mathcal{D}}
+\newcommand{\eE}{\mathcal{E}}
+\newcommand{\fF}{\mathcal{F}}
+\newcommand{\hH}{\mathcal{H}}
+\newcommand{\iI}{\mathcal{I}}
+\newcommand{\lL}{\mathcal{L}}
+\newcommand{\oO}{\mathcal{O}}
+\newcommand{\pP}{\mathcal{P}}
+\newcommand{\sS}{\mathcal{S}}
+\newcommand{\mM}{\mathcal{M}}
+\newcommand{\uU}{\mathcal{U}}
+
+% bold
+\newcommand{\bfa}{\mathbf{a}}
+\newcommand{\bfe}{\mathbf{e}}
+\newcommand{\bfF}{\pmb{F}}
+\newcommand{\bfR}{\pmb{R}}
+\newcommand{\bfv}{\mathbf{v}}
+%\newcommand{\bfx}{\bm{x}}
+%\newcommand{\bfx}{\mathbf{x}} 
+\newcommand{\bfx}{\pmb{x}}
+\newcommand{\bfX}{\pmb{X}}
+\newcommand{\bfy}{\pmb{y}}
+\newcommand{\bfz}{\pmb{z}}
+
+% roman
+\newcommand{\rmB}{\mathrm{B}}
+\newcommand{\rmD}{\mathrm{D}} 
+\newcommand{\rmK}{\mathrm{K}}
+\newcommand{\rmM}{\mathrm{M}}
+\newcommand{\rmP}{\mathrm{P}}  
+\newcommand{\rmR}{\mathrm{R}}
+\newcommand{\rmS}{\mathrm{S}}
+\newcommand{\rmT}{\mathrm{T}}
+\newcommand{\rmU}{\mathrm{U}}
+\newcommand{\rmY}{\mathrm{Y}}
+\newcommand{\rmZ}{\mathrm{Z}}
+
+% greek letters
+% I'm renewing some commands in order to appear in upright font
+% If I want to change it later, I don't have to do it manually, I just change it from here.
+% \newcommand{\uaa}{\alphaup}
+% \renewcommand{\alpha}{\alphaup}
+% \renewcommand{\beta}{\betaup}
+% \renewcommand{\gamma}{\gammaup}
+% \renewcommand{\delta}{\deltaup}
+% \renewcommand{\epsilon}{\epsilonup}
+% \newcommand{\ee}{\epsilon}
+% \renewcommand{\varepsilon}{\varepsilonup}
+% \renewcommand{\theta}{\thetaup}
+% \renewcommand{\lambda}{\lambdaup}
+% \newcommand{\ull}{\lambda}
+% \renewcommand{\mu}{\muup}
+% \renewcommand{\nu}{\nuup}
+% \renewcommand{\pi}{\piup}
+% \renewcommand{\rho}{\rhoup}
+% \renewcommand{\varrho}{\varrhoup}
+% \renewcommand{\sigma}{\sigmaup}
+% \renewcommand{\tau}{\tauup} 
+% \renewcommand{\phi}{\phiup}
+% \renewcommand{\chi}{\chiup}
+% \renewcommand{\psi}{\psiup}
+% \renewcommand{\omega}{\omegaup}
+
+% arrows and symbols 
+\renewcommand{\to}{\rightarrow}
+\newcommand{\toto}{\longrightarrow}
+\newcommand{\mapstoto}{\longmapsto}
+\newcommand{\then}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\tl}{\tilde}
+\newcommand{\wtl}{\widetilde}
+\newcommand{\ol}{\overline}
+\newcommand{\ul}{\underline}
+\newcommand{\oldemptyset}{\emptyset}
+\renewcommand{\emptyset}{\varnothing}
+\DeclareMathSymbol{\Arg}{\mathbin}{AMSa}{"39} % for arguments 
+\newcommand{\onto}{\ensuremath{\twoheadrightarrow}}
+
+% absolute value symbol
+\usepackage{mathtools} 
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+
+% tensor symbol
+\newcommand{\tensor}[1]{%
+  \mathbin{\mathop{\otimes}\limits_{#1}}%
+}
+
+% permutation cycle notation
+\ExplSyntaxOn
+\NewDocumentCommand{\cycle}{ O{\;} m }
+ {
+  (
+  \alec_cycle:nn { #1 } { #2 }
+  )
+ }
+
+\seq_new:N \l_alec_cycle_seq
+\cs_new_protected:Npn \alec_cycle:nn #1 #2
+ {
+  \seq_set_split:Nnn \l_alec_cycle_seq { , } { #2 }
+  \seq_use:Nn \l_alec_cycle_seq { #1 }
+ }
+\ExplSyntaxOff
+
+% setminus symbol
+\newcommand{\mysetminusD}{\hbox{\tikz{\draw[line width=0.6pt,line cap=round] (3pt,0) -- (0,6pt);}}}
+\newcommand{\mysetminusT}{\mysetminusD}
+\newcommand{\mysetminusS}{\hbox{\tikz{\draw[line width=0.45pt,line cap=round] (2pt,0) -- (0,4pt);}}}
+\newcommand{\mysetminusSS}{\hbox{\tikz{\draw[line width=0.4pt,line cap=round] (1.5pt,0) -- (0,3pt);}}}
+\newcommand{\sm}{\mathbin{\mathchoice{\mysetminusD}{\mysetminusT}{\mysetminusS}{\mysetminusSS}}}
+
+% custom math operators
+\newcommand{\Des}{\mathrm{Des}} 
+\newcommand{\des}{\mathrm{des}} 
+\newcommand{\Asc}{\mathrm{Asc}}
+\newcommand{\asc}{\mathrm{asc}} 
+\newcommand{\inv}{\mathrm{inv}}
+\newcommand{\Inv}{\mathrm{Inv}}
+\newcommand{\maj}{\mathrm{maj}} 
+\newcommand{\comaj}{\mathrm{comaj}} 
+\newcommand{\Sym}{\mathrm{Sym}} 
+\newcommand{\QSym}{\mathrm{QSym}}
+\newcommand{\FQSym}{\mathrm{FQSym}} 
+\newcommand{\End}{\mathrm{End}} 
+\newcommand{\Rad}{\mathrm{Rad}} 
+\newcommand{\rmMat}{\mathrm{Mat}} 
+\newcommand{\rmdim}{\mathrm{dim}} 
+\newcommand{\rmTop}{\mathrm{Top}} 
+\newcommand{\rmCF}{\mathrm{CF}} 
+\newcommand{\rmId}{\mathrm{Id}}
+\newcommand{\rmid}{\mathrm{id}}
+\newcommand{\rmtw}{\mathrm{tw}}
+\newcommand{\trace}{\mathrm{trace}}
+\newcommand{\Irr}{\mathrm{Irr}}
+\newcommand{\Ind}{\mathrm{Ind}} % induction
+\newcommand{\Res}{\mathrm{Res}} % restriction
+\newcommand{\triv}{\mathrm{triv}} % trivial rep
+\newcommand{\rmdef}{\mathrm{def}} % defining rep
+\newcommand{\dom}{\triangleleft}
+\newcommand{\domeq}{\trianglelefteq}
+\newcommand{\lex}{\mathrm{lex}}
+\newcommand{\sign}{\mathrm{sign}}
+\newcommand{\SYT}{\mathrm{SYT}}
+\renewcommand{\Im}{\mathrm{Im}}
+\newcommand{\Ker}{\mathrm{Ker}}
+\newcommand{\GL}{\mathrm{GL}}
+\newcommand{\FL}{\mathrm{FL}}
+\newcommand{\Span}{\mathrm{span}}
+\newcommand{\pos}{\mathrm{pos}}
+\newcommand{\Comp}{\mathrm{Comp}}
+\newcommand{\Set}{\mathrm{Set}}
+\newcommand{\std}{\mathrm{std}}
+\newcommand{\cont}{\mathrm{cont}} %content of a SSYT
+\newcommand{\SSYT}{\mathrm{SSYT}}
+\newcommand{\rmz}{\mathrm{z}}
+\newcommand{\ct}{\mathrm{ct}} % cycle type
+\newcommand{\ch}{\mathrm{ch}} % Frobenius characteristic map
+\newcommand{\height}{\mathrm{ht}}
+\newcommand{\FPS}{\CC[\![\bfx]\!]} % formal power series
+\newcommand{\FPSS}{\CC[\![\bfx,\bfy]\!]}
+\newcommand{\reg}{\mathrm{reg}}
+\newcommand{\hook}{\mathrm{h}}
+\newcommand{\weight}{\mathrm{wt}}
+\newcommand{\co}{\mathrm{co}}
+\newcommand{\ps}{\mathrm{ps}}
+\newcommand{\rmsum}{\mathrm{sum}}
+\newcommand{\NSym}{\mathrm{NSym}}
