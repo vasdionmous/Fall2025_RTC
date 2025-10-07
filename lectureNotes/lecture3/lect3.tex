@@ -1,0 +1,305 @@
+\documentclass[12pt,a4paper,reqno]{amsart}
+
+% section handling
+\usepackage{subfiles} 
+
+% language
+\usepackage[greek,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{alphabeta}
+
+% change default names to greek
+\addto\captionsenglish{
+    \renewcommand{\contentsname}{Περιεχόμενα}
+    \renewcommand{\refname}{Βιβλιογραφία}
+    \renewcommand{\datename}{Ημερομηνία:}
+    \renewcommand{\urladdrname}{Ιστοσελίδα}
+}
+
+% math 
+\usepackage{amsmath,amsthm,amssymb,amscd}
+
+% font
+\usepackage[cal=euler]{mathalfa}
+\usepackage{libertinus-type1}
+% \usepackage{txfonts} % for upright greek letters
+\usepackage{bm} % for bold symbols
+\usepackage{bbm} % for the simply-looking bb symbols
+
+% miscellaneous 
+\usepackage{changepage} %for indenting environments
+\usepackage{csquotes} % example: \textcquote{}
+
+% drawing
+\usepackage{tikz,tikz-cd}
+\usetikzlibrary{shapes.misc, patterns, matrix, calc, intersections,positioning}
+\usepackage{graphics,graphicx}
+\usepackage{float} % provides enhanced control and customization options for floating objects such as figures and tables
+
+% colors
+\usepackage{xcolor}
+\definecolor{darkcandyapplered}{rgb}{0.64, 0.0, 0.0}
+\definecolor{midnightblue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{mylightblue}{HTML}{336699}
+\definecolor{burntorange}{rgb}{0.8, 0.33, 0.0}
+\definecolor{iceberg}{rgb}{0.44, 0.65, 0.82}
+
+% hrefs
+\usepackage{hyperref}
+\usepackage[noabbrev,capitalize]{cleveref}
+\hypersetup{
+    pdftoolbar=true,        
+    pdfmenubar=true,        
+    pdffitwindow=false,     
+    pdfstartview={FitH},  % fits the width of the page to the window
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfnewwindow=true,  % links in new window
+    colorlinks=true,  % false: boxed links; true: colored links
+    linkcolor=darkcandyapplered,   % color of internal links
+    citecolor=midnightblue,  % color of links to bibliography
+    urlcolor=cyan,  % color of external links
+    linktocpage=true  % changes the links from the section body to the page number
+    }
+
+% geometry
+\textwidth=16cm 
+\textheight=21cm 
+\hoffset=-55pt 
+\footskip=25pt
+
+% thm envs (you might need to change the path)
+\input{thmEnvironments_macro.tex}
+
+% math ops (you might need to change the path)
+\input{mathOperators_macro.tex}
+
+% miscellaneous commands
+\newcommand{\defn}[1]{{\color{mylightblue}{#1}}}
+\newcommand{\toDo}{{\bf\color{red} TODO}}
+\newcommand{\toCite}{{\bf\color{green} CITE}}
+
+% 
+\newenvironment{nouppercase}{%
+  \let\uppercase\relax%
+  \renewcommand{\uppercasenonmath}[1]{}}{}
+
+% titlepage
+\title{Θ2.04: Θεωρία Αναπαραστάσεων και Συνδυαστική}
+\author[Β.~Δ. Μουστακας]{Βασίλης Διονύσης Μουστάκας \\ Πανεπιστήμιο Κρήτης}
+\date{7 Οκτωβρίου 2025}
+% \urladdr{\href{https://sites.google.com/view/vasmous}{https://sites.google.com/view/vasmous}}
+
+\begin{document}
+
+\begingroup
+\def\uppercasenonmath#1{} % this disables uppercase title
+\let\MakeUppercase\relax % this disables uppercase authors
+\maketitle
+\endgroup
+
+\setcounter{section}{2}
+\thispagestyle{empty}
+
+\begin{center}
+    \textbf{2. Πλήρης αναγωγικότητα και το Θεώρημα του Maschke
+}
+\end{center}
+
+Σε αυτή την παράγραφο υποθέτουμε ότι το σώμα $\FF$ είναι είτε το $\RR$, είτε το $\CC$ και θεωρούμε μια πεπερασμένη ομάδα $G$.
+
+Συνεχίζοντας το τρέχον παράδειγμα της προηγούμενης παραγράφου, παρατηρούμε ότι ο υπόχωρος $\RR[\bfe_2-\bfe_1,\bfe_3-\bfe_1]$ αποτελείται από όλα εκείνα τα στοιχεία του $\RR^3$ που είναι \emph{ορθογώνια} με το $\bfe_1 + \bfe_2 + \bfe_3$ ως προς το σύνηθες εσωτερικό γινόμενο, δηλαδή
+\[
+\RR[\bfe_2-\bfe_1,\bfe_3-\bfe_1] =
+\{(v_1, v_2, v_3) \in \RR^3 : v_1 + v_2 + v_3 = 0\}
+\] 
+τ' οποίο \textquote{σέβεται} τη δράση της $\fS_3$. Ας θυμηθούμε τον ορισμό του εσωτερικού γινομένου.
+
+\begin{definition}
+    \label{def:inner_product}
+    Έστω $V$ διανυσματικός χώρος. \defn{Εσωτερικό γινόμενο} στον $V$ ονομάζεται μια απεικόνιση $(\Arg,\Arg) : V\times V \to \FF$ η οποία είναι
+    %
+    \begin{itemize}
+        \item \emph{γραμμική} ως προς την πρώτη μεταβλητή, δηλαδή
+        \begin{align*}
+            (cv, u)   &= c(v,u) \\
+            (v+v', u) &= (v,u) + (v',u),
+        \end{align*}
+        για κάθε $v, v', u \in V$ και $c \in \FF$,
+        \item \emph{συζυγής-συμμετρική}, δηλαδή 
+        \[
+        (v,u) = \ol{(u,v)},
+        \]
+        για κάθε $u, v \in V$, και 
+        \item \emph{θετικά ορισμένη}, δηλαδή να έχουμε 
+        \[
+        (v,v) > 0, \quad \text{αν $v \neq 0$}.
+        \]
+    \end{itemize}
+    %
+    Επιπλέον, αν $W$ είναι υπόχωρος του $V$, τότε το σύνολο 
+    \[
+    W^\perp \coloneqq \{v \in V : (v,w) = 0, \ \text{για κάθε $w \in W$}\}
+    \]
+    ονομάζεται \defn{ορθογώνιο συμπλήρωμα} του $W$ στο $V$ ως προς το $(\Arg, \Arg)$.
+\end{definition}
+
+Το επόμενο αποτέλεσμα εξηγεί γιατί επιλέξαμε τον υπόχωρο $\RR[\bfe_2-\bfe_1,\bfe_3-\bfe_1]$ στο τρέχον παράδειγμα, έναντι κάποιου άλλου όπως, για παράδειγμα, ο $\RR[\bfe_2,\bfe_3]$.
+
+\begin{proposition}
+    \label{prop:invariant_inner_product}
+    Έστω $V$ ένα $G$-πρότυπο και $W$ υποπρότυπο του $V$. Αν $(\Arg,\Arg)$ είναι ένα \emph{$G$-αναλλοίωτο} εσωτερικό γινόμενο στον $V$, δηλαδή 
+    \[
+    (gv, gu) = (v,u),
+    \]
+    για κάθε $g \in G$ και $v, u \in V$, τότε το ορθογώνιο συμπλήρωμα του $W$ στο $V$ ως προς αυτό είναι υποπρότυπο του $V$.
+\end{proposition}
+
+\begin{proof}[Απόδειξη]
+    Αρκεί να δείξουμε ότι $gu \in W^\perp$, δηλαδή ότι $(gu, w) = 0$, για κάθε $g \in G$, $u \in W^\perp$ και $w \in W$. Πράγματι, 
+    \[
+    (gu, w) = (g^{-1}gu, g^{-1}w) = (u, g^{-1}w) = 0,
+    \]
+    όπου η πρώτη ισότητα έπεται από το ότι το $(\Arg,\Arg)$ είναι $G$-αναλλοίωτο και η τρίτη από το ότι το $W$ είναι υποπρότυπο του $V$. 
+\end{proof}
+
+Το να έχει μια αναπαράσταση $(\rho, V)$ ένα $G$-αναλλοίωτο εσωτερικό γινόμενο σημαίνει ότι για κάθε $g \in G$ ο μετασχηματισμός $\rho(g)$ είναι \emph{μοναδιαίος} (unitary), δηλαδή\footnote{Ο πίνακας $A^\ast \coloneqq \ol{A}^\top$ ονομάζεται \defn{προσηρτημένος} (adjoint) του $A$. Από την Γραμμική Άλγεβρα γνωρίζουμε ότι στην περίπτωση που έχουμε έναν μοναδιαίο πίνακα $A$ με στοιχεία στο $\CC$    , τότε υπάρχει μια \emph{ορθοκανοκική βάση} του $V$, η οποία αποτελείται από \emph{ιδιοδιανύσματα} του $A$ μήκους 1.}  
+\[
+\rho(g)^{-1} =  \ol{\rho(g)}^\top,
+\]
+όπου με $\ol{A}$ συμβολίζουμε τον πίνακα που προκύπτει από τον $A$ παίρνοντας τα συζηγή όλων των στοιχείων του και με $A^\top$ συμβολίζουμε τον ανάστροφο του $A$. Με άλλα λόγια, ο $\rho(g)$ πρέπει να είναι \emph{ισομετρία}. Στην περίπτωση όπου $\FF = \RR$, οι μοναδιαίοι πίνακες ονομάζονται \emph{ορθογώνιοι}. Παραδείγματα ορθογώνιων πινάκων αποτελούν οι πίνακες των μετασχηματισμών της στροφής και της ανάκλασης.
+
+Ας δούμε ένα παράδειγμα μη-αναλλοίωτου εσωτερικού γινομένου. Έστω $\rmC_2$ η κυκλική ομάδα τάξης 2, η οποία παράγεται από ένα στοχείο $g$, δηλαδή $\rmC_2 = \{\epsilon, g\}$. Θεωρούμε τη δράση της $\rmC_2$ στον $\RR^2$ που ορίζεται ως εξής
+\[
+\begin{tikzpicture}[>=stealth, thick, scale=1]
+    \begin{scope}[shift={(-1,0)}]
+        % Axes
+        \draw[->] (-1.5,0) -- (1.5,0);
+        \draw[->] (0,-1.5) -- (0,1.5);
+
+        % Vectors e1 and e2
+        \draw[->, burntorange, very thick] (0,0) -- (1,0) node[below] {\textcolor{black}{$\bfe_1$}};
+        \draw[->, iceberg, very thick] (0,0) -- (0,1) node[left] {\textcolor{black}{$\bfe_2$}};
+
+        % Origin dot
+        \fill (0,0) circle (1.5pt);
+    \end{scope}
+    \begin{scope}[shift={(6,0)}]
+        % Axes
+        \draw[->,burntorange!40] (-1.5,0) -- (1.5,0);
+        \draw[->] (0,-1.5) -- (0,1.5);
+
+        % Vectors
+        \draw[->, burntorange, very thick] (0,0) -- (1,0) node[above] {\textcolor{black}{$\bfe_1$}};
+        \draw[->, iceberg, very thick] (0,0) -- (1,-1) node[below] {\textcolor{black}{$\bfe_1 - \bfe_2$}};
+
+        % Origin dot
+        \fill (0,0) circle (1.5pt);
+    \end{scope}
+
+  % --- Curved arrow between them ---
+    \draw[->, thick]
+    (1.7,0.3) .. controls (2,0.7) and (3,0.7) .. (3.3,0.3)
+    node[midway, above] {$g$};
+\end{tikzpicture}
+\]
+Ισοδύναμα, έχουμε την αναπαράσταση $\rho : \rmC_2 \to \GL(\RR^2)$ με 
+\[
+\rho(\epsilon) = 
+\begin{pmatrix}
+    1 & 0 \\
+    0 & 1
+\end{pmatrix}
+\quad
+\text{και}
+\quad
+\rho(g) = 
+\begin{pmatrix}
+    1 & 1 \\
+    0 & -1
+\end{pmatrix}.
+\]
+Ο υπόχωρος $\RR[\bfe_1]$ διάστασης 1 που παράγεται από το $\bfe_1$ είναι $\rmC_2$-αναλλοίωτος (γιατί;). Ας \textquote{κοιτάξουμε} το ορθογώνιο συμπλήρωμά του ως προς το σύνηθες εσωτερικό γινόμενο $\Arg\cdot\Arg$
+\[
+\RR[\bfe_1]^\perp  = \{v \in \RR^2 : v\cdot\bfe_1 = 0\} = \{v = (v_1, v_2) \in \RR^2 : v_1= 0\} = \RR[\bfe_2].
+\]
+Τότε, 
+\[
+g\bfe_2 = \bfe_1 - \bfe_2 \ \notin \RR[\bfe_2]
+\]
+και κατά συνέπεια το ορθογώνιο συμπλήρωμα του $\RR[\bfe_1]$ δεν είναι $\rmC_2$-αναλλοίωτο. Αυτό συμβαίνει διότι το σύνηθες εσωτερικό γινόμενο \emph{δεν} είναι $\rmC_2$-αναλλοίωτο!
+
+Αποδεικνύεται όμως ότι κάθε αναπαράσταση πεπερασμένης διάστασης επιδέχεται ένα $G$-αναλ\-λοίωτο εσωτερικό γινόμενο. Πως θα μπορούσαμε να \textquote{τροποποιήσουμε} το σύνηθες εσωτερικό γινόμενο ώστε να \textquote{σέβεται} τη δράση της $\rmC_2$ στο παράδειγμα της προηγούμενης παραγράφου; Ας δούμε \textquote{πόσο έξω πέφτει} στην δράση του $g$ στην συνήθη βάση: 
+\[
+g\bfe_1 \cdot g\bfe_2 = \bfe_1 \cdot(\bfe_1-\bfe_2) = \bfe_1\cdot\bfe_1 - \bfe_1\cdot\bfe_2 = 1 - 0 = 1.
+\]
+Κατά έναν παράγοντα $\bfe_1\cdot\bfe_1$. Με άλλα λόγια, το \emph{νέο} εσωτερικό γινόμενο 
+\[
+v \cdot' w \coloneqq v \cdot w + gv \cdot gw = \epsilon v \cdot \epsilon w + gv \cdot gw = \sum_{x \in \rmC_2} xv \cdot xw
+\]
+για κάθε $v, w \in \RR^2$ είναι $\rmC_2$-αναλλοίωτο. Αυτή είναι η ιδέα της απόδειξης της επόμενης πρότασης.
+
+
+\begin{proposition}{\rm(Weyl's unitary trick)}
+    \label{prop:weyl_unitary_trick}
+    Κάθε αναπαράσταση $V$ της $G$ πεπερασμένης διάστασης επιδέχεται ένα $G$-αναλλοίωτο εσωτερικό γινόμενο.
+\end{proposition}
+
+\begin{proof}
+    Έστω $(\Arg,\Arg)_0$ ένα εσωτερικό γινόμενο στον $V$. Η βασική ιδέα (που επανέρχεται ξανά και ξανά στη θεωρία αναπαραστάσεων) είναι να μετατρέψουμε το $(\Arg,\Arg)_0$ σε $G$-αναλλοίωτο παίρνοντας τον \emph{μέσο όρο} πάνω από όλα τα στοιχεία της $G$. Πιο συγκεκριμένα, θεωρούμε την απεικόνιση 
+    \[
+    (v, u) \ \coloneqq \ \sum_{g \in G} (gv, gu)_0
+    \]
+    για κάθε $v, u \in V$. Αυτή είναι εσωτερικό γινόμενο (γιατί;) και για κάθε $h \in G$ έχουμε 
+    \[
+    (hv, hu) = \sum_{g \in G} (g(hv), g(hu))_0 = \sum_{g \in G} (ghv, ghu)_0 = \sum_{f \in G} (fv, fu)_0 = (v,u),
+    \]
+    όπου η προτελευταία ισότητα έπεται από το ότι η απεικόνιση $g \mapsto gh$ είναι αμφιμονοσήμαντη (γιατί;).
+\end{proof}
+
+Θα χρησιμοποιήσουμε τις Προτάσεις~\ref{prop:invariant_inner_product} και \ref{prop:weyl_unitary_trick} για ν' αποδείξουμε το πρώτο σημαντικό αποτέλεσμα της θεωρίας αναπαραστάσεων που καθιστά τις ανάγωγες αναπαραστάσεις τα θεμελιώδη δομικά στοιχεία για κάθε αναπαράσταση.
+
+\begin{theorem}{\rm(Maschke 1899)}
+    \label{thm:maschke}
+    Κάθε αναπαράσταση πεπερασμένης διάστασης, που δεν είναι ο τετριμμένος χώρος, μπορεί να γραφεί ως ευθύ άθροισμα ανάγωγων υποαναπαραστά\-σεων.
+\end{theorem}
+
+\begin{proof}[Απόδειξη]
+    Έστω $V \neq \{0\}$ μια αναπαράσταση πεπερασμένης διάστασης της $G$. Θα κάνουμε επαγωγή ως προς τη διάσταση της $V$. Είδαμε ότι κάθε μονοδιάστατη αναπαράσταση είναι κατ' ανάγκη ανάγωγη. Αυτή είναι η βάση της επαγωγής. Τώρα, υποθέτουμε ότι $\dim(V) > 1$ και ότι κάθε αναπαράσταση διάστασης $<\dim(V)$ μπορεί να γραφεί ως ευθύ άθροισμα ανάγωγων υποαναπαραστάσεων. Αυτή είναι η επαγωγική υπόθεση. 
+    
+    Αν η $V$ ήταν ανάγωγη, τότε τελειώσαμε. Διαφορετικά, είναι αναγωγική και γι' αυτό θεωρούμε μια υποαναπαράσταση $W$. Από τις Προτάσεις~\ref{prop:invariant_inner_product} και \ref{prop:weyl_unitary_trick} έπεται ότι 
+    \[
+    V  = W \oplus W^\perp
+    \]
+    ως προς κάποιο $G$-αναλλοίωτο εσωτερικό γινόμενο στον $V$. Εφαρμόζοντας την επαγωγική υπόθεση σε κάθε μια από τις υποαναπαραστάσεις $W$ και $W^\perp$ έχουμε το ζητούμενο.
+\end{proof}
+
+\begin{definition}
+    \label{def:completeReducibility}
+    Κάθε αναπαράσταση που μπορεί να γραφεί ως ευθύ άθροισμα (πιθανώς άπειρων το πλήθος) ανάγωγων υποαναπαραστάσεων ονομάζεται \defn{πλήρως αναγωγική} (completely reducible).
+\end{definition}
+
+\begin{remark}
+    Ας υποθέσουμε ότι το $\FF$ είναι ένα αυθαίρετο σώμα. Το Θεώρημα του Maschke στην πλήρη γενικότητά του λέει ότι μια αναπαράσταση πεπερασμένης διάστασης είναι πλήρως αναγωγική αν η χαρακτηριστική\footnote{Η \defn{χαρακτηριστική} ενός σώματος είναι ο ελάχιστος θετικός ακέραιος $k$ τέτοιος ώστε $\underbrace{1 + 1 + \cdots + 1}_{\text{$k$ φορές}}=0$, αν υπάρχει ή διαφορετικά το 0.} του $\FF$ \emph{δεν} διαιρεί την τάξη της $G$ ή είναι 0.
+
+    Στις ασκήσεις αυτής της ενότητας, θα δούμε κάποιες περιπτώσεις όπου το Θεώρημα του Maschke παύει να ισχύει. Κατά συνέπεια, δεν είναι όλες οι αναπαραστάσεις πλήρως αναγωγικές. Στο μάθημα αυτό θα μας απασχολήσει η περίπτωση όπου $\FF = \CC$.
+\end{remark}
+
+Σύμφωνα με το Θεώρημα~\ref{thm:maschke}, μια πλήρως αναγωγική αναπαράσταση πεπερασμένης διάστασης έχει την μορφή  
+\[
+V_1 \oplus V_2 \oplus \cdots \oplus V_k,
+\]
+όπου $V_1, V_2, \dots, V_k$ είναι ανάγωγες υποαναπαραστάσεις. Πολλές από αυτές τις αναπαραστάσεις που εμφανίζονται στην παραπάνω διάσπαση μπορεί να είναι \textquote{ίδιες} και κατά συνέπεια θα θέλαμε να τις \textquote{ομαδοποιήσουμε} ως εξής 
+\[
+V_1^{m_1} \oplus V_2^{m_2} \oplus \cdots \oplus V_n^{m_n},
+\]
+για κάποια συλλογή $V_1, V_2, \dots, V_n$ ανά δύο \textquote{διαφορετικών} αναπαραστάσεων της $G$, όπου
+\[
+V_i^{m_i} \coloneqq \underbrace{V_i \oplus V_i \oplus \cdots \oplus V_i}_{\text{$m_i$ φορές}}.
+\]
+
+Η κατάσταση αυτή μας θυμίζει το \emph{Θεωμελιώδες Θεώρημα της Αριθμητικής}, με το Θεώρημα του \textlatin{Maschke} να παραλληλίζει την ύπαρξη της παραγοντοποίησης ενός ακεραίου σε πρώτους παράγοντες. Θα δούμε παρακάτω ότι αυτή η ανάλυση σε ανάγωγες αναπαραστάσεις είναι ουσιαστικά μοναδική, ολοκληρώνοντας έτσι τον παραλληλισμό. Γι' αυτό χρειαζόμαστε κάποια ακόμα εργαλεία, ξεκινώντας από το τι σημαίνει για δυο αναπαραστάσεις να είναι \textquote{ίδιες}. 
+
+\end{document}
