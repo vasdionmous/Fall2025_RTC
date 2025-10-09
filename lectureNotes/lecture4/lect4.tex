@@ -1,0 +1,405 @@
+\documentclass[12pt,a4paper,reqno]{amsart}
+
+% section handling
+\usepackage{subfiles} 
+
+% language
+\usepackage[greek,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{alphabeta}
+
+% change default names to greek
+\addto\captionsenglish{
+    \renewcommand{\contentsname}{Περιεχόμενα}
+    \renewcommand{\refname}{Βιβλιογραφία}
+    \renewcommand{\datename}{Ημερομηνία:}
+    \renewcommand{\urladdrname}{Ιστοσελίδα}
+}
+
+% math 
+\usepackage{amsmath,amsthm,amssymb,amscd}
+
+% font
+\usepackage[cal=euler]{mathalfa}
+\usepackage{libertinus-type1}
+% \usepackage{txfonts} % for upright greek letters
+\usepackage{bm} % for bold symbols
+\usepackage{bbm} % for the simply-looking bb symbols
+
+% miscellaneous 
+\usepackage{changepage} %for indenting environments
+\usepackage{csquotes} % example: \textcquote{}
+
+% drawing
+\usepackage{tikz,tikz-cd}
+\usetikzlibrary{shapes.misc, patterns, matrix, calc, intersections,positioning}
+\usepackage{graphics,graphicx}
+\usepackage{float} % provides enhanced control and customization options for floating objects such as figures and tables
+
+% colors
+\usepackage{xcolor}
+\definecolor{darkcandyapplered}{rgb}{0.64, 0.0, 0.0}
+\definecolor{midnightblue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{mylightblue}{HTML}{336699}
+\definecolor{burntorange}{rgb}{0.8, 0.33, 0.0}
+\definecolor{iceberg}{rgb}{0.44, 0.65, 0.82}
+
+% hrefs
+\usepackage{hyperref}
+\usepackage[noabbrev,capitalize]{cleveref}
+\hypersetup{
+    pdftoolbar=true,        
+    pdfmenubar=true,        
+    pdffitwindow=false,     
+    pdfstartview={FitH},  % fits the width of the page to the window
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfnewwindow=true,  % links in new window
+    colorlinks=true,  % false: boxed links; true: colored links
+    linkcolor=darkcandyapplered,   % color of internal links
+    citecolor=midnightblue,  % color of links to bibliography
+    urlcolor=cyan,  % color of external links
+    linktocpage=true  % changes the links from the section body to the page number
+    }
+
+% geometry
+\textwidth=16cm 
+\textheight=21cm 
+\hoffset=-55pt 
+\footskip=25pt
+
+% thm envs (you might need to change the path)
+\input{thmEnvironments_macro.tex}
+
+% math ops (you might need to change the path)
+\input{mathOperators_macro.tex}
+
+% miscellaneous commands
+\newcommand{\defn}[1]{{\color{mylightblue}{#1}}}
+\newcommand{\toDo}{{\bf\color{red} TODO}}
+\newcommand{\toCite}{{\bf\color{green} CITE}}
+
+% 
+\newenvironment{nouppercase}{%
+  \let\uppercase\relax%
+  \renewcommand{\uppercasenonmath}[1]{}}{}
+
+% titlepage
+\title{Θ2.04: Θεωρία Αναπαραστάσεων και Συνδυαστική}
+\author[Β.~Δ. Μουστακας]{Βασίλης Διονύσης Μουστάκας \\ Πανεπιστήμιο Κρήτης}
+\date{9 Οκτωβρίου 2025}
+% \urladdr{\href{https://sites.google.com/view/vasmous}{https://sites.google.com/view/vasmous}}
+
+\begin{document}
+
+\begingroup
+\def\uppercasenonmath#1{} % this disables uppercase title
+\let\MakeUppercase\relax % this disables uppercase authors
+\maketitle
+\endgroup
+
+\setcounter{section}{3}
+\thispagestyle{empty}
+
+\begin{center}
+    \textbf{3. Λήμμα του Schur και εφαρμογές
+}
+\end{center}
+
+Σε αυτή την παράγραφο υποθέτουμε ότι
+\begin{itemize}
+    \item $G$ είναι μια πεπερασμένη ομάδα,
+    \item $\FF$ είναι ένα αυθαίρετο σώμα, και
+    \item όλοι οι διανυσματικοί χώροι είναι πεπερασμένοι.
+\end{itemize}  
+
+\begin{definition}
+    \label{def:representation_homomorphism}
+    Έστω $(\rho, V)$ και $(\sigma, W)$ δυο αναπαραστάσεις της $G$. \defn{Ομομορφισμός αναπαραστάσεων} (ή \defn{$G$-ομομορφισμός}) ονομάζεται μια γραμμική απεικόνιση $\varphi : V \to W$ η οποία \emph{διατηρεί} την δράση της $G$, δηλαδή 
+    %
+    \begin{equation}
+        \label{eq:representation_homomorphism}
+        \varphi(\rho(g)(v)) = \sigma(g)(\phi(v))
+    \end{equation}
+    για κάθε $g \in G$ και $v \in V$, ή ισοδύναμα αν το διάγραμμα
+    \[
+    \begin{tikzcd}
+    V \arrow[r, "\varphi"] & W \\
+    V \arrow[r, "\varphi"'] \arrow[u, "\rho(g)"] & W \arrow[u, "\sigma(g)"', right]
+    \end{tikzcd}
+    \]
+    είναι μεταθετικό. Επιπλέον, αν η $\varphi$ είναι γραμμικός ισομορφισμός, τότε ονομάζεται \defn{ισομορφισμός αναπαραστάσεων} (ή \defn{$G$-ισομορφισμός}) και στην περίπτωση αυτή γράφουμε $V \cong_G W$ (ή απλά $V\cong W$).
+\end{definition}
+
+Αν έχουμε έναν $G$-ισομορφισμό $\varphi : V \to W$ με πίνακα $T$ (ως προς κάποια βάση της $V$), τότε η Ταυτότητα~\eqref{eq:representation_homomorphism} γίνεται
+\[
+\rho(g) = T^{-1}\sigma(g)T.
+\]
+Με άλλα λόγια, δυο αναπαραστάσεις είναι ισόμορφες όταν \textquote{διαφέρουν} κατά μια αλλαγή βάσης. 
+
+Στον τρέχον παράδειγμα, όπου αναπαριστούμε την συμμετρική ομάδα $\fS_3$ ως ομάδα συμμετρίας του ισόπλευρου τριγώνου $\Delta$ έχουμε δει διάφορες εκδοχές της ίδιας αναπαράστασης στις ακόλουθες βάσεις του $\RR^3$:
+\begin{itemize}
+    \item $\{\bfe_1, \bfe_2, \bfe_3\}$
+    \item $\{\bfe_1+\bfe_2+\bfe_3, \bfe_2-\bfe_1, \bfe_3-\bfe_1\}$
+    \item $\{\bfe_1+\bfe_2+\bfe_3, \bfe_2, \bfe_3\}$.
+\end{itemize}
+
+Γενικότερα, η δράση αυτή της $\fS_n$ στον $\RR^n$ δίνεται από 
+\[
+\pi \cdot (v_1, v_2, \dots, v_n) \coloneqq (v_{\pi_1^{-1}}, v_{\pi_2^{-1}}, \dots, v_{\pi_n^{-1}})
+\]
+για κάθε $\pi \in \fS_n$ και $(v_1, v_2, \dots, v_n) \in \RR^n$ (βλ. Άσκηση~(1.2)). Η αναπαράσταση αυτή είναι ισόμορφη με την αναπαράσταση καθορισμού της $\fS_n$, με τον ισομορφισμό να δίνεται από 
+\[
+\bfe_i \mapsto i,
+\]
+για κάθε $1 \le i \le n$ και ο αντίστοιχος πίνακας είναι ο ταυτοτικός.
+
+Έστω $\rmC_2$ η κυκλική ομάδα τάξης 2, η οποία παράγεται από ένα στοιχείο $g$, δηλαδή $\rmC_2 = \{\epsilon, g\}$. Θεωρούμε τη δράση της $\rmC_2$ στον $\RR^2$ που ορίζεται ως εξής:
+\[
+\begin{tikzpicture}[>=stealth, thick, scale=1]
+\begin{scope}[shift={(-1,0)}]
+    % Axes
+    \draw[->] (-1.5,0) -- (1.5,0);
+    \draw[->] (0,-1.5) -- (0,1.5);
+
+    % Vectors e1 and e2
+    \draw[->, burntorange, very thick] (0,0) -- (1,0) node[below] {\textcolor{black}{$\bfe_1$}};
+    \draw[->, iceberg, very thick] (0,0) -- (0,1) node[left] {\textcolor{black}{$\bfe_2$}};
+
+    % Origin dot
+    \fill (0,0) circle (1.5pt);
+\end{scope}
+\begin{scope}[shift={(6,0)}]
+    % Axes
+    \draw[->,burntorange!40] (-1.5,0) -- (1.5,0);
+    \draw[->, iceberg!40] (0,-1.5) -- (0,1.5);
+
+    % Vectors
+    \draw[->, burntorange, very thick] (0,0) -- (1,0) node[above] {\textcolor{black}{$\bfe_1$}};
+    \draw[->, iceberg, very thick] (0,0) -- (0,-1) node[right] {\textcolor{black}{$\bfe_2$}};
+
+    % Origin dot
+    \fill (0,0) circle (1.5pt);
+\end{scope}
+
+% --- Curved arrow between them ---
+\draw[->, thick]
+(1.7,0.3) .. controls (2,0.7) and (3,0.7) .. (3.3,0.3)
+node[midway, above] {$g$};
+\end{tikzpicture}
+\]
+Ισοδύναμα, έχουμε την αναπαράσταση $\sigma : \rmC_2 \to \GL(\RR^2)$ με 
+\[
+\sigma(\epsilon) = 
+\begin{pmatrix}
+    1 & 0 \\
+    0 & 1
+\end{pmatrix}
+\quad
+\text{και}
+\quad
+\sigma(g) = 
+\begin{pmatrix}
+    1 & 0 \\
+    0 & -1
+\end{pmatrix}.
+\]
+Αυτή είναι ισόμορφη με την απαράσταση $(\rho, \RR^2)$ της Παραγράφου~2. Πράγματι, τα ιδιοδιανύσματα του $\rho(g)$ είναι
+\begin{itemize}
+    \item $\left(\begin{smallmatrix}
+        1 \\ 0
+    \end{smallmatrix}\right)$, που αντιστοιχεί στην ιδιοτιμή 1, και 
+    \item $\left(\begin{smallmatrix}
+        1 \\ -2
+    \end{smallmatrix}\right)$, που αντιστοιχεί στην ιδιοτιμή -1
+\end{itemize}
+(γιατί;) και γι' αυτό
+\[
+\begin{pmatrix}
+    1 & 1 \\
+    0 & -2
+\end{pmatrix}^{-1} 
+\rho(g) 
+\begin{pmatrix}
+    1 & 1 \\
+    0 & -2
+\end{pmatrix}
+\ = \
+\sigma(g).
+\]
+
+Στην καινούργια βάση, μας είναι πιο εύκολο να \textquote{ξεχωρίσουμε} τις ανάγωγες υποαναπαραστάσεις. Κοιτώντας τον πίνακα $\sigma(g)$, προκύπτει η διάσπαση
+\[
+\RR^2 = \RR[\bfe_1] \oplus \RR[\bfe_2],
+\]
+όπου 
+\begin{align*}
+    \sigma(g)\left(\bfe_1\right) &= \bfe_1 \\
+    \sigma(g)\left(\bfe_2\right) &= -\bfe_2
+\end{align*}
+και κατά συνέπεια το $\RR[\bfe_1]$ είναι ισόμορφο με την τετριμμένη αναπαράσταση και το $\RR[-\bfe_2]$ είναι ισόμορφο με την αναπαράσταση προσήμου (γιατί;).
+
+Δοθείσης μια γραμμικής απεικόνισης $\varphi : V \to W$, οι υπόχωροι 
+%
+\begin{align*}
+    \Ker(\varphi) &\coloneqq \{v \in V : \varphi(v) = 0\} \\
+    \Im(\varphi) &\coloneqq \{w \in W : \varphi(v) = w, \ \text{για κάποιο $v \in V$}\}
+\end{align*}
+%
+ονομάζονται \defn{πυρήνας} και \defn{εικόνα} της $\varphi$. Αν η $\varphi$ είναι $G$-ομομορφισμός, τότε ο πυρήνας και η εικόνα είναι υποπρότυπα του $V$ και $W$, αντίστοιχα (γιατί;).
+Το επόμενο αποτέλεσμα, γνωστό ως \emph{Λήμμα του Schur}, χαρακτηρίζει τους $G$-ομομορφισμούς μεταξύ ανάγωγων αναπαραστάσεων και (παρά την απλή του απόδειξη) έχει πολύ σημαντικές συνέπειες, όπως θα δούμε στη συνέχεια.
+
+\begin{theorem}{\rm(I. Schur 1905)}
+    \label{thm:Schur_lemma}
+    Έστω $V$ και $W$ δυο ανάγωγα $G$-πρότυπα και $\varphi : V \to W$ είναι ένας $G$-ομομορφισμός. 
+    \begin{itemize}
+    \item[(1)] Ο $\varphi$ είναι είτε η μηδενική απεικόνιση, είτε είναι ισομορφισμός.
+    \item[(2)] Αν το $\FF$ είναι αλγεβρικά κλειστό σώμα, τότε ο $\varphi$ είναι πολλαπλάσιο του ταυτοτικού ομομορφισμού.
+    \end{itemize}
+\end{theorem}
+
+\begin{proof}[Απόδειξη]
+    \leavevmode 
+    \begin{itemize}
+        \item[(1)] Αφού τα $V$ και $W$ είναι ανάγωγα, έπεται ότι το υποπρότυπο $\Ker(\varphi)$ (αντ. $\Im(\varphi)$) είναι είτε $\{0\}$, είτε $V$ (αντ. $W$).  Αν $\Ker(\varphi) = V$, τότε η $\varphi$ είναι η μηδενική απεικόνιση. 
+        
+        Διαφορετικά, έστω $\Ker(\varphi) = \{0\}$. Αν $\Im(\varphi) \neq \{0\}$, τότε $V = \{0\}$, τ' οποίο είναι αδύνατο (γιατί;). Συνεπώς, $\Im(\varphi) = W$ και γι' αυτό η $\varphi$ είναι ισομορφισμός.
+        
+        \item[(2)] Αφού το $\FF$ είναι αλγεβρικά κλειστό, ο $\varphi$ (ως γραμμική απεικόνιση) έχει κάποια ιδιοτιμή $c \in \FF$. Συνεπώς, ο ομομορφισμός 
+        \[
+        \varphi - c\, \rmid 
+        \]
+        όπου $\rmid$ είναι η ταυτοτική επεικόνιση, έχει μη-τετριμμένο πυρήνα. Άρα, δεν μπορεί να είναι (γραμμικός) ισομορφισμός και γι' αυτό από το (1) έπεται ότι είναι η μηδενική απεικόνιση. Με άλλα λόγια 
+        \[
+        \varphi = c\, \rmid 
+        \] 
+        που είναι το ζητούμενο.
+    \end{itemize}
+\end{proof}
+
+Σε ότι ακολουθεί υποθέτουμε ότι το $\FF$ είναι αλγεβρικά κλειστό σώμα (για παράδειγμα, το $\CC$). Για δυο $G$-πρότυπα $V$ και $W$, θέτουμε\footnote{Ομομορφισμός μεταξύ διανυσματικών χώρων δεν είναι τίποτα άλλα παρά μια γραμμική απεικόνιση και μια γραμμική απεικόνιση του ίδιου χώρου ονομάζεται και ενδομορφισμός. Αυτό εξηγεί τα σύμβολα $\Hom$ και $\End$.} 
+\begin{align*}
+    \Hom(V,W) &\coloneqq \{\varphi : V \to W : \ \text{$\varphi$ είναι γραμμική}\} \\
+    \Hom_G(V,W) &\coloneqq \{\varphi : V \to W : \ \text{$\varphi$ είναι $G$-ομομορφισμός}\} \\
+    \End_G(V) &\coloneqq \Hom_G(V,V).
+\end{align*}
+Το $\Hom(V,W)$ έχει και αυτό τη δομή διανυσματικού χώρου. Στην Άσκηση~(1.4), βλέπουμε ότι υπάρχει μια δράση της $G$ η οποία του δίνει την δομή $G$-προτύπου. Σε αυτή την περίπτωση, το $\Hom_G(V,W)$ ταυτίζεται με το σύνολο των σταθερών σημείων αυτής της δράσης. Το Λήμμα του Schur μας πληροφορεί ότι 
+\begin{equation}
+    \label{eq:endV_schur}
+    \End_G(V) \cong \FF,    
+\end{equation}
+ως διανυσματικοί χώροι.
+
+\begin{corollary}
+    \label{cor:schur_dimension_of_Hom_space}
+    Αν $V$ και $W$ είναι δυο ανάγωγα $G$-πρότυπα, τότε 
+    \[
+    \dim\Hom_G(V,W)\ = \ 
+    \begin{cases}
+        1, &\ \text{αν $V \cong_G W$} \\
+        0, &\ \text{διαφορετικά}.
+    \end{cases}
+    \]
+\end{corollary}
+
+\begin{proof}[Απόδειξη]
+    Αν τα $V$ και $W$ δεν είναι ισόμορφα, τότε από το Λήμμα του Schur έπεται ότι $\Hom_G(V,W) = \{0\}$. Στην περίπτωση αυτή 
+    \[
+    \dim\Hom_G(V,W) = 0.
+    \] 
+    
+    Διαφορετικά, έστω $\varphi, \vartheta : V \to W$ δυο μη-μηδενικοί $G$-ομομορφισμοί. Πάλι από το Λήμμα του Schur, έπεται ότι αυτοί είναι ισομορφισμοί και γι' αυτό μπορούμε να θεωρήσουμε το $\vartheta^{-1}\circ\varphi \in \End_G(V)$. Από την Ταυτότητα~\eqref{eq:endV_schur}, έπεται ότι υπάρχει $c \in \FF$ τέτοιο ώστε $\vartheta^{-1}\circ\varphi = c\, \rmid$ ή ισοδύναμα $\varphi = c\, \vartheta$. Με άλλα λόγια, κάθε δυο στοιχεία του $\Hom_G(V,W)$ είναι συγγραμμικά και γι΄αυτό 
+    \[
+    \dim\Hom_G(V,W) = 1.
+    \] 
+\end{proof}
+
+\begin{corollary}
+    \label{cor:schur_representations_of_abelian_groups}
+    Κάθε ανάγωγη αναπαράσταση μιας αβελιανής ομάδας είναι έχει διάσταση 1.
+\end{corollary}
+
+\begin{proof}[Απόδειξη]
+    Υποθέτουμε ότι η $G$ είναι αβελιανή και θεωρούμε μια ανάγωγη αναπαράστασή της $(\rho,V)$. Για κάθε $g \in G$, παρατηρούμε ότι $\rho(g) \in \End_G(V)$. Πράγματι, για κάθε $h \in G$ και $v \in V$, 
+    \[
+    \rho(g)\left(\rho(h)(v)\right) = 
+    \rho(gh)(v) = 
+    \rho(hg)(v) = 
+    \rho(h)\left(\rho(g)(v)\right)
+    \]
+    όπου η πρώτη και τρίτη ισότητα έπονται από το ότι η $\rho$ είναι ομομορφισμός ομάδων και η δεύτερη από το ότι η $G$ είναι αβελιανή. 
+    
+    Επομένως, εφαρμόζωντας το Λήμμα του Schur σε κάθε $\rho(g)$ έπεται ότι η δράση κάθε στοιχείου της ομάδας $G$ δίνεται από κάποιο πολλαπλάσιο της ταυτοτικής και κατά συνέπεια όλοι οι υπόχωροι της $V$ θα είναι αναγκαστικά $G$-αναλλοίωτοι (γιατί;). Καθώς η $V$ είναι ανάγωγη, αυτό αφήνει μόνο μια περίπτωση για τη διάστασής της (γιατί;), δηλαδή $\dim(V) = 1$.
+\end{proof}
+
+Στην Άσκηση~(1.6) χρησιμοποιούμε το Πόρισμα~\ref{cor:schur_representations_of_abelian_groups} για να καθορίσουμε \emph{όλες} τις ανάγωγες αναπαραστάσεις μιας κυκλικής ομάδας όταν $\FF = \CC$. Θα ολοκληρώσουμε την παράγραφο αυτή με μια ακόμα σημαντική εφαρμογή του Λήμματος του Schur.
+
+Στο τέλος της Παραγράφου~2, είδαμε ότι ένα πλήρως αναγωγικό $G$-πρότυπο $V$ μπορεί να γραφεί ως 
+\begin{equation}
+    \label{eq:isotypic_decomposition}
+    V \cong_G V_1^{m_1} \oplus V_2^{m_2} \oplus \cdots \oplus V_n^{m_n},
+\end{equation}
+για κάποια συλλογή $V_1, V_2, \dots, V_n$ ανά δύο \emph{μη-ισόμορφων} αναπαραστάσεων της $G$ και μη αρνητικούς ακέραιους $m_1, m_2, \dots, m_n$.
+
+Η Έκφραση~\eqref{eq:isotypic_decomposition} ονομάζεται \defn{ισοτυπική διάσπαση} της $V$ και κάθε $m_i$ ονομάζεται \defn{πολλαπλότητα} εμφάνισης του $V_i$ στο $V$. Το παρακάτω αποτέλεσμα ολοκληρώνει τον παραλληλισμό που κάναμε με το Θεμελιώδες Θεώρημα της Αριθμητικής.
+
+\begin{corollary}
+    \label{cor:Schur_uniqueness_of_isotypic_decomposition}
+    Η ισοτυπική διάσπαση ενός πλήρως αναγωγικού προτύπου είναι μοναδική ως προς ισομορφισμούς και αναδιατάξεις των μερών της.
+\end{corollary}
+
+Η απόδειξη του Πορίσματος~\ref{cor:Schur_uniqueness_of_isotypic_decomposition} βασίζεται στην εξής παρατήρηση, η οποία με τη σειρά της είναι μια ακόμη εφαρμογή του Λήμματος του Schur.
+
+\begin{lemma}
+    \label{lem:Schur_uniqueness_of_isotypic_decomposition}
+    Έστω $V$ ένα πλήρως αναγωγικό $G$-πρότυπο. Η πολλαπλότητα ενός ανάγωγου $G$-προτύπου $W$ στην ισοτυπική διάσπαση του $V$ ισούται με 
+    \[
+    \dim\Hom_G(W,V).
+    \]
+\end{lemma}
+
+\begin{proof}[Απόδειξη]
+    Έστω 
+    \[
+    V = W_1 \oplus W_2 \oplus \cdots \oplus W_k
+    \]
+    η ανάλυση σε ανάγωγα υποπρότυπα του $V$. Τότε 
+    %
+    \begin{align*}
+    \Hom_G(W,V) 
+        &= \Hom_G(W, W_1 \oplus W_2 \oplus \cdots \oplus W_k) \\
+        &\cong \Hom_G(W, W_1) \oplus \Hom_G(W, W_2) \oplus \cdots \oplus \Hom_G(W, W_k) \\
+        &\cong \FF^{\abs{\{1 \le i \le k : W_i \cong W\}}},
+    \end{align*}
+    %
+    όπου ο τρίτος ισομορφισμός έπεται από το Πόρισμα~\ref{cor:schur_dimension_of_Hom_space}. Για τον δεύτερο ισομορφισμό δείτε την παρατή\-ρηση μετά το τέλος της απόδειξης. Συνεπώς, 
+    \[
+    \dim\Hom_G(W,V) \ = \ \abs{\{1 \le i \le k : W_i \cong W\}},
+    \]
+    και το ζητούμενο έπεται.
+\end{proof}
+
+\begin{remark}{{\rm(Γραμμικής Άλγεβρας)}}
+Έστω $V, V_1, V_2, W, W_1$ και $W_2$ διανυσματικοί χώροι. Υπάρχουν \emph{φυσικοί} ισομορφισμοί 
+\begin{align*}
+    \Hom(V, W_1 \oplus W_2) &\cong \Hom(V,W_1) \oplus \Hom(V,W_2) \\ 
+    \Hom(V_1\oplus V_2, W) &\cong \Hom(V_1,W) \oplus \Hom(V_2,W),
+\end{align*}
+οι οποίοι δίνονται από 
+\begin{align*}
+    \varphi &\mapsto (\proj_1\circ\varphi, \proj_2\circ\varphi) \\ 
+    \varphi &\mapsto (\varphi\circ\iota_1, \varphi\circ\iota_2),
+\end{align*}
+αντίστοιχα, όπου $\proj_i : W_1 \oplus W_2 \to W_i$ είναι η φυσική προβολή και $\iota_i : V_i \to V_1 \oplus V_2$ είναι ο φυσικός εγκλεισμός (γιατί;). Ομοίως, για κάθε πεπερασμένο αριθμό προσθετέων. Αυτό εξηγεί τον δεύτερο ισομορφισμό στην απόδειξη του Πορίσματος~\ref{lem:Schur_uniqueness_of_isotypic_decomposition}.
+
+Αυτό έχει ως συνέπεια, η \textquote{ίδια} απόδειξη να μας πληροφορεί ότι η πολλαπλότητα ενός ανάγωγου $G$-προτύπου $W$ στην ισοτυπική διάσπαση του $V$ ισούται και με 
+\[
+\dim\Hom_G(V,W)
+\]
+(γιατί;). Αυτή η συμμετρία θα εξηγεί σε επόμενες παραγράφους, όταν μιλήσουμε για χαρακτήρες ομάδων.
+\end{remark}
+
+Ουσιαστικά το Λήμμα~\ref{lem:Schur_uniqueness_of_isotypic_decomposition} μας πληροφορεί ότι η πολλαπλότητα της $W$ στην ισοτυπική διάσπαση της $V$ εξαρτάται \emph{μόνο} από τα πρότυπα $V$ και $W$ και \emph{όχι} από την εκάστοτε διάσπαση. Τώρα, μπορεί κανείς να αποδείξει το Πόρισμα~\ref{cor:Schur_uniqueness_of_isotypic_decomposition}, η απόδειξη του οποίου αφήνεται ως άσκηση.
+\end{document}
