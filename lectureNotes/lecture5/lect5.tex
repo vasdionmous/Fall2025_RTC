@@ -1,0 +1,422 @@
+\documentclass[12pt,a4paper,reqno]{amsart}
+
+% section handling
+\usepackage{subfiles} 
+
+% language
+\usepackage[greek,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{alphabeta}
+
+% change default names to greek
+\addto\captionsenglish{
+    \renewcommand{\contentsname}{Περιεχόμενα}
+    \renewcommand{\refname}{Βιβλιογραφία}
+    \renewcommand{\datename}{Ημερομηνία:}
+    \renewcommand{\urladdrname}{Ιστοσελίδα}
+}
+
+% math 
+\usepackage{amsmath,amsthm,amssymb,amscd}
+
+% font
+\usepackage[cal=euler]{mathalfa}
+\usepackage{libertinus-type1}
+% \usepackage{txfonts} % for upright greek letters
+\usepackage{bm} % for bold symbols
+\usepackage{bbm} % for the simply-looking bb symbols
+
+% miscellaneous 
+\usepackage{changepage} %for indenting environments
+\usepackage{csquotes} % example: \textcquote{}
+
+% drawing
+\usepackage{tikz,tikz-cd}
+\usetikzlibrary{shapes.misc, patterns, matrix, calc, intersections,positioning}
+\usepackage{graphics,graphicx}
+\usepackage{float} % provides enhanced control and customization options for floating objects such as figures and tables
+
+% colors
+\usepackage{xcolor}
+\definecolor{darkcandyapplered}{rgb}{0.64, 0.0, 0.0}
+\definecolor{midnightblue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{mylightblue}{HTML}{336699}
+\definecolor{burntorange}{rgb}{0.8, 0.33, 0.0}
+\definecolor{iceberg}{rgb}{0.44, 0.65, 0.82}
+
+% hrefs
+\usepackage{hyperref}
+\usepackage[noabbrev,capitalize]{cleveref}
+\hypersetup{
+    pdftoolbar=true,        
+    pdfmenubar=true,        
+    pdffitwindow=false,     
+    pdfstartview={FitH},  % fits the width of the page to the window
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfnewwindow=true,  % links in new window
+    colorlinks=true,  % false: boxed links; true: colored links
+    linkcolor=darkcandyapplered,   % color of internal links
+    citecolor=midnightblue,  % color of links to bibliography
+    urlcolor=cyan,  % color of external links
+    linktocpage=true  % changes the links from the section body to the page number
+    }
+
+% geometry
+\textwidth=16cm 
+\textheight=21cm 
+\hoffset=-55pt 
+\footskip=25pt
+
+% thm envs (you might need to change the path)
+\input{thmEnvironments_macro.tex}
+
+% math ops (you might need to change the path)
+\input{mathOperators_macro.tex}
+
+% miscellaneous commands
+\newcommand{\defn}[1]{{\color{mylightblue}{#1}}}
+\newcommand{\toDo}{{\bf\color{red} TODO}}
+\newcommand{\toCite}{{\bf\color{green} CITE}}
+
+% 
+\newenvironment{nouppercase}{%
+  \let\uppercase\relax%
+  \renewcommand{\uppercasenonmath}[1]{}}{}
+
+% titlepage
+\title{Θ2.04: Θεωρία Αναπαραστάσεων και Συνδυαστική}
+\author[Β.~Δ. Μουστακας]{Βασίλης Διονύσης Μουστάκας \\ Πανεπιστήμιο Κρήτης}
+\date{13 Οκτωβρίου 2025}
+% \urladdr{\href{https://sites.google.com/view/vasmous}{https://sites.google.com/view/vasmous}}
+
+\begin{document}
+
+\begingroup
+\def\uppercasenonmath#1{} % this disables uppercase title
+\let\MakeUppercase\relax % this disables uppercase authors
+\maketitle
+\endgroup
+
+\setcounter{section}{4}
+\thispagestyle{empty}
+
+\begin{center}
+    \textbf{4. Η κανονική αναπαράσταση και ο τύπος διάστασης
+}
+\end{center}
+
+Στην παράγραφο αυτή υποθέτουμε ότι $G$ είναι μια πεπερασμένη ομάδα και όλοι οι διανυσματικοί χώροι είναι πεπερασμένης διάστασης.
+
+Το Θεώρημα του Maschke έστρεψε την προσοχή μας στα ανάγωγα $G$-πρότυπα και το Λήμμα του Schur μας είπε ότι μπορούμε να χρησιμοποιήσουμε τον χώρο $\Hom_G(\Arg,\Arg)$ για να \textquote{μετρήσουμε} πόσο απέχουν δυο $G$-πρότυπα από το να είναι ισόμορφα. Οι παρατηρήσεις αυτές εγείρουν τα εξής ερωτήματα.
+\begin{questions}
+\leavevmode
+\begin{itemize}
+    \item[(1)] Πόσα διαφορετικά ανάγωγα $G$-πρότυπα υπάρχουν ως προς ισομορφισμό?
+    \item[(2)] Πως μπορούμε να υπολογίσουμε όλα τα ανάγωγα $G$-πρότυπα?
+    \item[(3)] Υπάρχει εύκολος τρόπος να καταλάβουμε αν δυο ανάγωγα $G$-πρότυπα είναι ισόμορφα?
+\end{itemize}
+\end{questions}
+
+Ας δούμε την ισοτυπική διάσπαση της κανονικής αναπαράστασης $\rho^\reg$ της $\rmC_4$. Ως προς τη συνήθη βάση $\{\epsilon, g, g^2, g^3\}$, 
+\[
+\rho^\reg(g) = 
+\begin{pmatrix}
+    0 & 0 & 0 & 1 \\
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+\end{pmatrix}.
+\]
+Ο πίνακας αυτός έχει τέσσερις ιδιοτιμές: $1, -1, i, -i$, με αντίστοιχα ιδιοδιανύσματα:
+\[
+\begin{pmatrix}
+    1 \\ 
+    1 \\ 
+    1 \\
+    1
+\end{pmatrix}, \ 
+\begin{pmatrix}
+    1 \\ 
+    -1 \\
+    1 \\ 
+    -1 
+\end{pmatrix}, \ 
+\begin{pmatrix}
+    1 \\ 
+    i \\ 
+    -1 \\ 
+    -i 
+\end{pmatrix}, \ \text{και} \
+\begin{pmatrix}
+    1 \\ 
+    -i \\
+    -1 \\
+    i
+\end{pmatrix}.
+\]
+Συνεπώς, κάνοντας αλλαγή βάσης στην 
+\[
+\{
+    \epsilon + g  + g^2 + g^3, \, 
+    \epsilon - g  + g^2 - g^3, \, 
+    \epsilon + ig - g^2 - ig^3, \, 
+    \epsilon - ig - g^2 + ig^3
+\}
+\]
+του $\CC[\rmC_4]$ έχουμε 
+\[
+\rho^\reg(g) = 
+\begin{pmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & -1 & 0 & 0 \\
+    0 & 0 & i & 0 \\
+    0 & 0 & 0 & -i 
+\end{pmatrix}.
+\]
+Με άλλα λόγια, έχουμε τη διάσπαση 
+\[
+\CC[\rmC_4] = 
+\CC[\epsilon + g  + g^2 + g^3] \oplus 
+\CC[\epsilon - g  + g^2 - g^3] \oplus 
+\CC[\epsilon + ig - g^2 - ig^3] \oplus 
+\CC[\epsilon - ig - g^2 + ig^3],  
+\]
+όπου το $g$ δρα σε καθένα από τους προσθεταίους ως πολλαπλασιασμός με $1, -1, i$ και $-i$, αντίστοιχα (γιατί;).
+
+Συγκρίνοντας με την Άσκηση~1.6 παρατηρούμε ότι κάθε ανάγωγη αναπαράσταση της $\rmC_4$ εμφανίζεται στην ισοτυπική διάσπαση της κανονικής αναπαράστασης της $\rmC_4$ με πολλαπλότητα ίση με τη διάστασή της. Αυτό ισχύει για κάθε ομάδα!
+
+\begin{proposition}
+    \label{prop:regularRep_irreducible_multiplicity}
+    Η πολλαπλότητα εμφάνισης ενός ανάγωγου $G$-προτύπου στην ισοτυπική διάσπαση της κανονική αναπαράσταση της $G$ ισούται με τη διάστασή του.
+\end{proposition}
+
+\begin{proof}[Απόδειξη]
+    Έστω $W$ ένα ανάγωγο $G$-πρότυπο. Από το Λήμμα~3.6, αρκεί να δείξουμε ότι 
+    \[
+    \dim\left(\Hom_G\left(\CC[G],W\right)\right) = \dim(W).
+    \]
+    Έστω $\{w_1, w_2, \dots, w_k\}$ μια βάση του $W$. Θεωρούμε τις απεικονίσεις 
+    \begin{align*}
+        \varphi_i : \CC[G] &\to W \\
+                    g   &\mapsto gw_i
+    \end{align*}
+    για κάθε $1 \le i \le k$. Αυτοί είναι $G$-ομομορφισμοί (γιατί;) και το σύνολο τους αποτελεί βάση του $\Hom_G\left(\CC[G],W\right)$. Το τελευταίο αφήνεται ως άσκηση.
+\end{proof}
+
+Μια άμεση συνέπεια της Πρότασης~\ref{prop:regularRep_irreducible_multiplicity} είναι ότι το πλήθος των κλάσεων ισομορφισμού των ανάγωγων $G$-προτύπων είναι πεπερασμένο, απαντώντας μερικώς στο Ερώτημα~(α). Επιπλέον, υπολογίζοντας τις διαστάσεις στην ισοτυπική διάσπαση της κανονικής αναπαράστασης προκύπτει ο παρακάτω τύπος.
+
+\begin{corollary}{\rm(Τύπος Διάστασης)}
+    \label{cor:dimension_formula}
+    Αν $\{V_1, V_2, \dots, V_n\}$ είναι ένα σύνολο ανά δυο μη ισόμορφων $G$-προτύπων, τότε 
+    \[
+    \CC[G] \cong_G V_1^{\dim(V_1)} \oplus V_2^{\dim(V_2)} \oplus \cdots \oplus V_n^{\dim(V_n)}.
+    \]
+    Ειδικότερα, 
+    \begin{equation}
+        \label{eq:dimension_formula}
+        \abs{G} = \sum_{i=1}^n \left(\dim(V_i)\right)^2.
+    \end{equation}
+\end{corollary}
+
+Η Ταυτότητα~\eqref{eq:dimension_formula} επιβάλει ισχυρούς περιορισμούς στο πλήθος των ανάγωγων $G$-προτύπων. Για παράδειγμα, μια άμεση συνέπεια είναι ότι το πλήθος τους είναι μικρότερο ή ίσο με την τάξη της $G$. Επιπλέον, για 
+\begin{itemize}
+    \item $\abs{G}= 2$ έχουμε 
+    \[
+    2 = 1^2 + 1^2
+    \] 
+    και γι' αυτό υπάρχουν δυο ανάγωγα $\rmC_2$-πρότυπα,
+    \item $\abs{G} = 3$ έχουμε
+    \[
+    3 = 1^2 + 1^2 + 1^3
+    \] 
+    και γι' αυτό υπάρχει τρία ανάγωγα $\rmC_3$-πρότυπα,
+    \item $\abs{G} =4 $ έχουμε 
+    \[
+    4 = 1^2 + 1^2 + 1^2 + 1^2
+    \] 
+    και γι' αυτό υπάρχουν τέσσερα ανάγωγα $\rmC_4$- ή $\rmV_4$-πρότυπα (ποιά είναι;), 
+    \item $\abs{G} = 5$ έχουμε 
+    \[
+    5 = 1^2 + 1^2 + 1^2 + 1^2 + 1^2
+    \]
+    και γι' αυτό υπάρχουν πέντε ανάγωγα $\rmC_5$-πρότυπα,
+    \item $\abs{G} = 6$ έχουμε 
+    \[
+    6 = 1^2 + 1^2 + 1^2 + 1^2 + 1^2 + 1^2 = 1^2 + 1^2 + 2^2,
+    \]
+    όπου η πρώτη περίπτωση αντιστοιχεί στην $\rmC_6$ η οποία έχει έξι ανάγωγα πρότυπα και η δεύτερη στην $\fS_3$ η οποία εμφανίζει το πρώτο ανάγωγο πρότυπο διάστασης 2 (ποιό είναι;),
+    \item $\abs{G} = 7$ έχουμε 
+    \[
+    7 = 1^2 + 1^2 + 1^2 + 1^2 + 1^2 + 1^2 + 1^2,
+    \]
+    και γι' αυτό υπάρχουν επτά ανάγωγα $\rmC_7$-πρότυπα,
+    \item $\abs{G} = 8$ έχουμε
+    \begin{align*}
+    8 &= 1^2 + 1^2 + 1^2 + 1^2 + 1^2 + 1^2 + 1^2 + 1^2 \\ 
+    &=  1^2 + 1^2 + 1^2 + 1^2 + 2^2,
+    \end{align*}
+    όπου η πρώτη περίπτωση αντιστοιχεί στις αβελιανές ομάδες $\rmC_8 , \rmC_4\times\rmC_2$ και $\rmC_2\times\rmC_2\times\rmC_2$ οι οποίες έχουν οκτώ ανάγωγα πρότυπα και η δεύτερη περίπτωση στις μη-αβελιανές ομάδες $\rmD_8$ και $\rmQ_8$\footnote{Η $\rmQ_8$ είναι η  ομάδα των \emph{quaternions}. Μια παράστασή της είναι $\langle i, j \ \vert \ i^4=1, i^2 = j^2, i^{-1}ji=j^{-1}\rangle$. Για μια γεωμετρική εισαγωγή στην ομάδα αυτή δείτε \href{https://youtu.be/d4EgbgTm0Bg?si=oWdYRfOO3EwByIaq}{εδώ}.}, οι οποίες έχουν πέντε ανάγωγα πρότυπα. Στην Άσκηση~1.1 βλέπουμε την ανάγωγη αναπαράσταση διάστασης 2 της διεδρικής ομάδας (ποιές είναι οι υπόλοιπες;).
+\end{itemize}
+
+Η απόδειξη του Πορίσματος~\ref{cor:dimension_formula} δεν μας δίνει πληροφορίες για το πως να κατασκευάσουμε τα ανάγωγα $G$-πρότυπα. Ιδανικά, θα θέλαμε να βρούμε μια οικογένεια $\cC$ \emph{συνδυαστικών} αντικειμένων (για παράδειγμα, μεταθέσεις, ταμπλώ, γραφήματα, μερικές διατάξεις κ.ο.κ.) ώστε για κάθε στοιχείο του $c \in \cC$ να ορίσουμε ένα ανάγωγο $G$-πρότυπο $V_c$, το οποίο και αυτό ενδεχομένως θα δίνεται από μια άλλη οικογένεια συνδυαστικών αντικειμένων. Η ισοτυπική διάσπαση της κανονικής αναπαράστασης παίρνει έτσι την μορφή 
+\[
+\CC[G] \cong_G \bigoplus_{c \in \cC} V_c^{\dim(V_c)}.
+\]
+
+Στην περίπτωση αυτή, θα μπορούσαμε να επανααποδείξουμε τον τύπο διάστασης βρίσκοντας μια αμφιμονοσήμαντη απεικόνιση που εμπλέκει τα στοιχεία της $G$ με ζεύγη στοιχείων του $\cC$ και κάποιων άλλων συνδυαστικών αντικειμένων. Αυτό εν γένει είναι αρκετά δύσκολο. Θα δούμε παρακάτω πως να το κάνουμε στην περίπτωση της συμμετρικής ομάδας. Προβλήματα τέτοιου τύπου αποτελούν μέρος της \emph{συνδυαστικής θεωρίας αναπαραστάσεων}.
+
+\newpage 
+
+\setcounter{section}{5}
+\setcounter{theorem}{0}
+\begin{center}
+    \textbf{5. Χαρακτήρες ομάδων: Εισαγωγή
+}
+\end{center}
+
+Σε ότι ακολουθεί, υποθέτουμε ότι $G$ είναι μια πεπερασμένη ομάδα με ταυτοτικό στοιχείο $\epsilon$ και όλοι οι διανυσματικοί χώροι είναι πεπερασμένης διάστασης.
+
+Όσο μεγαλώνει η διάσταση μιας αναπαραστάσης, τόσο πιο δύσκλο γίνεται να κάνει κανείς υπολογισμούς. Σ' αυτή την περίπτωση, και σκεπτόμενοι το Ερώτημα~(3), μια ιδέα θα ήταν να βρούμε μια \emph{αναλλοίωτη} μιας αναπαράστασης, δηλαδή μια \textquote{ποσότητα} που να την χαρακτηρίζει.
+
+Μια τέτοια αναλλοίωτη, πρέπει να είναι αναλλοίωτη και από την αλλαγή βάσης, διότι όπως είδαμε στην Παράγραφο~3, δυο αναπαραστάσεις είναι ισόμορφες αν διαφέρουν κατά μια αλλαγή βάσης. Δυο προφανείς υποψήφιοι είναι η \emph{ορίζουσα} και το \emph{ίχνος} μιας γραμμικής απεικόνισης.
+
+Η ορίζουσα δεν μπορεί να είναι η ζητούμενη αναλλοίωτη. Για παράδειγμα, ας θεωρήσουμε τις εξής αναπαραστάσεις της $\rmC_2 = \{\epsilon, g\}$
+\[
+    \rho(g) = 
+        \begin{pmatrix}
+            1 & 0 \\
+            0 & 1
+        \end{pmatrix} 
+    \quad 
+    \text{και}
+    \quad
+    \sigma(g) = 
+        \begin{pmatrix}
+            -1 & 0 \\
+            0 & -1
+        \end{pmatrix}.
+\]
+Οι αναπαραστάσεις $(\rho, \CC^2)$ και $(\sigma, \CC^2)$ δεν είναι ισόμορφές (γιατί;), αλλά 
+\[
+\det\left(\rho(g)\right) = 1 = \det\left(\sigma(g)\right).
+\]
+Από την άλλη μεριά,
+\[
+\trace\left(\rho(g)\right) = 2 \neq -2 = \trace\left(\sigma(g)\right).
+\]
+
+\begin{definition}
+    \label{def:character}
+    Έστω $(\rho,V)$ μια αναπαράσταση της $G$. Η απεικόνιση $\chi^{\rho,V} : G \to \CC$ (ή πιο απλά $\chi^V$), που ορίζεται θέτοντας 
+    \[
+    \chi^{\rho,V}(g) \coloneqq \trace\left(\rho(g)\right)
+    \]
+    ονομάζεται \defn{χαρακτήρας}\footnote{Η ορολογία που αναπτύσσουμε για τις αναπαραστάσεις θα χρησιμοποιείτε ελεύθερα για τους αντίστοιχους χαρακτήρες, όπου βγάζει νόημα. Για παράδειγμα, ένας χαρακτήρας θα λέγεται ανάγωγος, αν είναι ο χαρακτήρας μια ανάγωγης αναπαραστάασης.} της αναπαράστασης $(\rho,V)$.
+\end{definition}
+
+Στο τρέχον παράδειγμα, της αναπαράστασης της $\fS_3$ ως ομάδας συμμετρίας ενός ισόπλευρου τριγώνου, έχουμε
+\begin{align*}
+    \underbrace{\begin{pmatrix} 
+        1 & 0 & 0 \\ 
+        0 & 1 & 0 \\ 
+        0 & 0 & 1 
+    \end{pmatrix}
+     }_{\cycle{1}\cycle{2}\cycle{3}} 
+     \quad &\stackrel{\trace(\Arg)}{\mapstoto} \quad 3 \\
+     \underbrace{\begin{pmatrix} 
+        0 & 0 & 1 \\ 
+        1 & 0 & 0 \\ 
+        0 & 1 & 0
+    \end{pmatrix}
+     }_{\cycle{1,2,3}}, \ 
+     \underbrace{\begin{pmatrix} 
+        0 & 1 & 0 \\ 
+        0 & 0 & 1 \\ 
+        1 & 0 & 0
+    \end{pmatrix}
+     }_{\cycle{1,3,2}} 
+     \quad &\stackrel{\trace(\Arg)}{\mapstoto} \quad 0 \\
+     \underbrace{\begin{pmatrix} 
+        0 & 1 & 0 \\ 
+        1 & 0 & 0 \\ 
+        0 & 0 & 1
+    \end{pmatrix}
+     }_{\cycle{1,2}\cycle{3}}, \ 
+     \underbrace{\begin{pmatrix} 
+        0 & 0 & 1 \\ 
+        0 & 1 & 0 \\ 
+        1 & 0 & 0
+    \end{pmatrix}
+     }_{\cycle{1,3}\cycle{2}}, \
+     \underbrace{\begin{pmatrix} 
+        1 & 0 & 0 \\ 
+        0 & 0 & 1 \\ 
+        0 & 1 & 0
+    \end{pmatrix}
+     }_{\cycle{2,3}\cycle{1}} 
+     \quad &\stackrel{\trace(\Arg)}{\mapstoto} \quad 1. \\
+\end{align*}
+
+Αν $\chi^\rmdef$ είναι ο χαρακτήρας της αναπαράστασης καθορισμού της $\fS_n$, τότε 
+\begin{align*}
+\chi^\rmdef(\pi) &= \ \text{πλήθος των 1 στη διαγώνιο του $\rho^\rmdef(\pi)$} \\ 
+&= \abs{\{i \in [n] : \pi_i = i\}} \\ 
+&\coloneqq \fix(\pi)
+\end{align*}
+για κάθε $\pi \in \fS_n$. Με άλλα λόγια, ο χαρακτήρας της αναπαράστασης καθορισμού μιας μετάθεσης ισούται με το πλήθος των στοιχείων που μένουν σταθερά από την δράση της. 
+
+Αυτό ισχύει γενικότερα, για κάθε αναπαράσταση μεταθέσεων, όπως θα δούμε στο δεύτερο φυλλάδιο ασκήσεων. Ειδικότερα, για τον χαρακτήρα $\chi^\reg$ της κανονικής αναπαράστασης της $G$ έχουμε
+\[
+\chi^\reg(g) = 
+\begin{cases}
+    \abs{G}, &\ \text{αν $g = \epsilon$} \\
+    0, &\ \text{διαφορετικά}
+\end{cases}
+\]
+(γιατί;).
+
+\begin{combInterlude}
+    Η απεικόνιση $\fix : \fS_n \to \NN$ αποτελεί παράδειγμα \emph{στατιστικ΄ής μεταθέσεων}. Γενικά, \defn{στατιστική} ενός συνόλου $\cC$ συνδυαστικών αντικειμένων ονομάζεται μια απεικόνιση 
+    \[
+    \stat : \cC \to \NN.
+    \]
+    Η $\stat$ εκλεπτύνει την απαρίθμηση στο $\cC$.
+
+    Για παράδειγμα, αν $\cC = 2^{[n]}$ είναι το σύνολο όλων των υποσυνόλων του $[n]$, τότε ο πληθάριθμος $\abs{\Arg} : 2^{[n]} \to \NN$ είναι μια στατιστική η οποία εκλεπτύνει το πλήθος των στοιχείων του $2^{[n]}$ με την εξής έννοια 
+    \[
+    2^n = \sum_{S \ \in \ 2^{[n]}} \abs{S} = \sum_{k=0}^n \binom{n}{k},
+    \]
+    όπου με $\binom{n}{k}$ συμβολίζουμε τον \emph{δυωνυμικό συντελεστή}, δηλαδή το πλήθος των υποσυνόλων του $[n]$ με $k$ στοιχεία.
+
+    Οι στατιστικές μεταθέσεων αποτελούν βασικό αντικείμενο μελέτης της \emph{απαριθμητικής} και \emph{αλγεβρικής συνδυαστικής}. Παρακάτω θα δούμε και άλλα παραδείγματα στατιστικών μεταθέσεων.
+\end{combInterlude}
+
+\begin{proposition}
+    \label{prop:character_properties}
+    Έστω $(\rho,V)$ μια αναπαράσταση της $G$.
+    \begin{itemize}
+        \item[(1)] Ισχύει ότι
+        $
+        \chi^{\rho,V}(\epsilon) = \dim(V).
+        $
+        \item[(2)] Ο χαρακτήρας μια αναπαράστασης της $G$ έχει σταθερή τιμή στις κλάσεις συζυγίας της $G$.
+        \item[(3)] Δυο ισόμορφες αναπαραστάσεις έχουν τον ίδιο χαρακτήρα.
+    \end{itemize}
+\end{proposition}
+
+\begin{proof}[Απόδειξη]
+    To (1) έπεται από το ότι ο πίνακας του $\rho(\epsilon)$ είναι ο ταυτοτικός πίνακας διάστασης $\dim(V)$. Για το (2), θεωρούμε δυο συζυγή $g, h \in G$, δηλαδή $g = xhx^{-1}$ για κάποιο $x \in G$. Τότε,
+    \begin{align*}
+    \chi^{\rho,V}(g) 
+    &= \trace\left(\rho(g)\right) \\
+    &= \trace\left(\rho(xhx^{-1})\right) \\
+    &= \trace\left(\rho(x)\rho(h)\left(\rho(x)\right)^{-1}\right) \\
+    &= \trace\left(\rho(h)\right) \\
+    &= \chi^{\rho,V}(h),
+    \end{align*}
+    όπου η τρίτη ισότητα έπεται από το ότι ο $\rho$ είναι ομομορφισμός ομάδων και η τέταρτη από το ότι το ίχνος είναι αναλλοίωτο για όμοιους πίνακες\footnote{Δυο τετραγωνικοί πίνακες $A,B$ ίδιας διάστασης ονομάζονται \defn{όμοιοι} αν υπάρχει αντιστρέψιμος πίνακας $P$ τέτοιος ώστε $B = PAP^{-1}$. Με άλλα λόγια, όμοιοι είναι οι συζυγείς πίνακες στην γενική γραμμική ομάδα.}. Όμοια έπεται και το (3).
+\end{proof}
+\end{document}
