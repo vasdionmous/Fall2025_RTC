@@ -1,0 +1,415 @@
+\documentclass[12pt,a4paper,reqno]{amsart}
+
+% section handling
+\usepackage{subfiles} 
+
+% language
+\usepackage[greek,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{alphabeta}
+
+% change default names to greek
+\addto\captionsenglish{
+    \renewcommand{\contentsname}{Περιεχόμενα}
+    \renewcommand{\refname}{Βιβλιογραφία}
+    \renewcommand{\datename}{Ημερομηνία:}
+    \renewcommand{\urladdrname}{Ιστοσελίδα}
+}
+
+% math 
+\usepackage{amsmath,amsthm,amssymb,amscd}
+
+% font
+\usepackage[cal=euler]{mathalfa}
+\usepackage{libertinus-type1}
+% \usepackage{txfonts} % for upright greek letters
+\usepackage{bm} % for bold symbols
+\usepackage{bbm} % for the simply-looking bb symbols
+
+% miscellaneous 
+\usepackage{changepage} %for indenting environments
+\usepackage{csquotes} % example: \textcquote{}
+
+% drawing
+\usepackage{tikz,tikz-cd}
+\usetikzlibrary{shapes.misc, patterns, matrix, calc, intersections,positioning}
+\usepackage{graphics,graphicx}
+\usepackage{float} % provides enhanced control and customization options for floating objects such as figures and tables
+
+% colors
+\usepackage{xcolor}
+\definecolor{darkcandyapplered}{rgb}{0.64, 0.0, 0.0}
+\definecolor{midnightblue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{mylightblue}{HTML}{336699}
+\definecolor{burntorange}{rgb}{0.8, 0.33, 0.0}
+\definecolor{iceberg}{rgb}{0.44, 0.65, 0.82}
+
+% hrefs
+\usepackage{hyperref}
+\usepackage[noabbrev,capitalize]{cleveref}
+\hypersetup{
+    pdftoolbar=true,        
+    pdfmenubar=true,        
+    pdffitwindow=false,     
+    pdfstartview={FitH},  % fits the width of the page to the window
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfnewwindow=true,  % links in new window
+    colorlinks=true,  % false: boxed links; true: colored links
+    linkcolor=darkcandyapplered,   % color of internal links
+    citecolor=midnightblue,  % color of links to bibliography
+    urlcolor=cyan,  % color of external links
+    linktocpage=true  % changes the links from the section body to the page number
+    }
+
+% geometry
+\textwidth=16cm 
+\textheight=21cm 
+\hoffset=-55pt 
+\footskip=25pt
+
+% thm envs (you might need to change the path)
+\input{thmEnvironments_macro.tex}
+
+% math ops (you might need to change the path)
+\input{mathOperators_macro.tex}
+
+% miscellaneous commands
+\newcommand{\defn}[1]{{\color{mylightblue}{#1}}}
+\newcommand{\toDo}{{\bf\color{red} TODO}}
+\newcommand{\toCite}{{\bf\color{green} CITE}}
+
+% 
+\newenvironment{nouppercase}{%
+  \let\uppercase\relax%
+  \renewcommand{\uppercasenonmath}[1]{}}{}
+
+% titlepage
+\title{Θ2.04: Θεωρία Αναπαραστάσεων και Συνδυαστική}
+\author[Β.~Δ. Μουστακας]{Βασίλης Διονύσης Μουστάκας \\ Πανεπιστήμιο Κρήτης}
+\date{14 Οκτωβρίου 2025}
+% \urladdr{\href{https://sites.google.com/view/vasmous}{https://sites.google.com/view/vasmous}}
+
+\begin{document}
+
+\begingroup
+\def\uppercasenonmath#1{} % this disables uppercase title
+\let\MakeUppercase\relax % this disables uppercase authors
+\maketitle
+\endgroup
+
+\setcounter{section}{5}
+\setcounter{theorem}{2}
+\begin{center}
+    \textbf{5. Χαρακτήρες ομάδων: Εισαγωγή (συνέχεια)
+}
+\end{center}
+
+\begin{definition}
+    \label{def:class_function}
+    Μια απεικόνιση $\alpha : G \to \CC$ η οποία έχει σταθερή τιμή στις κλάσεις συζυγίας της $G$, δηλαδή 
+    \[
+    \alpha(g) = \alpha(xgx^{-1})
+    \]
+    για κάθε $x \in G$ και $g \in G$ ονομάζεται \defn{συνάρτηση κλάσης} (class function).
+\end{definition}
+
+Η Πρόταση~5.2~(2) μας πληροφορεί ότι κάθε χαρακτήρας της $G$ είναι συνάρτηση κλάσης. Το σύνολο $\rmCF_\CC(G)$ (ή πιο απλά $\rmCF(G)$) όλων των συναρτήσεων κλάσης της $G$ αποτελεί διανυσματικό χώρο με πράξη την πρόσθεση συναρτήσεων 
+\[
+(\alpha+\beta)(g) \coloneqq \alpha(g) + \beta(g)
+\]
+για κάθε $\alpha, \beta \in \rmCF(G)$ και $g \in G$ (γιατί;). Μια προφανής βάση του χώρου αυτού αποτελείται από τις χαρακτηριστικές συναρτήσεις στις κλάσεις συζυγίας $\rmK$ της $G$, δηλαδή 
+\[
+1_K(g) \coloneqq 
+\begin{cases}
+    1, &\ \text{αν $g \in K$} \\
+    0, &\ \text{διαφορετικά}.
+\end{cases}
+\]
+Συνεπώς, 
+\begin{equation}
+    \label{eq:CF_dimension}
+    \dim\left(\rmCF(G)\right) = \ \text{πλήθος των κλάσεων συζυγίας της $G$}.
+\end{equation}
+
+\begin{definition}
+    \label{def:character_table}
+    Ο πίνακας 
+    \[
+    \begin{array}{c | c}
+                              & \text{κλάσεις συζυγίας της $G$} \\ 
+    \hline 
+    \text{ανάγωγοι}           &        \\
+    \text{χαρακτήρες}  &  \vdots    \\
+    \text{μη ισόμορφων}       & \cdots \ \chi(K) \ \cdots\\  
+    \text{αναπαραστάσεων}     & \vdots \\
+    \text{της $G$}
+    \end{array}
+    \]
+    ονομάζεται \defn{πίνακας χαρακτήρων} (character table) της $G$. Στην πρώτη στήλη θα αναγράφεται πάντα η κλάση συζυγίας του ταυτοτικού στοιχείου και στην πρώτη γραμμή ο χαρακτήρας της τετριμμένης αναπαράστασης.
+\end{definition}
+
+Ας (προσπαθήσουμε) να υπολογίσουμε τον πίνακα χαρακτήρων της συμμετρικής ομάδας $\fS_3$. Οι κλάσεις συζυγίας της $\fS_3$ είναι 
+\[
+Κ_1 = \{\cycle{1}\cycle{2}\cycle{3}\}, \ 
+K_2 = \{\cycle{1,2}\cycle{3}, \cycle{1,3}\cycle{2}, \cycle{2,3}\cycle{1}\}, \ \text{και} \ \
+K_3= \{\cycle{1,2,3}, \cycle{1,3,2}\}.
+\]
+Στην Παράγραφο~4 είδαμε ότι η $\fS_3$ έχει τρεις διαφορετικές ανάγωγες αναπαραστάσεις: 
+\begin{itemize}
+    \item την τετριμμένη αναπαράσταση,
+    \item την αναπαράσταση προσήμου,
+\end{itemize}  
+των οποίων τους χαρακτήρες συμβολίζουμε με $\chi^\rmdef$ και $\chi^\sign$, αντίστοιχα και 
+\begin{itemize}
+    \item μια ανάγωγη αναπαράσταση διάστασης 2.
+\end{itemize} 
+Συνεπώς, ο πίνακας χαρακτήρων της $\fS_3$ έχει την εξής μορφή
+\renewcommand{\arraystretch}{1.2} % increases row height by 20%
+\[
+\begin{array}{l|c|c|c}
+                  & K_1 & K_2 & K_3 \\ \hline
+    \chi^\triv    & 1   & 1   & 1 \\ \hline
+    \chi^\sign    & 1   & -1  & 1 \\ \hline
+    \chi^\text{;} & 2   & \text{;}   & \text{;} 
+\end{array}.
+\]
+Ποιός είναι ο ανάγωγος χαρακτήρας που λείπει;
+
+Ας κάνουμε το ίδιο για την κυκλική ομάδας $\rmC_3 = \{\epsilon, g, g^2\}$ τάξης 3. Αφού η $\rmC_3$ είναι αβελιανή ομάδα, κάθε στοιχείο της σχηματίζει τη δική του κλάση συζυγίας. Στην Άσκηση~1.6 είδαμε ότι η $\rmC_3$ έχει τρεις ανάγωγες αναπαραστάσεις με χαρακτήρες\footnote{Στην περίπτωση όπου η αναπαράσταση έχει διάσταση 1, τότε η έννοια του χαρακτήρα και της αναπαράστασης ταυτίζονται.}
+\[
+\chi_1(g) = 1, \quad \chi_2(g) = \zeta, \quad \chi_3(g) = \zeta^2,
+\]
+όπου $\zeta$ είναι μια τρίτη ρίζα της μονάδας. Συνεπώς, ο πίνακας χαρακτήρων της $\rmC_3$ είναι 
+\[
+\begin{array}{l|c|c|c}
+           & \{\epsilon\} & \{g\}   & \{g^2\} \\ \hline
+    \chi_1 & 1            & 1       & 1 \\ \hline
+    \chi_2 & 1            & \zeta   & \zeta^2 \\ \hline
+    \chi_3 & 1            & \zeta^2 & \zeta
+\end{array}.
+\]
+Ομοίως, o πίνακας χαρακτήρων της κυκλικής ομάδας τάξης 4 είναι 
+\[
+\begin{array}{l|c|c|c|c}
+           & \{\epsilon\} & \{g\}   & \{g^2\} & \{g^3\} \\ \hline
+    \chi_1 & 1            & 1       & 1       & 1       \\ \hline
+    \chi_2 & 1            & -1      & 1       & -1      \\ \hline
+    \chi_3 & 1            & i       & -1      & -i      \\ \hline 
+    \chi_4 & 1            & -i      & -1      & i      
+\end{array}
+\]
+(γιατί;).
+
+\newpage
+
+\setcounter{section}{6}
+\setcounter{theorem}{0}
+\begin{center}
+    \textbf{6. Χαρακτήρες ομάδων: Κατασκευές προτύπων
+}
+\end{center}
+
+Το ευθύ άρθοισμα $V\oplus W$ δυο διανυσματικών χώρων $V$ και $W$ γίνεται $G$-πρότυπο\footnote{Όπως είδαμε και στην περίπτωση του ευθέως αθροίσματος δυο υπόχωρων.} με τη \emph{διαγώνια δράση}:
+\[
+g\cdot(v,w) \coloneqq (gv,gw).
+\]
+Το ευθύ άθροισμα είναι μια κατασκευή μεταξύ διανυσματικών χώρων όπου τα στοιχεία του δεν \textquote{ανακατεύονται}. Για παράδειγμα, 
+\[
+\underbrace{\begin{pmatrix}
+    a \\ 
+    b
+\end{pmatrix}}_{\in \, \RR^2}
+\oplus
+\underbrace{\begin{pmatrix}
+    c \\ 
+    d \\ 
+    e
+\end{pmatrix}}_{\in \, \RR^3}
+=
+\begin{pmatrix}
+    a \\ 
+    b \\ 
+    c \\ 
+    d \\ 
+    e
+\end{pmatrix} \ \in \RR^5
+\]
+Όπως θα δούμε παρακάτω, ο χαρακτήρας του ευθέως αθροίσματος ισούται με το \emph{άθροισμα} των χαρακτήρων των αντίστοιχων προτύπων.
+
+Πώς θα μπορούσαμε να κατασκευάσουμε ένα πρότυπο του οποίου τα στοιχεία θα \textquote{ανακατεύονται} (ή \emph{πολλαπλασιάζονται}) και σε επίπεδο χαρακτήρων αυτό να μεταφράζεται σε \emph{πολλαπλασιασμό}; Για παράδειγμα, θα θέλαμε 
+\[
+\underbrace{\begin{pmatrix}
+    a \\ 
+    b
+\end{pmatrix}}_{\in \, \RR^2}
+\ \text{\textquote{$\times$}} \
+\underbrace{\begin{pmatrix}
+    c \\ 
+    d \\ 
+    e
+\end{pmatrix}}_{\in \, \RR^3}
+\ \text{\textquote{$=$}} \
+\begin{pmatrix}
+    ac \\ 
+    ad \\ 
+    ae \\ 
+    bc \\ 
+    bd \\
+    be
+\end{pmatrix} \ \in \RR^6.
+\]
+
+Όπως και στο ευθύ άθροισμα, ξεκινάμε με το $V\times{W}$. Στο $V \oplus W$ όμως, η πρόσθεση ορίζεται κατά συντεταγμένες. Για παράδειγμα, στο $\RR^2 \oplus \RR^2$ έχουμε 
+\[
+((1,0) + (0,1), (1,2)) = ((1,1), (1,2)).
+\]
+Στον δικό μας χώρο όμως, θα θέλαμε ο \textquote{πολλαπλασιασμός} να είναι επιμεριστικός ως προς την πρόσθεση:
+\[
+(v + v') \ \text{\textquote{$\times$}} \ w = 
+v \ \text{\textquote{$\times$}} \ w + v' \ \text{\textquote{$\times$}} \ w,
+\]
+το οποίο δε συμβαίνει στο $V\oplus W$. Στο παράδειγμα, 
+\[
+((1,0), (1,2)) + ((0,1),(1,2)) = ((1,1), (2,4)) \neq ((1,1), (1,2)).
+\] 
+Για να \textquote{λύσουμε} αυτό το πρόβλημα, κατασκευάζουμε έναν χώρο, όπου \emph{εξαναγκάζουμε} τα στοιχεία του να ικανοποιούν την επιμεριστική ιδιότητα.
+
+\begin{definition}
+    \label{def:tensor_product}
+    Έστω $V$ και $W$ δυο διανυσματικοί χώρου. Ο χώρος πηλίκο
+    \[
+    V \otimes W \coloneqq \FF[V \times W] / U,
+    \]
+    όπου $U$ είναι ο υπόχωρος που παράγεται από όλα τα στοιχεία της μορφής 
+    \begin{itemize}
+        \item $(v + v', w) - (v,w) - (v',w)$
+        \item $(v, w+w') - (v,w) - (v,w')$
+        \item $(cv, w) - c(v,w)$
+        \item $(v, cw) - c(v,w)$,
+    \end{itemize}
+    για κάθε $v, v' \in V$, $w, w' \in W$ και $c \in \FF$ ονομάζεται \defn{τανυστικό γινόμενο} (tensor product) των $V$ και $W$.
+\end{definition}
+
+\begin{remark}
+    Ο ορισμός του τανυστικού γινομένου εξαρτάται σε μεγάλο βαθμό πάνω από πιο σώμα το ορίζουμε. Γι αυτό συνήθως χρησιμοποιείται ο συμβολισμός $V\otimes_{\FF}W$. Για παράδειγμα, ως διανυσματικοί χώροι $\CC\otimes_\CC\CC \ncong \CC\otimes_\RR\CC$, καθώς ο πρώτος έχει διάσταση 1 (βλ. Παράδειγμα~6.4~(1)), ενώ ο δεύτερος έχει διάσταση 2 (βλ. Θεώρημα~\ref{thm:tensor_product_basis}), αλλά τέτοιες περιπτώσεις δε θα μας απασχολήσουν σε αυτό το μάθημα.
+\end{remark}
+
+Το τανυστικό γινόμενο αποτελείται από όλους γραμμικούς συνδυασμούς 
+\[
+\sum_{(v,w) \in V\times W} c_{v,w}(v,w)
+\]
+όπου όλα τα $c_{v,w}=0$ εκτός από ένα πεπερασμένο πλήθος που είναι μη μηδενικά, modulo τις σχέσεις του $U$. Την κλάση ενός στοιχείου $(v,w)$ τη συμβολίζουμε με $v \otimes w$ και ονομάζεται \defn{στοιχειώδης τανυστής} (simple tensor).
+
+Πρέπει να είναι κανείς προσεκτικός όταν δουλεύει με στοιχείωδεις τανυστές καθώς μπορεί να έχουν πολλές \textquote{διαφορετικές} μορφές. Για παράδειγμα, 
+\[
+(2\bfe_1) \otimes \bfe_2 = 2(\bfe_1 \otimes \bfe_2) = \bfe_1 \otimes (2\bfe_2) = 4(\bfe_1 \otimes (\frac{1}{2}\bfe_2)) = \cdots. 
+\]
+
+Το τανυστικό γινόμενο μας επιτρέπει να \textquote{πολλαπλασιάσουμε} στοιχεία διανυσματικών χώρων όπου εκ των προτέρων δεν υπάρχει κάποιος προφανής \textquote{πολλαπλασιασμός}. Για παράδειγμα\footnote{Με $\FF[t]$ και $\rmMat_n(\FF)$ συμβολίζουμε τον χώρο των πολυωνύμων στο $t$ με συντελεστές στο $\FF$ και τον χώρο των $(n\times n)$-πινάκων με στοιχεία από το $\FF$, αντίστοιχα.}, στο $\RR[t] \otimes \rmMat_2(\RR)$,
+\begin{align*}
+(1 + 2t) \otimes \begin{pmatrix}
+    0 & 1 \\
+    2 & 0 
+\end{pmatrix} &= 
+1 \otimes \begin{pmatrix}
+    0 & 1 \\
+    2 & 0 
+\end{pmatrix} + 2t \otimes \begin{pmatrix}
+    0 & 1 \\
+    2 & 0 
+\end{pmatrix} \\ 
+&= 
+1 \otimes \begin{pmatrix}
+    0 & 1 \\
+    2 & 0 
+\end{pmatrix} + t \otimes \begin{pmatrix}
+    0 & 2 \\
+    4 & 0 
+\end{pmatrix} \\
+&= \cdots 
+\end{align*}
+Σε κάποιες περιπτώσεις όμως που υπάρχει ένας προφανής \textquote{πολλαπλασιασμός}, παίρνουμε διαφορετικά στοιχεία από αυτά που περιμέναμε. Για παράδειγμα, στο $\RR[t] \otimes \RR[t]$, 
+\[
+1 \otimes t^2 \neq t \otimes t \neq t^2 \otimes 1.
+\]
+
+\begin{definition}
+    \label{def:bilinear}
+    Έστω $V, W$ και $U$ διανυσματικοί χώροι. Μια απεικόνιση $f: V\times W \to U$ ονομάζεται \defn{διγραμμική} αν 
+    \begin{align*}
+        f(c_1v_1 + c_2v_2, w) &= c_1f(v_1,w) + c_2f(v_2,w) \\
+        f(v, cw_1+dw_2) &= c_1f(v,w_1) + c_2f(v,w_2) \\
+    \end{align*}
+    για κάθε $v_1, v_2 \in V$, $w_1, w_2 \in W$ και $c_1, c_2 \in \FF$.
+\end{definition}
+
+Οι σχέσεις που \textquote{επιβάλλαμε} στο $\FF[V\times{W}]$ στον Ορισμό~\ref{def:tensor_product} έχουν ως συνέπεια η απεικόνιση
+\begin{align*}
+\proj : V \times W &\to V \otimes W \\
+(v,w) &\mapsto v \otimes w
+\end{align*}
+να είναι διγραμμική (γιατί;). Το επόμενο αποτέλεσμα εκφράζει την \emph{καθολική ιδιότητα} του τανυστικού γινομένου ως προς τις διγραμμικές απεικονίσης.
+\begin{theorem}
+    \label{thm:tensor_product_universal_property}
+    Έστω $V, W$ και $U$ διανυσματικοί χώροι. Για κάθε διγραμμική απεικόνιση $f: V \times W \to U$, υπάρχει μοναδική γραμμική απεικόνιση $\ol{f}: V \otimes W \to U$, τέτοια ώστε
+    \[
+    f = \ol{f} \circ \proj
+    \]
+    ή ισοδύναμα το διάγραμμα
+    \[
+    \begin{tikzcd}
+    V\times W \arrow[r, "f"] \arrow[d, "\proj"'] & U \\
+    V \otimes W   \arrow[ur, "\ol{f}"']          & 
+    \end{tikzcd}
+    \]
+    είναι μεταθετικό. Ειδικότερα, υπάρχει μια αμφιμονοσήμαντη απεικόνιση 
+    \[
+    \left\{
+        \begin{array}{c}
+        \text{διγραμμικές απεικονίσεις} \\
+        V \times W \to U
+    \end{array}
+    \right\} 
+    \to
+    \left\{
+    \begin{array}{c}
+        \text{γραμμικές απεικονίσεις} \\
+        V \otimes W \to U
+    \end{array}
+    \right\}.    
+    \]
+\end{theorem}
+
+Το Θεώρημα~\ref{thm:tensor_product_universal_property}, η απόδειξη του οποίου παραλλείπεται, μας επιτρέπει να \textquote{αναγνωρίσουμε} τανυστικά γινόμενα ως εξής: αν θέλουμε να ορίσουμε μια γραμμική απεικόνιση $V\otimes{W} \to U$, αρκεί να βρούμε μια διγραμμική απεικόνιση $V\times{W} \to U$.
+
+\begin{example}
+    \leavevmode
+    \begin{itemize}
+        \item[(1)] Για κάθε διανυσματικό χώρο $V$, ισχύει ότι $\FF \otimes V \cong V$. Πράγματι, η απεικόνιση 
+        \begin{align*}
+            \FF\times{V} &\to V \\
+            (c,v) &\mapsto cv
+        \end{align*}
+        είναι διγραμμική (γιατί;) και από το Θεώρημα~\ref{thm:tensor_product_universal_property} επάγεται μια γραμμική απεικόνιση 
+        \begin{align*}
+            \FF\otimes{V} &\to V \\
+            c\otimes{v} &\mapsto cv.
+        \end{align*}
+        Η αντίστροφή της δίνεται από $v \mapsto 1 \otimes v$ (γιατί;).
+        \item[(2)] Έστω $\KK$ ένα σώμα το οποίο περιέχει το $\FF$. Το τανυστικό γινόμενο $\KK \otimes V$ (πάνω από το $\FF$) γίνεται διανυσματικός χώρος πάνω από το $\KK$ θέτοντας 
+        \[
+        c \cdot \left(\sum_{i} a_i \otimes v\right) \coloneqq \sum_{i} (ca_i) \otimes v,
+        \]
+        για κάθε $c \in \KK$. Η κατασκευή αυτή ονομάζεται \emph{επέκταση βαθμωτών} από το $\FF$ στο $\KK$. 
+
+        Για παράδειγμα, αν $\KK = \CC$ και $\FF = \RR$, τότε το τανυστικό γινόμενο $\CC \otimes \RR$ ως διανυσματικός χώρος πάνω από το $\CC$ είναι ισόμορφος με το ίδιο το $\CC$, μέσω της ταύτισης
+        \[
+        a + ib \ \mapsto \ 1 \otimes a + i \otimes b 
+        \]
+        (γιατί;).
+    \end{itemize}
+\end{example}
+\end{document}
