@@ -1,0 +1,347 @@
+\documentclass[12pt,a4paper,reqno]{amsart}
+
+% section handling
+\usepackage{subfiles} 
+
+% language
+\usepackage[greek,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{alphabeta}
+
+% change default names to greek
+\addto\captionsenglish{
+    \renewcommand{\contentsname}{Περιεχόμενα}
+    \renewcommand{\refname}{Βιβλιογραφία}
+    \renewcommand{\datename}{Ημερομηνία:}
+    \renewcommand{\urladdrname}{Ιστοσελίδα}
+}
+
+% math 
+\usepackage{amsmath,amsthm,amssymb,amscd}
+
+% font
+\usepackage[cal=euler]{mathalfa}
+\usepackage{libertinus-type1}
+% \usepackage{txfonts} % for upright greek letters
+\usepackage{bm} % for bold symbols
+\usepackage{bbm} % for the simply-looking bb symbols
+
+% miscellaneous 
+\usepackage{changepage} %for indenting environments
+\usepackage{csquotes} % example: \textcquote{}
+
+% drawing
+\usepackage{tikz,tikz-cd}
+\usetikzlibrary{shapes.misc, patterns, matrix, calc, intersections,positioning}
+\usepackage{graphics,graphicx}
+\usepackage{float} % provides enhanced control and customization options for floating objects such as figures and tables
+
+% colors
+\usepackage{xcolor}
+\definecolor{darkcandyapplered}{rgb}{0.64, 0.0, 0.0}
+\definecolor{midnightblue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{mylightblue}{HTML}{336699}
+\definecolor{burntorange}{rgb}{0.8, 0.33, 0.0}
+\definecolor{iceberg}{rgb}{0.44, 0.65, 0.82}
+\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
+\definecolor{canaryyellow}{rgb}{1.0, 0.94, 0.0}
+
+% hrefs
+\usepackage{hyperref}
+\usepackage[noabbrev,capitalize]{cleveref}
+\hypersetup{
+    pdftoolbar=true,        
+    pdfmenubar=true,        
+    pdffitwindow=false,     
+    pdfstartview={FitH},  % fits the width of the page to the window
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfnewwindow=true,  % links in new window
+    colorlinks=true,  % false: boxed links; true: colored links
+    linkcolor=darkcandyapplered,   % color of internal links
+    citecolor=midnightblue,  % color of links to bibliography
+    urlcolor=cyan,  % color of external links
+    linktocpage=true  % changes the links from the section body to the page number
+    }
+
+% geometry
+\textwidth=16cm 
+\textheight=21cm 
+\hoffset=-55pt 
+\footskip=25pt
+
+% thm envs (you might need to change the path)
+\input{thmEnvironments_macro.tex}
+
+% math ops (you might need to change the path)
+\input{mathOperators_macro.tex}
+
+% miscellaneous commands
+\newcommand{\defn}[1]{{\color{mylightblue}{#1}}}
+\newcommand{\toDo}{{\bf\color{red} TODO}}
+\newcommand{\toCite}{{\bf\color{green} CITE}}
+
+% 
+\newenvironment{nouppercase}{%
+  \let\uppercase\relax%
+  \renewcommand{\uppercasenonmath}[1]{}}{}
+
+% titlepage
+\title{Θ2.04: Θεωρία Αναπαραστάσεων και Συνδυαστική}
+\author[Β.~Δ. Μουστακας]{Βασίλης Διονύσης Μουστάκας \\ Πανεπιστήμιο Κρήτης}
+\date{22 Οκτωβρίου 2025}
+% \urladdr{\href{https://sites.google.com/view/vasmous}{https://sites.google.com/view/vasmous}}
+
+\begin{document}
+
+\begingroup
+\def\uppercasenonmath#1{} % this disables uppercase title
+\let\MakeUppercase\relax % this disables uppercase authors
+\maketitle
+\endgroup
+
+\setcounter{section}{6}
+\setcounter{theorem}{4}
+\begin{center}
+    \textbf{6. Χαρακτήρες ομάδων: Κατασκευές προτύπων
+} (Συνέχεια)
+\end{center}
+
+\begin{theorem}
+    \label{thm:tensor_product_basis}
+    Αν $\{v_1, v_2, \dots, v_n\}$ και $\{w_1, w_2, \dots, w_m\}$ είναι βάσεις των διανυσματικών χώρων $V$ και $W$ αντίστοιχα, τότε το 
+    \[
+    \{v_i \otimes w_j : 1 \le i \le n, \ 1 \le j \le m\}
+    \]
+    αποτελεί βάση του $V \otimes W$.
+\end{theorem}
+
+\begin{example_cont}{\rm(Συνέχεια)}
+    \begin{itemize}
+        \item[(3)] Ισχύει ότι $\rmMat_{n\times{m}}(\FF) \otimes \rmMat_{k\times{\ell}}(\FF) \cong \rmMat_{nk\times{m\ell}}(\FF)$. Ειδικότερα, $\FF^n \otimes \FF^m \cong \FF^{nm}$, όπως ελπίζαμε στην αρχή της παραγράφου. Πράγματι, η απεικόνιση 
+        \[
+        (Α,Β) \mapsto
+        \begin{pmatrix}
+            a_{11}B & a_{12}B & \cdots & a_{1m}B \\
+            a_{21}B & a_{22}B & \cdots & a_{2m}B \\
+            \vdots & \vdots &        & \vdots \\
+            a_{n1}B & a_{n2}B & \cdots & a_{nm}B
+        \end{pmatrix} 
+        \]
+        όπου $A = (a_{ij})_{\substack{1 \le i \le n\\ 1 \le j \le m}}$ και στο δεξί μέλος έχουμε τον μπλόκ-πίνακα\footnote{Ο πίνακας $A\otimes{B}$ ονομάζεται \defn{γινόμενο Kronecker} των $Α$ και $B$.} του οποίου το $(i,j)$-μπλοκ είναι ο πίνακας $a_{ij}B$, είναι διγραμμική απεικόνιση (γιατί;). Από το Θεώρημα~6.3, επάγεται μια γραμμική απεικόνιση 
+        \[
+        \phi : \rmMat_{n\times{m}}(\FF) \otimes \rmMat_{k\times{\ell}}(\FF) \to \rmMat_{nk\times{m\ell}}(\FF). 
+        \]
+        Από το Θεώρημα~\ref{thm:tensor_product_basis}, το σύνολο 
+        \[
+        \{E_{ij} \otimes E_{rs} : 1\le{i}\le{n}, 1 \le j \le m, \ 1 \le r \le k, 1 \le s \le \ell\}
+        \]
+        όπου $E_{ij}$ είναι ο στοιχειώδης πίνακας που έχει 1 στη θέση $(i,j)$ και 0 οπουδήποτε αλλού
+        αποτελεί βάση του $\rmMat_{n\times{m}}(\FF) \otimes \rmMat_{k\times{\ell}}(\FF)$. Ποιά είναι η εικόνα της βάσης αυτής μέσω της $\phi$;
+    \end{itemize}
+\end{example_cont}
+
+Ένας ακόμη διανυσματικός χώρος που έχει διάσταση $\dim(V)\dim(W)$ είναι ο $\Hom(V,W)$. Πράγματι, αν $\{v_1, v_2, \dots, v_n\}$ και $\{w_1, w_2, \dots, w_m\}$ είναι βάσεις των $V$ και $W$ αντίστοιχα, τότε το σύνολο $\{\varphi_{ij} : 1 \le i \le n, \ 1 \le j \le m\}$, όπου 
+\[
+\varphi_{ij}(v_k) =
+\begin{cases}
+    w_j, &\ \text{αν $i=k$} \\ 
+    0,   &\ \text{διαφορετικά}
+\end{cases}
+\]
+αποτελεί βάση του $\Hom(V,W)$ (γιατί;). Στην Άσκηση~1.4 είδαμε ότι αυτός ο χώρος γίνεται $G$-πρότυπο θέτοντας 
+\begin{equation}
+    \label{eq:action_on_HomVW}
+(g \cdot \varphi)(v) \coloneqq \underbrace{g \cdot \left(\varphi(\underbrace{g^{-1}\cdot{v}}_{\text{δράση της $G$ στο $V$}})\right)}_{\text{δραση της $G$ στο $W$}}
+\end{equation}
+Στην ειδική περίπτωση όπου $W = \FF$ και η δράση της $G$ είναι η τετριμμένη, τότε η Ταυτότητα \eqref{eq:action_on_HomVW} παίρνει την μορφή 
+\[
+(g \cdot \varphi)(v) = \varphi(g^{-1}\cdot{v}).
+\]
+
+Το τανυστικό γινόμενο $V \otimes W$ γίνεται και αυτό $G$-πρότυπο με τη διαγώνια δράση 
+\[
+g \cdot v\otimes w \coloneqq gv \otimes gw. 
+\]
+Είναι λογικό λοιπόν να αναρρωτηθούμε αν τα δυο αυτά $G$-πρότυπα είναι ισόμορφα. 
+\begin{theorem}
+    \label{thm:vdual_tensor_w_cong_homvw}
+    Η απεικόνιση $\Gamma : V^\ast \otimes W \to \Hom(V,W)$, όπου 
+    \begin{align*}
+    \Gamma(f \otimes w) : V &\to W \\
+        v &\mapsto f(v)w
+    \end{align*}
+    για κάθε $f \in V^\ast$ και $w \in W$ είναι $G$-ισομορφισμός.
+\end{theorem}
+
+Πριν την απόδειξη του Θεωρήματος~\ref{thm:vdual_tensor_w_cong_homvw}, ας θυμηθούμε τον δυϊκό χώρο.
+\begin{digression_la}
+Ας σκεφτούμε τις γραμμικές απεικονίσεις $f : \RR^n \to \RR$. Κάθε τέτοια καθορίζεται από τις τιμές της στα στοιχεία της συνήθους βάσης $\{\bfe_1, \bfe_2, \dots,$ $\bfe_n\}$. Συνεπώς, ο πίνακας της $f$ είναι 
+\[
+\begin{pmatrix}
+    f(\bfe_1) & f(\bfe_2) & \cdots & f(\bfe_n)
+\end{pmatrix}.
+\]
+Τι γίνεται αν υπολογίσουμε το $f(v)$ για ένα αυθαίρετο $v = (v_1, v_2, \dots, v_n) \in \RR^n$; Λόγω γραμμικότητας,
+\begin{align*}
+    f(v) 
+    &= f(v_1\bfe_1 + v_2\bfe_2 + \cdots v_n\bfe_n) \\
+    &= v_1f(\bfe_1) + v_2f(\bfe_2) + \cdots + v_nf(\bfe_n) \\ 
+    &= \begin{pmatrix}
+    f(\bfe_1) & f(\bfe_2) & \cdots & f(\bfe_n)
+    \end{pmatrix}
+    \begin{pmatrix}
+        v_1 \\ 
+        v_2 \\ 
+        \vdots \\ 
+        v_n
+    \end{pmatrix}.
+\end{align*}
+Η τελευταία ισότητα δεν είναι τίποτα άλλο παρά το σύνηθες εσωτερικό γινόμενο δυο διανυσμάτων του $\RR^n$ και προβλέπει μια σύνδεση μεταξύ γραμμικών απεικονίσεων $\RR^n \to \RR$ και διανυσμάτων του $\RR^n$.
+\begin{thm}{\rm(Riesz 1907)}
+    Έστω $V$ διανυσματικός χώρος πάνω από το $\FF \in \{\RR, \CC\}$. Για κάθε γραμμική απεικόνιση $f: V \to \FF$, υπάρχει μοναδικό $v_0 \in V$ τέτοιο ώστε 
+    \[
+    f(v) = v_0 \cdot v,
+    \]
+    όπου με $\cdot$ συμβολίζουμε το σύνηθες εσωτερικό γινόμενο στο $\FF$.
+\end{thm}
+
+Για παράδειγμα, αν $f : \RR^2 \to \RR$ με $f(\bfe_1) = 3$ και $f(\bfe_2) = 2$, τότε 
+\[
+f(-1,-3) = (-1,-3)\cdot(2,3) = -11.
+\]
+Η εμφάνιση του εσωτερικού γινομένου, γεωμετρικά, εξηγείται στο παρακάτω σχήμα:
+\[
+\begin{tikzpicture}[scale=0.8,>=stealth]
+\begin{scope}[shift={(0,0)}]
+    % Draw 2D grid
+    \draw[step=1cm,gray!40,thin] (-4,-4) grid (4,4);
+
+    % Axes
+    \draw[thick,->] (-4.2,0) -- (4.5,0);
+    \draw[thick,->] (0,-4.2) -- (0,4.5);
+
+    % Basis vectors
+    \draw[->,thick,iceberg] (0,0) -- (1,0) node[midway,below] {$\bfe_1$};
+    \draw[->,thick,applegreen] (0,0) -- (0,1) node[midway,left] {$\bfe_2$};
+
+    % 1D subspace spanned by (2,3)
+    \draw[thin,burntorange!60] (-2.7,-4) -- (2.7,4); % the whole line
+    \draw[->,very thick,burntorange] (0,0) -- (2,3) node[right] {\scriptsize{$(2,3)$}};
+
+    % Vector v = (-1,-3)
+    \draw[->,thick,canaryyellow!80!black] (0,0) -- (-1,-3) node[below right] {\scriptsize{$(-1,-3)$}};
+
+    % Projection of v onto span{(2,3)}
+    \coordinate (proj) at (-1.69,-2.54);
+    \draw[dashed,gray] (-1,-3) -- (proj); % projection drop line
+    \draw[->,thick,orange!60!black] (0,0) -- (proj) node {};
+\end{scope}
+
+% Curved arrow labelled f
+\begin{scope}[shift={(4,-.4)}]
+    \draw[->, thick]
+        (1.7,0.3) .. controls (2,0.7) and (3,0.7) .. (3.3,0.3)
+        node[midway, above] {$f$};
+\end{scope}
+
+% 1D grid (real line)
+\begin{scope}[shift={(9,0)}]
+    % Real line
+    \draw[step=1cm,gray!40,thin] (-1,0) grid (5,0);
+    \draw[thick,->] (-1,0) -- (5.2,0) node {};
+
+    % Ticks (no labels)
+    \foreach \x in {-1,0,1,2,3,4,5}
+        \draw (\x,0.1) -- (\x,-0.1);
+
+    % Vectors (as arrows on the real line)
+    \draw[->,thick,iceberg] (0,0.2) -- (2,0.2) node[midway,below left] {$2$};
+    \draw[->,thick,applegreen] (0,0.5) -- (3,0.5) node[midway,above] {$3$};
+\end{scope}
+\end{tikzpicture}
+\]
+Το $f(-1,-3)$ ισούται με το μήκος του $(2,3)$ πολλαπλασιασμένο με το μήκος της προβολής του $(-1,-3)$ στην ευθεία που παράγεται από το $(2,3)$. Με άλλα λόγια, το εσωτερικό τους γινόμενο.
+
+Το σύνολο $V^\ast \coloneqq \Hom(V,\FF)$ ονομάζεται \defn{δυϊκός χώρος} του $V$. Το Θεώρημα του Riesz μας πληροφορεί ότι αν το $\FF$ είναι το $\RR$ ή το $\CC$, τότε η απεικόνιση 
+\begin{align*}
+    V &\to V^\ast \\
+    v &\mapsto \Arg \cdot v
+\end{align*}
+είναι αμφιμονοσήμαντη. Στην περίπτωση όπου $\FF = \RR$, τότε η γραμμικότητα του εσωτερικού γινομένου έχει ως συνέπεια η απεικόνιση αυτή να είναι γραμμικός ισομορφισμός και γι' αυτό $V \cong V^\ast$. Στην περίπτωση όπου $\FF = \CC$ θέλει μια προσοχή, καθώς το εσωτερικό γινόμενο είνια \emph{συζυγές γραμμικό} ως προς τη δεύτερη μεταβλητή και γι' αυτό ο δυϊκός χώρος είναι (ουσιαστικά) το $V$, αλλά με διαφορετική δομή γραμμικότητας. Σε γενικότερες περιπτώσεις, αυτές οι δυο ταυτίσεις παύουν να ισχύουν, αλλά $V \cong \left(V^\ast\right)^\ast$.
+
+Από την παραπάνω συζήτηση, δοθήσεις μια βάσης $\{v_1, v_2, \dots, v_n\}$ του $V$ προκύπτει μια φυσική βάση του δυϊκού χώρου. Αυτή αποτελείται από τις \emph{προβολές} στην ευθεία που παράγεται από τo $v_i$. Πιο συγκεκριμένα, το σύνολο $\{v_1^\ast, v_2^\ast, \dots, v_n^\ast\}$ όπου 
+\begin{align*}
+    v_i^\ast : V &\to \RR \\
+    v_j &\mapsto 
+    \begin{cases}
+        1, &\ \text{αν $i =j$} \\
+        0, &\ \text{διαφορετικά}
+    \end{cases}
+\end{align*}
+για κάθε $1 \le i \le n$ αποτελεί βάση του $V^\ast$ (γιατί;) η οποία ονομάζεται \emph{δυϊκή βάση} της $\{v_1, v_2, \dots, v_n\}$.
+\end{digression_la}
+
+\begin{proof}[Απόδειξη του Θεωρήματος~\ref{thm:vdual_tensor_w_cong_homvw}]
+    Αρχικά, παρατηρούμε ότι η απεικόνιση $V^\ast \times W \to \Hom(V,W)$ που ορίζεται θέτοντας
+    \[
+    (f, w)(v) \mapsto f(v)w
+    \]
+    για κάθε $v \in V, f \in V^\ast$ και $w \in W$
+    είναι διγραμμική και γι' αυτό από το Θεώρημα~6.3 επάγεται η γραμμική απεικόνιση $\Gamma$. Θα δείξουμε ότι η $\Gamma$ είναι γραμμικός ισομορφισμός και $G$-ομομορφισμός.
+
+    Για το πρώτο, αρκεί να δείξουμε ότι η $\Gamma$ στέλνει μια βάση του $V^\ast \otimes W$ σε μια βάση του $\Hom(V,W)$. Έστω $\{v_1, v_2, \dots, v_n\}$ και $\{w_1, w_2, \dots, w_m\}$ βάσεις των $V$ και $W$, αντίστοιχα. Από το Θεώρημα~\ref{thm:tensor_product_basis}, το σύνολο 
+    \[
+    \{v_i^\ast \otimes w_j : 1 \le i \le n, \ 1 \le j \le m\}
+    \]
+    αποτελεί βάση του $V^\ast \otimes W$ (γιατί;). Η εικόνα ενός αυθαίρετου στοιχείου της μέσω της $\Gamma$ είναι 
+    \[
+    \Gamma(v_i^\ast \otimes w_j)(v_k) = v_i^\ast(v_j)w_k =
+    \begin{cases}
+    w_j, &\ \text{αν $i=k$} \\ 
+    0,   &\ \text{διαφορετικά}
+    \end{cases}
+    \]
+    το οποίο δεν είναι άλλο από εκείνη την γραμμική απεικόνιση $\varphi_{ij}$ που συναντήσαμε πριν το Θεώρημα~\ref{thm:vdual_tensor_w_cong_homvw} και το ζητούμενο έπεται.
+
+    Για το δεύτερο, αρκεί να επαληθεύσουμε τον Ορισμό~3.1, δηλαδή 
+    \[
+    \Gamma\left(\underbrace{g\cdot(f\otimes{w})}_{\text{δράση της $G$ στο $V^\ast \otimes W$}}\right) = 
+    \underbrace{g\cdot\Gamma(f\otimes{w})}_{\text{δράση της $G$ στο $\Hom(V,W)$}},
+    \]
+    για κάθε $g \in G, f \in V^\ast$ και $w \in W$. Πράγματι, για κάθε $v \in V$, 
+    \begin{align*}
+    \Gamma\left(g\cdot(f\otimes{w})\right)(v) &= 
+    \Gamma\left(\underbrace{g\cdot{f}}_{\text{δράση της $G$ στο $V^\ast$}} \otimes \underbrace{g\cdot{w}}_{\text{δράση της $G$ στο $W$}}\right)(v) \\ 
+    &= (g\cdot{f})(v)g\cdot{w} \\
+    &= f(g^{-1}v) \, gw.
+    \end{align*}
+    Από την άλλη, 
+    \begin{align*}
+        \left(g\cdot\Gamma(f\otimes{w})\right) (v)
+        &= \underbrace{g\cdot\left(\Gamma(f\otimes{w})(\underbrace{g^{-1}v}_{\text{δράση της $G$ στο $V$}})\right)}_{\text{δράση της $G$ στο $W$}} \\
+        &= g\cdot\left(f(g^{-1}v) \, w\right) \\ 
+        &= f(g^{-1}v) \, gw,
+    \end{align*}
+    και το ζητούμενο έπεται.
+\end{proof}
+
+Συνεπώς, ξεκινώντας από δυο διανυσματικούς χώρους, έχουμε κατασκευάσει τα εξής $G$-πρότυπα 
+\[
+V \oplus W, \, V\otimes{W}, \, \Hom(V,W), \ \text{και} \ V^\ast.
+\]
+Ας υπολογίσουμε τους χαρακτήρων τους και πως σχετίζονται με αυτούς των $V$ και $W$.
+\begin{proposition}
+    \label{prop:characters_of_constructions}
+    Αν $V$ και $W$ είναι δυο $G$-πρότυπα πεπερασμένης διάστασης, τότε 
+    \begin{align}
+        \chi^{V\oplus{W}} &= \chi^V + \chi^W \label{eq:character_direct_sum}\\
+        \chi^{V\otimes{W}} &= \chi^V\chi^W \label{eq:character_tensor_product}\\
+        \chi^{V^\ast} &= \ol{\chi^V} \label{eq:character_dual} \\
+        \chi^{\Hom(V,W)} &= \ol{\chi^V}\chi^W, \label{eq:character_hom}
+    \end{align}
+    όπου $\ol{\chi^V} : G \to \CC$ ορίζεται θέτοντας $\ol{\chi^V}(g) = \ol{\chi^V(g)}$ για κάθε $g \in G$.
+\end{proposition}
+\end{document}
