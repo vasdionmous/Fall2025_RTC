@@ -1,0 +1,421 @@
+\documentclass[12pt,a4paper,reqno]{amsart}
+
+% language
+\usepackage[greek,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{alphabeta}
+
+% change default names to greek
+\addto\captionsenglish{
+    \renewcommand{\contentsname}{Περιεχόμενα}
+    \renewcommand{\refname}{Βιβλιογραφία}
+    \renewcommand{\datename}{Ημερομηνία:}
+    \renewcommand{\urladdrname}{Ιστοσελίδα}
+}
+
+% math 
+\usepackage{amsmath,amsthm,amssymb,amscd}
+
+% font
+\usepackage[cal=euler]{mathalfa}
+\usepackage{libertinus-type1}
+% \usepackage{txfonts} % for upright greek letters
+\usepackage{bm} % for bold symbols
+\usepackage{bbm} % for the simply-looking bb symbols
+
+% miscellaneous 
+\usepackage{changepage} %for indenting environments
+\usepackage{csquotes} % example: \textcquote{}
+\usepackage{blkarray}
+\setcounter{MaxMatrixCols}{20} % default for pmatrix is 10!!
+
+% drawing
+\usepackage{tikz,tikz-cd}
+\usetikzlibrary{shapes.misc, patterns, matrix, calc, intersections,positioning}
+\usepackage{graphics,graphicx}
+\usepackage{float} % provides enhanced control and customization options for floating objects such as figures and tables
+
+% colors
+\usepackage{xcolor}
+\definecolor{darkcandyapplered}{rgb}{0.64, 0.0, 0.0}
+\definecolor{midnightblue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{mylightblue}{HTML}{336699}
+\definecolor{burntorange}{rgb}{0.8, 0.33, 0.0}
+\definecolor{iceberg}{rgb}{0.44, 0.65, 0.82}
+\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
+\definecolor{canaryyellow}{rgb}{1.0, 0.94, 0.0}
+
+% hrefs
+\usepackage{hyperref}
+\usepackage[noabbrev,capitalize]{cleveref}
+\hypersetup{
+    pdftoolbar=true,        
+    pdfmenubar=true,        
+    pdffitwindow=false,     
+    pdfstartview={FitH},  % fits the width of the page to the window
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfnewwindow=true,  % links in new window
+    colorlinks=true,  % false: boxed links; true: colored links
+    linkcolor=darkcandyapplered,   % color of internal links
+    citecolor=midnightblue,  % color of links to bibliography
+    urlcolor=cyan,  % color of external links
+    linktocpage=true  % changes the links from the section body to the page number
+    }
+
+% geometry
+\textwidth=16cm 
+\textheight=21cm 
+\hoffset=-55pt 
+\footskip=25pt
+
+% thm envs (you might need to change the path)
+\input{thmEnvironments_macro.tex}
+
+% math ops (you might need to change the path)
+\input{mathOperators_macro.tex}
+
+% miscellaneous commands
+\newcommand{\defn}[1]{{\color{mylightblue}{#1}}}
+\newcommand{\toDo}{{\bf\color{red} TODO}}
+\newcommand{\toCite}{{\bf\color{green} CITE}}
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}} % for matrices with column vectors
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}} % for matrices with row vectors
+\newcommand{\myblue}[1]{{\color{iceberg}{#1}}}
+\newcommand{\myorange}[1]{{\color{burntorange}{#1}}}
+\newcommand{\mygreen}[1]{{\color{applegreen}{#1}}}
+\newcommand{\myred}[1]{{\color{darkcandyapplered}{#1}}}
+
+% 
+\newenvironment{nouppercase}{%
+  \let\uppercase\relax%
+  \renewcommand{\uppercasenonmath}[1]{}}{}
+
+% titlepage
+\title{Θ2.04: Θεωρία Αναπαραστάσεων και Συνδυαστική}
+\author[Β.~Δ. Μουστακας]{Βασίλης Διονύσης Μουστάκας \\ Πανεπιστήμιο Κρήτης}
+\date{13 Νοεμβρίου 2025}
+% \urladdr{\href{https://sites.google.com/view/vasmous}{https://sites.google.com/view/vasmous}}
+
+\begin{document}
+
+\begingroup
+\def\uppercasenonmath#1{} % this disables uppercase title
+\let\MakeUppercase\relax % this disables uppercase authors
+\maketitle
+\endgroup
+
+
+\setcounter{section}{9}
+\setcounter{theorem}{0}
+\begin{center}
+    \textbf{9. Στοιχεία αλγεβρικής συνδυαστικής: Μεταθέσεις, διαμερίσεις, συνθέσεις και μερικές διατάξεις
+}
+\end{center}
+
+Μια μετάθεση $\pi \in \fS_n$ ονομάζεται \defn{κύκλος} μήκους $k$ (ή πιο απλά \defn{$k$-κύκλος}) αν υπάρχουν $i_1, i_2, \dots, i_k \in [n]$ τέτοια ώστε 
+\[
+\pi(i_1) = i_2, \ \pi(i_2) = i_3, \ \dots, \pi(i_{k-1}) = i_k, \ \pi(i_k) = i_1
+\]
+και $\pi(j) = j$ για κάθε $j \in [n] \sm \{i_1, i_2, \dots i_k\}$. Συμβολικά, γράφουμε 
+\[
+\pi = \cycle{i_1, i_2, \cdots, i_k}.
+\]
+Για παράδειγμα, για $n=7$ η μετάθεση 
+\[
+\begin{pmatrix}
+    1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    7 & 3 & 5 & 1 & 4 & 6 & 2
+\end{pmatrix}
+= \cycle{1,7,2,3,5,4}
+\]
+είναι ένας $6$-κύκλος της $\fS_7$.
+
+Αν μια μετάθεση $\pi \in \fS_n$ δεν είναι $n$-κύκλος, τότε η ακολουθία 
+\[
+i, \pi(i), \pi(\pi(i)), \dots 
+\]
+για κάποιο $i \in [n]$ πρέπει να έχει κάποια επαναλαμβανόμενα στοιχεία (γιατί;). Αν $k$ ο μικρότερος μη αρνητικός ακέραιος τέτοιος ώστε 
+\[
+\pi^k(i) \coloneq \underbrace{\pi(\pi(\cdots(\pi}_{\text{$k$ φορές}}(i))\cdots)) = i,
+\]
+τότε 
+\[
+\pi = \cycle{i, \pi(i), \pi^2(i), \cdots, \pi^{k-1}(i)} \pi'
+\]
+για κάποια $\pi' \in \fS_n$. Επαναλαμβάνοντας το ίδιο επιχείρημα για κάποιο $j \in [n] \sm \{i, \pi(i), \dots,$ $\pi^{k-1}(i)\}$ προκύπτει ότι 
+\[
+\pi = 
+\cycle{i, \pi(i), \pi^2(i), \cdots, \pi^{k-1}(i)}
+\cycle{i, \pi(j), \pi^2(j), \cdots, \pi^{\ell-1}(j)}
+\pi''
+\]
+για κάποια $\pi'' \in \fS_n$, όπου $\ell$ είναι ο μικρότερος θετικός ακέραιος για τέτοιος ώστε $\pi^\ell(j)=j$. Η έκφραση που προκύπτει μόλις εξαντλήσουμε όλα τα στοιχεία του $[n]$ ονομάζεται \defn{κυκλική μορφή} (cycle type) της $\pi$. Για παράδειγμα, για $n=9$
+\[
+\begin{pmatrix}
+    \myorange{1} & \myblue{2} & \mygreen{3} & \mygreen{4} & \myred{5} & \myorange{6} & \mygreen{7} & \mygreen{8} & \myblue{9} \\
+    \myorange{6} & \myblue{9} & \mygreen{4} & \mygreen{7} & \myred{5} & \myorange{1} & \mygreen{8} & \mygreen{3} & \myblue{2} 
+\end{pmatrix}
+= 
+\cycle{\myorange{1},\myorange{6}}
+\cycle{\myblue{2},\myblue{9}}
+\cycle{\mygreen{3},\mygreen{4},\mygreen{7},\mygreen{8}}
+\cycle{\myred{5}}.
+\]
+
+Δυο κύκλοι οι οποίοι δεν έχουν κοινά στοιχεία ονομάζονται \defn{ξένοι}. Αν $\pi, \sigma \in \fS_n$ είναι ξένοι κύκλοι, τότε $\pi\sigma = \sigma\pi$ (γιατί;). Συνεπώς, αναδιατάσσοντας τους (ξένους) κύκλους στην κυκλική μορφή μια μετάθεσης, δεν αλλάζει η μετάθεση. Για παράδειγμα, για $n=9$ 
+\begin{align*}
+    \begin{pmatrix}
+    \myorange{1} & \myblue{2} & \mygreen{3} & \mygreen{4} & \myred{5} & \myorange{6} & \mygreen{7} & \mygreen{8} & \myblue{9} \\
+    \myorange{6} & \myblue{9} & \mygreen{4} & \mygreen{7} & \myred{5} & \myorange{1} & \mygreen{8} & \mygreen{3} & \myblue{2} 
+\end{pmatrix}
+&= 
+\cycle{\myorange{1},\myorange{6}}
+\cycle{\myblue{2},\myblue{9}}
+\cycle{\mygreen{3},\mygreen{4},\mygreen{7},\mygreen{8}}
+\cycle{\myred{5}} \\
+&= 
+\cycle{\myblue{2},\myblue{9}}
+\cycle{\myorange{1},\myorange{6}}
+\cycle{\mygreen{3},\mygreen{4},\mygreen{7},\mygreen{8}}
+\cycle{\myred{5}} \\
+&= 
+\cycle{\mygreen{3},\mygreen{4},\mygreen{7},\mygreen{8}}
+\cycle{\myred{5}}
+\cycle{\myblue{2},\myblue{9}}
+\cycle{\myorange{1},\myorange{6}} \\
+&\hspace{70pt} \vdots \\
+&=
+\cycle{\mygreen{3},\mygreen{4},\mygreen{7},\mygreen{8}}
+\cycle{\myblue{2},\myblue{9}}
+\cycle{\myorange{1},\myorange{6}}
+\cycle{\myred{5}}.
+\end{align*}
+Συνεπώς, κάθε μετάθεση γράφεται ως γινόμενο ξένων κύκλων και η κυκλική μορφή είναι ένας \textquote{κανονικός} τρόπος να γίνει αυτό.
+
+Οι 2-κύκλοι ονομάζονται \defn{αντιμεταθέσεις} (transpositions). Κάθε κύκλος μπορεί να γραφεί ως γινόμενο αντιμεταθέσεων. Πράγματι, αρκεί να παρατηρήσουμε ότι 
+\[
+\cycle{i,j}\cycle{j,k} = 
+\begin{pmatrix}
+1 & 2 & \cdots & i & \cdots & j & \cdots & k & \cdots & {n-1} & n \\
+1 & 2 & \cdots & j & \cdots & k & \cdots & i & \cdots & {n-1} & n
+\end{pmatrix}
+= \cycle{i,j,k}
+\]
+για κάθε $i < j < k$ και γι αυτό, γενικότερα έχουμε
+\[
+\cycle{i_1, i_2, \cdots, i_k} = 
+\cycle{i_1,i_2}\cycle{i_2,i_3}\cdots\cycle{i_{k-1},i_k}
+\]
+για $i_1 < i_2 < \cdots < i_k$ (γιατί;). Κατά συνέπεια, κάθε μετάθεση γράφεται ως γινόμενο αντιμεταθέσεων. Με άλλα λόγια, το σύνολο 
+\[
+\{\cycle{i,j} : 1 \le i < j \le n\}
+\]
+παράγει την $\fS_n$.
+
+Παρόλο που υπάρχουν πολλοί διαφορετικοί τρόποι να γράψει κανείς μια μετάθεση ως γινόμενο αντιμεταθέσεων, το πλήθος αυτών σε κάθε τέτοια γραφή μπορεί να είναι είτε άρτιο είτε περιττό, αλλά όχι και τα δύο (γιατί;).
+\begin{definition}
+    \label{def:sign_permutation}
+    Μια μετάθεση ονομάζεται \defn{άρτια} (αντ. \defn{περιττή}) αν μπορεί να γραφεί ως γινόμενο άρτιου (αντ. περιττού) πλήθους αντιμεταθέσεων. Για $\pi \in \fS_n$, το 
+    \[
+    \sign(\pi) = 
+    \begin{cases}
+        1, &\ \text{αν η $\pi$ είναι άρτια} \\
+        -1, &\ \text{αν η $\pi$ είναι περιττή}
+    \end{cases}
+    \]
+    ονομάζεται \defn{πρόσημο} (sign) της $\pi$.
+\end{definition}
+
+Αναδιατάσσοντας τους κύκλους της κυκλικής μορφής μιας μετάθεσης σε (ασθενώς) φθίνουσα σειρά ανάλογα με τα μήκη τους, προκύπτει μια ακολουθία θετικών ακεραίων που ονομάζεται \defn{κυκλικός τύπος} (cycle type). Για παράδειγμα, ο κυκλικός τύπος της 
+\[
+\begin{pmatrix}
+    \myorange{1} & \myblue{2} & \mygreen{3} & \mygreen{4} & \myred{5} & \myorange{6} & \mygreen{7} & \mygreen{8} & \myblue{9} \\
+    \myorange{6} & \myblue{9} & \mygreen{4} & \mygreen{7} & \myred{5} & \myorange{1} & \mygreen{8} & \mygreen{3} & \myblue{2} 
+\end{pmatrix}
+= 
+\cycle{\mygreen{3},\mygreen{4},\mygreen{7},\mygreen{8}}
+\cycle{\myorange{1},\myorange{6}}
+\cycle{\myblue{2},\myblue{9}}
+\cycle{\myred{5}}
+\]
+είναι $(4,2,2,1)$. Η κυκλική μορφή δυο μεταθέσεων \textquote{γνωρίζει} αν ανήκουν στην ίδια κλάση συζυγίας της $\fS_n$ ή όχι και ο κυκλικός τύπος τις \textquote{ξεχωρίζει}.
+
+\begin{proposition}
+    \label{prop:conjugacy_class_criterion}
+    Έστω $\pi, \sigma \in \fS_n$. Αν 
+    \[
+    \cycle{i_1, i_2, \cdots, i_k}
+    \cycle{j_1, j_2, \cdots, j_\ell}\cdots
+    \]
+    είναι η κυκλική μορφή της $\pi$, τότε 
+    \[
+    \cycle{\sigma(i_1), \sigma(i_2), \cdots, \sigma(i_k)}
+    \cycle{\sigma(j_1), \sigma(j_2), \cdots, \sigma(j_\ell)}\cdots
+    \]
+    είναι η κυκλική μορφή της $\sigma\pi\sigma^{-1}$. Ειδικότερα, δυο μεταθέσεις ανήκουν στην ίδια κλάση συζυγίας αν και μόνο αν έχουν τον ίδιο κυκλικό τύπο.
+\end{proposition}
+\begin{proof}[Απόδειξη]
+    Για τον πρώτο ισχυρισμό, αρκεί να παρατηρήσουμε ότι αν $\pi(i_1) = i_2$, τότε 
+    \[
+    \sigma\pi\sigma^{-1}\left(\sigma(i_1)\right) = \sigma\pi(i_1) = \sigma(i_2)
+    \]
+    (γιατί;).
+
+    Για το δεύτερο ισχυρισμό, η κατεύθυνση \textquote{$\then$} έπεται άμεσα από τον πρώτο ισχυρισμό. Για την άλλη κατεύθυνση, θα κάνουμε μια \textquote{απόδειξη με παράδειγμα}. Ας υποθέσουμε ότι έχουμε τις μεταθέσεις 
+    \begin{align*}
+        \sigma &= \cycle{1,2,9,5}\cycle{3,6}\cycle{4,7}\cycle{8} \\
+        \pi &= \cycle{3,4,7,8}\cycle{1,6}\cycle{2,9}\cycle{5}
+    \end{align*}
+    οι οποίες έχουν κυκλικό τύπο $(4,2,2,1)$. Για να δείξουμε ότι ανήκουν στην ίδια κλάση συζυγίας, πρέπει να βρούμε μια μετάθεση $\tau \in \fS_9$ τέτοια ώστε $\sigma = \tau\pi\tau^{-1}$. Θεωρούμε την μετάθεση 
+    \[
+    \tau = \begin{pmatrix}
+        1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+        3 & 4 & 1 & 2 & 8 & 6 & 9 & 5 & 7
+    \end{pmatrix}
+    \]
+    που προκύπτει ως εξής: Ξεχνάμε τις παρενθέσεις στις κυκλικές μορφές των $\sigma$ και $\pi$ και τοποθετούμε τις δυο ακολουθίες αριθών που προκύπτουν σε έναν $(2\times9)$-πίνακα
+    \[
+    \begin{pmatrix}
+        1 & 2 & 9 & 5 & 3 & 6 & 4 & 7 & 8 \\
+        3 & 4 & 7 & 8 & 1 & 6 & 2 & 9 & 5
+    \end{pmatrix}.
+    \]
+    Η $\tau$ είναι η μετάθεση που προκύπτει από την αναδιάταξη των στηλών του πίνακα αυτού με αύξουσα σειρά ως προς τους αριθμούς της πρώτης γραμμής. Τότε, παρατηρούμε ότι 
+    \[
+    \begin{tikzcd}
+        1 \arrow{r}{\sigma} \arrow[swap]{d}{\tau^{-1}} & 2 \\
+        3 \arrow{r}{\pi}& 4 \arrow[swap]{u}{\tau}
+    \end{tikzcd}
+    \quad
+    \begin{tikzcd}
+        2 \arrow{r}{\sigma} \arrow[swap]{d}{\tau^{-1}} & 9 \\
+        4 \arrow{r}{\pi}& 7 \arrow[swap]{u}{\tau}
+    \end{tikzcd}
+    \quad 
+    \begin{tikzcd}
+        9 \arrow{r}{\sigma} \arrow[swap]{d}{\tau^{-1}} & 5 \\
+        7 \arrow{r}{\pi} & 8 \arrow[swap]{u}{\tau}
+    \end{tikzcd}
+    \quad
+    \begin{tikzcd}
+        5 \arrow{r}{\sigma} \arrow[swap]{d}{\tau^{-1}} & 1 \\
+        8 \arrow{r}{\pi} & 3 \arrow[swap]{u}{\tau}
+    \end{tikzcd}
+    \]
+    και όμοια για τους υπόλοιπους κύκλους. Συνεπώς, $\sigma = \tau\pi\tau^{-1}$, όπως θέλαμε. Δεν είναι δύσκολο τώρα να γενικεύσει κανείς το επιχείρημα για αυθαίρετες μεταθέσεις που έχουν τον ίδιο κυκλικό τύπο.
+\end{proof}
+
+Η Πρόταση~\ref{prop:conjugacy_class_criterion} οδήγει με φυσικό τρόπο στον παρακάτω ορισμό.
+\begin{definition}
+    \label{def:integer_partition}
+    Μια ακολουθία $\lambda = (\lambda_1,\lambda_2,\dots,\lambda_k)$ θετικών ακεραίων τέτοια ώστε 
+    \begin{itemize}
+        \item $\lambda_1 \ge \lambda_2 \ge \cdots \ge \lambda_k$
+        \item $\lambda_1 + \lambda_2 + \cdots + \lambda_k = n$
+    \end{itemize}
+    ονομάζεται \defn{διαμέριση} (partition) του $n$ και γράφουμε $\lambda \vdash n$. Τα $\lambda_i$ ονομάζονται \defn{μέρη} της $\lambda$ και το $k$ ονομάζεται \defn{μήκος} της $\lambda$ και συμβολίζεται με $\ell(\lambda)$.
+\end{definition}
+
+Ο κυκλικός τύπος μιας μετάθεσης της $\fS_n$ δεν είναι άλλο παρά μια διαμέριση του $n$.
+\begin{corollary}
+    \label{cor:irreducible_characters_partitions}
+    Οι κλάσεις συζυγίας, και κατά συνέπεια οι ανάγωγοι χαρακτήρες, της $\fS_n$ είναι σε 1-1 και επί αντιστοιχία με τις διαμερίσεις του $n$.
+\end{corollary}
+
+Στις προηγούμενες παραγράφους, όπου υπολογίζαμε τους πίνακες χαρακτήρων της $\fS_n$ για μικρές τιμές του $n$ εμφανίστηκαν οι διαμερίσεις του $n$ ως υποδείκτες στον συμβολισμό των κλάσεων συζυ\-γίας. Το Πόρισμα \ref{cor:irreducible_characters_partitions} εξηγεί την επιλογή αυτού του συμβολισμού. Με άλλα λόγια, βρήκαμε μια οικογένεια συνδυαστικών αντικειμένων η οποία παραμετρικοποιεί τους ανάγωγους χα\-ρακτήρες της συμμετρικής ομάδας. Στις επόμενες παραγράφους θα δούμε πως μπορούμε να ορίσουμε ακριβώς την ανάγωγη αναπαράσταση που αντιστοιχεί σε αυτούς τους χαρακτήρες.
+
+Έστω $\Par(n)$ το σύνολο όλων των διαμερίσεων του $n$ και $\rmp(n) = \abs{\Par(n)}$. Για παράδειγμα,
+\[
+\renewcommand{\arraystretch}{1.2}
+\begin{array}{c|c|c}
+    n       & 4 & 5 \\\hline 
+    \Par(n) & (1,1,1,1) & (1,1,1,1,1) \\
+            & (2,1,1)   & (2,1,1,1) \\ 
+            & (2,2)     & (2,2,1) \\ 
+            & (3,1)     & (3,1,1) \\ 
+            & (4)       & (3,2) \\ 
+            &           & (4,1) \\ 
+            &           & (5) \\ 
+\end{array}
+\]
+και 
+\[
+\left(\rmp(n)\right)_{n\ge1} = (1, 2, 3, 5, 7, 11, \dots).
+\]
+Δε γνωρίζουμε κλειστό τύπο για το $\rmp(n)$, ούτε καν αναδρομικό. Η καλύτερη προσέγγιση οφείλεται στους Hardy και Ramanujan (1918),
+\[
+\rmp(n) \approx \frac{1}{4\sqrt{3}n}e^{\pi\sqrt{\frac{2n}{3}}} 
+\]
+καθώς $n \to \infty$. Για περισσότερες πληροφορίες για τους αριθμούς αυτούς δείτε \href{https://oeis.org/A000041}{εδώ}. Παρόλα αυτά, μπορούμε να υπολογίσουμε ακριβώς το πλήθος των στοιχείων μια κλάσης συζυγίας της $\fS_n$.
+
+\begin{proposition}
+    \label{prop:conjugacy_class_cardinality_Sn}
+    Αν $\rmK_\lambda$ είναι η κλάση συζυγίας της $\fS_n$ που αντιστοιχεί στην διαμέριση $\lambda \vdash n$, τότε 
+    \[
+    \abs{\rmK_\lambda} = \frac{n!}{\prod_{k=1}^n k^{m_k}m_k!},
+    \]
+    όπου $m_k$ είναι το πλήθος των μερών της $\lambda$ που είναι ίσα με $k$, για κάθε $1 \le k \le n$.
+\end{proposition}
+
+\begin{proof}[Απόδειξη]
+    Θέτουμε\footnote{Παρατηρήστε ότι το $\rmz_\lambda$ είναι ο πληθάριθμος του κεντρικοποιητή οποιουδήποτε στοιχείου της κλάσης συζυγίας $\rmK_\lambda$ στην $\fS_n$.} 
+    \[
+    \rmz_\lambda \coloneqq \prod_{k=1}^n k^{m_k}m_k!
+    \]
+    και θεωρούμε την απεικόνιση $f: \fS_n \to \rmK_\lambda$ που ορίζεται ως εξής. Για\footnote{Θυμίζουμε ότι μπορούμε να παραστήσουμε μια μετάθεση $\pi$ ως την λέξη $\pi_1\pi_2\cdots\pi_n$ κρατώντας μόνο την ακολουθία $(\pi(1), \pi(2), \dots, \pi(n))$ και γράφοντας $\pi_i \coloneqq \pi(i)$, για κάθε $1 \le i \le n$.} $\pi = \pi_1\pi_2\cdots\pi_n \in \fS_n$, θέτουμε 
+    \[
+    f(\pi) = 
+    \cycle{\pi_1,\pi_2,\cdots,\pi_{\lambda_1}}
+    \cycle{\pi_{\lambda_1 + 1},\pi_{\lambda_1+2},\cdots,\pi_{\lambda_1+\lambda_2}} \cdots 
+    \cycle{\pi_{\lambda_1 + \cdots + \lambda_{k-1}+1},\pi_{\lambda_1 + \cdots + \lambda_{\ell(\lambda)-1}+2},\cdots,\pi_n}. 
+    \]
+    Για παράδειγμα, αν $\pi = 347816295 \in \fS_9$ και $\lambda = (4,2,2,1)$, τότε 
+    \[
+    f(\pi) = \cycle{3,4,7,8}\cycle{1,6}\cycle{2,9}\cycle{5} \ \in \ \rmK_{(4,2,2,1)}.
+    \]
+    Αρκεί να δείξουμε ότι η $f$ είναι $\rmz_\lambda$ προς 1, δηλαδή ότι για κάθε $\sigma \in \rmK_\lambda$ υπάρχουν ακριβώς $\rmz_\lambda$ το πλήθος $\pi \in \fS_n$ τέτοιες ώστε $f(\pi) = \sigma$ (γιατί;).
+
+    Γι αυτό, θεωρούμε $\sigma \in \rmK_\lambda$. Αν $\cycle{i_1,i_2, \dots, i_k}$ είναι ένας $k$-κύκλος που εμφανίζεται στην κυκλική μορφή της $\sigma$, τότε μεταθέτοντας κυκλικά τα στοιχεία $i_1, i_2, \dots, i_k$ δεν αλλάζει η $\sigma$ (γιατί;). Αυτό μπορούμε να το κάνουμε με $k$ διαφορετικούς τρόπους (γιατί;). Συνεπώς, επειδή η $\sigma$ έχει $m_k$ κύκλους μήκους $k$ έπεται ότι υπάρχουν ακριβώς
+    \[
+    \prod_{k=1}^n k^{m_k}
+    \]
+    μεταθέσεις $\pi \in \fS_n$ τέτοιες ώστε $f(\pi)=\sigma$ που προκύπτουν από κυκλικές μεταθέσεις των στοιχείων των κύκλων της κυκλικής μορφής της $\sigma$. 
+
+    Για παράδειγμα, αν $\pi = 347816295 \in \fS_9, \lambda = (4,2,2,1)$ και $\sigma = \cycle{\mygreen{3},\mygreen{4},\mygreen{7},\mygreen{8}}\cycle{\myorange{1},\myorange{6}}\cycle{\myblue{2},\myblue{9}}\cycle{\myred{5}}$, τότε μεταθέτοντας κυκλικά τα στοιχεία $\mygreen{3},\mygreen{4},\mygreen{7}$ και $\mygreen{8}$ παίρνουμε τις τέσσερις μεταθέσεις 
+    \[
+    \mygreen{3478}16295, \ 
+    \mygreen{8347}16295, \ 
+    \mygreen{7834}16295, \ 
+    \mygreen{4783}16295.
+    \]
+    \emph{Για κάθε μια από αυτές}, μεταθέτοντας κυκλικά τα στοιχεία $\myorange{1}$ και $\myorange{6}$ στη $\sigma$ παίρνουμε τις δυο \emph{διαφορετικές} μεταθέσεις 
+    \[
+    \mygreen{3478}\myorange{16}295, \
+    \mygreen{3478}\myorange{61}295
+    \]
+    κ.ο.κ. έχοντας συνολικά $4^1\cdot2^2\cdot1^1$ διαφορετικές μεταθέσεις στην προεικόνα της $\sigma$ μέσω της $f$.
+
+    Επιπλέον, μεταθέτοντας τους κύκλους στην κυκλική μορφή της $\sigma$ επίσης δεν αλλάζει η $\sigma$ (γιατί;). Επειδή το πλήθος των μεταθέσεων ενός συνόλου με $m_k$ στοιχεία ισούται με $m_k!$ και η $\sigma$ έχει $m_k$ κύκλους μήκους $k$ έπεται ότι υπάρχουν ακριβώς 
+    \[
+    \prod_{k=1}^n m_k!
+    \]
+    μεταθέσεις $\pi \in \fS_n$ τέτοιες ώστε $f(\pi)=\sigma$ που προκύπτουν από αναδιατάξεις των κύκλων της κυκλικής μορφής της $\sigma$. 
+
+    Στο τρέχον παράδειγμα, αναδιατάσσοντας τους 2-κύκλους παίρνουμε τις δυο μεταθέσεις 
+    \[
+    \mygreen{3478}\myorange{16}\myblue{29}\myred{5}, \ 
+    \mygreen{3478}\myblue{29}\myorange{16}\myred{5}. 
+    \]
+    \emph{Για κάθε μια από αυτές} τις αναδιατάξεις, αναδιατάσσοντας όλους τους κύκλους της $\sigma$ προκύτουν 24 διαφορετικές μεταθέσεις, δηλαδή συνολικά προκύτπουν $2!\cdot4!$ το πλήθος διαφορεικά στοιχεία της $\fS_9$ των οποία η εικόνα μέσω της $f$ είναι η $\sigma$ από αυτή την διαδικασία.
+
+    Τέλος, συνδυάζοντας τις δυο απαριθμήσεις που κάναμε προκύτπουν ακριβώς  
+    \[
+    \rmz_\lambda = \prod_{k=1}^n k^{m_k}m_k!
+    \]
+    μεταθέσεις $\pi \in \fS_n$ τέτοιες ώστε $f(\pi)=\sigma$ όπως θέλαμε και η απόδειξη ολοκληρώθηκε.
+\end{proof}
+
+\end{document}
