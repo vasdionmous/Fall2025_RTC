@@ -1,0 +1,517 @@
+\documentclass[12pt,a4paper,reqno]{amsart}
+
+% language
+\usepackage[greek,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{alphabeta}
+
+% change default names to greek
+\addto\captionsenglish{
+    \renewcommand{\contentsname}{Περιεχόμενα}
+    \renewcommand{\refname}{Βιβλιογραφία}
+    \renewcommand{\datename}{Ημερομηνία:}
+    \renewcommand{\urladdrname}{Ιστοσελίδα}
+}
+
+% math 
+\usepackage{amsmath,amsthm,amssymb,amscd}
+
+% font
+\usepackage[cal=euler]{mathalfa}
+\usepackage{libertinus-type1}
+% \usepackage{txfonts} % for upright greek letters
+\usepackage{bm} % for bold symbols
+\usepackage{bbm} % for the simply-looking bb symbols
+
+% miscellaneous 
+\usepackage{changepage} %for indenting environments
+\usepackage{csquotes} % example: \textcquote{}
+\usepackage{blkarray}
+\setcounter{MaxMatrixCols}{20} % default for pmatrix is 10!!
+\usepackage{ytableau}
+
+% drawing
+\usepackage{tikz,tikz-cd}
+\usetikzlibrary{shapes.misc, patterns, matrix, calc, intersections,positioning}
+\usepackage{graphics,graphicx}
+\usepackage{float} % provides enhanced control and customization options for floating objects such as figures and tables
+
+% colors
+\usepackage{xcolor}
+\definecolor{darkcandyapplered}{rgb}{0.64, 0.0, 0.0}
+\definecolor{midnightblue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{mylightblue}{HTML}{336699}
+\definecolor{burntorange}{rgb}{0.8, 0.33, 0.0}
+\definecolor{iceberg}{rgb}{0.44, 0.65, 0.82}
+\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
+\definecolor{canaryyellow}{rgb}{1.0, 0.94, 0.0}
+
+% hrefs
+\usepackage{hyperref}
+\usepackage[noabbrev,capitalize]{cleveref}
+\hypersetup{
+    pdftoolbar=true,        
+    pdfmenubar=true,        
+    pdffitwindow=false,     
+    pdfstartview={FitH},  % fits the width of the page to the window
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfnewwindow=true,  % links in new window
+    colorlinks=true,  % false: boxed links; true: colored links
+    linkcolor=darkcandyapplered,   % color of internal links
+    citecolor=midnightblue,  % color of links to bibliography
+    urlcolor=cyan,  % color of external links
+    linktocpage=true  % changes the links from the section body to the page number
+    }
+
+% geometry
+\textwidth=16cm 
+\textheight=21cm 
+\hoffset=-55pt 
+\footskip=25pt
+
+% thm envs (you might need to change the path)
+\input{thmEnvironments_macro.tex}
+
+% math ops (you might need to change the path)
+\input{mathOperators_macro.tex}
+
+% miscellaneous commands
+\newcommand{\defn}[1]{{\color{mylightblue}{#1}}}
+\newcommand{\toDo}{{\bf\color{red} TODO}}
+\newcommand{\toCite}{{\bf\color{green} CITE}}
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}} % for matrices with column vectors
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}} % for matrices with row vectors
+\newcommand{\myblue}[1]{{\color{iceberg}{#1}}}
+\newcommand{\myorange}[1]{{\color{burntorange}{#1}}}
+\newcommand{\mygreen}[1]{{\color{applegreen}{#1}}}
+\newcommand{\myred}[1]{{\color{darkcandyapplered}{#1}}}
+
+% ferrer's diagram
+\newcommand{\fdiagram}[1]{
+    \begin{tikzpicture}[scale=.7]
+        \fill foreach \Z [count=\Y] in {#1}
+        {foreach \X in {1,...,\Z} 
+        {(\X,-\Y) circle[radius=3pt]}};
+    \end{tikzpicture}
+}
+
+%
+\newcommand{\tcbo}[1]{\textcolor{burntorange}{#1}}
+
+% 
+\newenvironment{nouppercase}{%
+  \let\uppercase\relax%
+  \renewcommand{\uppercasenonmath}[1]{}}{}
+
+% titlepage
+\title{Θ2.04: Θεωρία Αναπαραστάσεων και Συνδυαστική}
+\author[Β.~Δ. Μουστακας]{Βασίλης Διονύσης Μουστάκας \\ Πανεπιστήμιο Κρήτης}
+\date{20 Νοεμβρίου 2025}
+% \urladdr{\href{https://sites.google.com/view/vasmous}{https://sites.google.com/view/vasmous}}
+
+\begin{document}
+
+\begingroup
+\def\uppercasenonmath#1{} % this disables uppercase title
+\let\MakeUppercase\relax % this disables uppercase authors
+\maketitle
+\endgroup
+
+\setcounter{section}{11}
+\setcounter{theorem}{2}
+\begin{center}
+    \textbf{11. Πρότυπα Specht
+} (Συνέχεια)
+\end{center}
+
+\begin{example}
+    \label{ex:specht_modules}
+    \leavevmode
+    \begin{itemize}
+        \item[(1)] Έστω $\lambda = (2,1) \vdash 3$. Για κάθε ένα από τα έξι ταμπλώ σχήματος $\lambda$
+        \[
+        \begin{ytableau}
+            1 & 2 \\
+            3
+        \end{ytableau}\,, \
+        \begin{ytableau}
+            2 & 1 \\
+            3
+        \end{ytableau}\,, \
+        \begin{ytableau}
+            1 & 3 \\
+            2
+        \end{ytableau}\,, \
+        \begin{ytableau}
+            3 & 1 \\
+            2
+        \end{ytableau}\,, \
+        \begin{ytableau}
+            2 & 3 \\
+            1
+        \end{ytableau}\,, \
+        \begin{ytableau}
+            3 & 2 \\
+            1
+        \end{ytableau}
+        \]
+        παίρνουμε ένα πολυταμπλοειδές. Για διαφορετικούς αριθμούς $a, b, c \in [3]$, έχουμε
+        \[
+        \ytableausetup{smalltableaux,notabloids}
+        \bfe_{\ytableaushort{ab, c}} 
+        = \nabla_{\ytableaushort{ab, c}}^- \
+        \ytableausetup{nosmalltableaux,tabloids}
+        \ytableaushort{ab, c}  
+        = \left(\epsilon - \cycle{a,c}\right) \ \ytableaushort{ab, c}  
+        = \ytableaushort{ab, c} - \ytableaushort{cb, a}\ .
+        \]
+        Χρησιμοποιώντας τον ισομορφισμό $\rmM^{(2,1)} \cong \CC[1,2,3]$ που είδαμε στην αρχή της παραγράφου προκύπτει
+        \[
+        \ytableausetup{smalltableaux,notabloids}
+        \bfe_{\ytableaushort{ab, c}} \ \mapsto c - a. 
+        \]
+        Με άλλα λόγια, το πρότυπο Specht $\sS^{(2,1)}$ παράγεται από όλες τις διαφορές $c - a$ για κάθε $c \neq a$ στο $\rmM^{(2,1)}$. Όπως είδαμε στο Παράδειγμα 6.7, αυτό δεν είναι άλλο από την συνήθη αναπαράσταση της $\fS_3$ και γι αυτό
+        \[
+        \sS^{(2,1)} = \CC[\,\bfe_{\ytableaushort{12, 3}}\, , \bfe_{\ytableaushort{13, 2}} \ ].
+        \]
+        Γενικότερα, το $\sS^{(n-1,1)}$ είναι ένα ανάγωγο υποπρότυπο του $\rmM^{(n-1,1)}$ ισόμορφο με τη συνήθη αναπαράσταση της $\fS_n$.
+
+        \item[(2)] Αν $\lambda = (n)$, τότε υπάρχει ακριβώς ένα ταμπλώ σχήματος $(n)$ και γι αυτό 
+        \[
+        \ytableausetup{smalltableaux,notabloids}
+        \bfe_{\ytableaushort{12\cdots{n}}} = 
+        \nabla_{\ytableaushort{12\cdots{n}}}^- \
+        \ytableausetup{nosmalltableaux,tabloids,centertableaux}
+        \ytableaushort{12\cdots{n}} = \ytableaushort{12\cdots{n}} \, .
+        \]
+        Με άλλα λόγια, το $\sS^{(n)} = \rmM^{(n)}$. 
+
+        \item[(3)] Αν $\lambda = (1^n)$, τότε για κάθε ταμπλώ $T$ σχήματος $(1^n)$ έχουμε $\rmC(T) = \fS_n$ (γιατί;) και γι αυτό 
+        \[
+        \nabla_T^- = \sum_{\pi \in \rmC(T)} \sign(\pi)\pi = \sum_{\pi \in \fS_n} \sign(\pi)\pi \coloneqq \nabla_n^-.
+        \]
+        Συνεπώς, για ένα αυθαίρετο πολυταμπλοειδές 
+        \begin{align*}
+            \ytableausetup{smalltableaux,notabloids}
+            \ytableausetup{boxsize=1.3em}
+            \bfe_{\ytableaushort{{\pi_1},{\pi_2},\vdots,{\pi_n}}} 
+            &= \sum_{\sigma \in \fS_n} \sign(\sigma)\sigma \ 
+            \ytableausetup{nosmalltableaux,tabloids,centertableaux} 
+            \ytableaushort{{\pi_1},{\pi_2},\vdots,{\pi_n}} \\
+            &\mapsto \sum_{\sigma \in \fS_n} \sign(\sigma)\sigma\pi \\
+            &= \sign(\pi^{-1}) \sum_{\sigma \in \fS_n} \sign(\sigma\pi)\sigma\pi \\
+            &= \sign(\pi) \sum_{\tau \in \fS_n} \sign(\tau)\tau \\
+            &= \sign(\pi)\nabla_n^-,
+        \end{align*}
+        όπου στη δεύτερη γραμμή χρησιμοποιήσαμε τον ισομορφισμό $M^{(1^n)} \cong \CC[\fS_n]$ και η δεύτερη και τρίτη ισότητα έπονται από την Άσκηση 3.6 (4). 
+
+        Άρα, το πρότυπο Specht που αντιστοιχεί στην διαμέριση $(1^n)$ είναι ισόμορφο με το υποπρότυπο $\CC[\nabla_n^+]$ της κανονικής αναπαράστασης με τη δράση να δίνεται από το πρόσημο μιας μετάθεσης. Αυτό δεν είναι άλλο από το πρότυπο της αναπαράστασης προσήμου της $\fS_n$.
+    \end{itemize}
+\end{example}
+
+Οι υπολογισμοί του Παραδείγματος \ref{ex:specht_modules} δείχνουν ότι \textquote{βαδίζουμε} στο σωστό μονοπάτι αναφορικά με τον στόχο μας να βρούμε τα ανάγωγα $\fS_n$-πρότυπα. Η επόμενη πρόταση εξερευνεί ορισμένες ιδιότητες των προτύπων Specht. Η απόδειξη, αν και τεχνική, δεν παρουσιάζει δυσκολίες και είναι μια καλή ευκαιρία να ελέγξει κανείς την κατανόηση των ορισμών.
+
+\begin{lemma}
+    \label{lem:specht_module}
+    Αν $T$ είναι ταμπλώ περιεχομένου $[n]$ και $\pi \in \fS_n$, τότε ισχύουν τα εξής 
+    \begin{itemize}
+        \item[(1)] $\rmC(\pi{T}) = \pi\rmC(T)\pi^{-1}$
+        \item[(2)] $\nabla_{\pi{T}}^- = \pi\nabla_{T}^-\pi^{-1}$
+        \item[(3)] $\bfe_{\pi{T}} = \pi\bfe_T$
+        \item[(4)] Αν επιπλεόν $\pi \in \rmC(T)$, τότε $\bfe_{\pi{T}} = \sign(\pi)\bfe_T$.
+    \end{itemize}
+\end{lemma}
+
+\begin{proof}[Απόδειξη]
+    Για το (1), έχουμε $\sigma \in \rmC(\pi{T})$ αν και μόνο αν για κάθε $i \in [n]$, τα $\sigma(i)$ και $i$ βρίσκονται στην ίδια στήλη του $\pi{T}$. Ισοδύναμα, αν και μόνο αν για κάθε $j \in [n]$, τα $\sigma(\pi(j))$ και $\pi(j)$ βρίσκονται στην ίδια στήλη του $\pi{T}$, καθώς η $\pi$ είναι μετάθεση. Με τη σειρά του, αυτό είναι ισόδυναμο με το να βρίσκονται τα $\pi^{-1}(\sigma(\pi(j)))$ και $j$ στην ίδια στήλη του $T$, για κάθε $j \in [n]$ (γιατί;), δηλαδή με το $\pi^{-1}\sigma\pi \in \rmC(T)$ και γι αυτό $\sigma \in \pi\rmC(T)\pi^{-1}$.
+
+    Για το (2), υπολογίζουμε 
+    \begin{align*}
+        \pi\nabla_{T}^-\pi^{-1} 
+        &= \sum_{\sigma \in \rmC(T)} \sign(\sigma) \pi\sigma\pi^{-1} \\
+        &= \sum_{\sigma \in \rmC(T)} \sign(\pi\sigma\pi^{-1}) \pi\sigma\pi^{-1} \\
+        &= \sum_{\tau \in \pi\rmC(T)\pi^{-1}} \sign(\tau) \tau \\
+        &= \sum_{\tau \in \rmC(\pi{T})} \sign(\tau) \tau \\
+        &= \nabla_{\pi{T}}^-,
+    \end{align*}
+    όπου η προτελευταία ισότητα έπεται από το (1).
+
+    Για το (3), έχουμε 
+    \begin{align*} 
+        \bfe_{\pi{T}} 
+        = \nabla_{\pi{T}}^-[\pi{T}] 
+        = \pi\nabla_{T}^-\pi^{-1}[\pi{T}] 
+        = \pi\nabla_{T}^-[T] 
+        = \pi\bfe_T,
+    \end{align*}
+    όπου η δεύτερη ισότητα έπεται από το (2).
+
+    Τέλος, για το (4), έχουμε 
+    \begin{align*}
+        \bfe_{\pi{T}} 
+        &= \nabla_{\pi{T}}^-[\pi{T}] \\
+        &= \sum_{\sigma \in \rmC(\pi{T})}\sign(\sigma)\sigma[\pi{T}] \\
+        &= \sum_{\sigma \in \rmC(T)}\sign(\sigma)\sigma[\pi{T}] \\
+        &= \sign(\pi^{-1})\sum_{\sigma \in \rmC(T)}\sign(\sigma\pi)\sigma\pi[T] \\
+        &= \sign(\pi)\sum_{\tau \in \rmC(T)}\sign(\tau)\tau[T] \\
+        &= \sign(\pi)\nabla_T^-[T] \\
+        &= \sign(\pi)\bfe_T,
+    \end{align*}
+    όπου η τρίτη ισότητα έπεται από το (1) και το γεγονός ότι $\pi \in \rmC(T)$ και η πέμπτη ισότητα έπεται από το ότι η αντιστοιχία $\sigma \mapsto \sigma\pi$ είναι αμφιμονοσήμαντη στο $\rmC(T)$, καθώς $\pi \in \rmC(T)$.
+\end{proof}
+
+Μια σημαντική συνέπεια του Λήμματος \ref{lem:specht_module}~(3) είναι ότι το πρότυπο Specht είναι υποπρότυπο του προτύπου Young. Πράγματι, για κάθε $\lambda \vdash n$ αν $v \in \sS^\lambda$, τότε 
+\[
+v = \sum_{T} c_T \, \bfe_T
+\]
+όπου το άθροισμα διατρέχει όλα τα ταμπλώ σχήματος $\lambda$, και $c_T \in \CC$. Τότε, 
+\[
+\pi{v} = \pi\left(\sum_{T} c_T \, \bfe_T\right) = \sum_{T} c_T \, (\pi\bfe_T) = \sum_{T} c_T \, \bfe_{\pi{T}} \ \in \ \sS^\lambda,
+\]
+για κάθε $\pi \in \fS_n$.
+
+Για την ακρίβεια, μπορούμε να πούμε κάτι παραπάνω. Τα πρότυπα Young και Specht έχουν την ιδιότητα ένα αυθαίρετο στοιχείο τους να έχει την μορφή 
+\[
+\left(\sum_{\pi \in \fS_n}c_\pi\pi\right)[T]
+\quad
+\text{και}
+\quad
+\left(\sum_{\pi \in \fS_n}c_\pi\pi\right)\bfe_T
+\]
+για οποιοδήποτε ταμπλοειδές $[T]$ και πολυταμπλοειδές $\bfe_T$, αντίστοιχα (γιατί;). Ορισμένες φορές πρότυπα με αυτή την ιδιότητα ονομάζονται \emph{κυκλικά}.
+
+\begin{digression_a}
+    Γενικότερα, αν $G$ είναι μια πεπερασμένη ομάδα, τότε η κανονική αναπαράσταση $\FF[G]$, εκτός από δομή διανυσματικού χώρου έχει και τη δομή \emph{δακτύλιου}, με τον πολλαπλασιασμό να κληρονομείται από την πράξη στην $G$. Πιο συγκεκριμένα, 
+    \[
+    \left(\sum_{g \in G} c_g{g}\right)
+    \left(\sum_{x \in G} c_x{x}\right) \ \coloneqq \ 
+    \sum_{h \in G} \left(\sum_{\substack{g, x \in G \\ h = gx}}c_gc_x\right){h}.
+    \]
+    Αυτό ονομάζεται \emph{ομαδοδακτύλιος} (group ring).
+    
+    Έχοντας αυτό κατά νου, αυτά που ονομάζουμε $G$-πρότυπα μέχρι στιγμής, δεν είναι τίποτα άλλο παρά (αριστερά) $\FF[G]$-πρότυπα. Διαισθητικά, ένα πρότυπο πάνω από έναν δακτύλιο $R$ είσαι σαν ένα \textquote{διανυσματικό χώρο}, μόνο που τώρα ο βαθμωτός πολλαπλασιασμός δίνεται από τα στοιχεία του $R$, αντί για τα στοιχεία κάποιου σώματος $\FF$.
+    
+    Πιο συγκεκριμένα, ένα (\emph{αριστερό}) \emph{$R$-πρότυπο} (left $R$-module) είναι μια αβελιανή ομάδα $M$ εφοδιασμένη με μια πράξη $R \times M \to M$, την οποία συμβολίζουμε με $(r,m) \mapsto r\cdot{m}$ τέτοια ώστε 
+    \begin{align*}
+        1\cdot{m} &= m \\
+        r\cdot{(m+m')} &= r\cdot{m} + r\cdot{m'} \\
+        (r+r')\cdot{m} &= r\cdot{m} + r'\cdot{m} \\
+        (rr')\cdot{m} &= r\cdot(r'\cdot(m)) 
+    \end{align*}
+    για κάθε $r, r' \in R$ και $m, m' \in M$. Συγκρίνοντας αυτά τα αξιώματα με τα αντίστοιχα ενός $G$-προτύπου, τι παρατηρείτε; Ποια είναι τα $\FF$-πρότυπα; Ποιά ειναι τα $\ZZ$-πρότυπα;
+
+    Σε αυτό το πλαίσιο, ένα $R$-πρότυπο $M$ ονομάζεται \emph{κυκλικό} αν $M = Rm$, δηλαδή 
+    \[
+    M = \{rm : r \in R\}
+    \]
+    για οποιοδήποτε (μη μηδενικό) $m \in M$. Η έννοια του κυκλικού $\FF[G]$-προτύπου δεν είναι ακριβώς ίδια με την παραπάνω που έχουν τα πρότυπα Young και Specht. Ειδικότερα, τα πρότυπα Young παράγονται από οποιοδήποτε ταμπλοειδές, αλλά όχι οποιοδήποτε \emph{γραμμικό συνδυασμό ταμπλειδών}, που είναι και ένα αυθαίρετο στοιχείο του $\rmM^\lambda$. Από την άλλη μεριά όμως, θα δείξουμε ότι τα πρότυπα Specht είναι ανάγωγα και ως τέτοια είναι κυκλικά \emph{και} με τις δυο έννοιες\footnote{Δεν είναι δύσκολο να δείξει κανείς ότι ένα μη-τετριμμένο $\FF[G]$-πρότυπο είναι ανάγωγο αν και μόνο αν είναι κυκλικό ως $\FF[G]$-πρότυπο.}. 
+\end{digression_a}
+
+Θα δείξουμε τώρα ότι τα πρότυπα Specht είναι ανάγωγα. Γι αυτό θεωρούμε το (μοναδικό) εσωτερικό γινόμενο $(\Arg, \Arg)$ στο $M^\lambda$ που ορίζεται κάνοντας την βάση των ταμπλοειδών σχήματος $\lambda$ ορθοκανονική, δηλαδή
+\[
+([T], [Q]) = 
+\begin{cases}
+    1, &\ \text{αν $[T] = [Q]$} \\
+    0, &\ \text{διαφορετικά}. \\
+\end{cases}
+\]
+Το $(\Arg,\Arg)$ είναι $\fS_n$-αναλλοίωτο (γιατί;).
+\begin{theorem}{\rm(Submodule theorem, James 1976)}
+    \label{thm:james}
+    Έστω $\lambda \vdash n$. Αν $U$ είναι υποπρότυπο του $M^\lambda$, τότε είτε $U \supseteq \sS^\lambda$, είτε $U \subseteq (\sS^\lambda)^\perp$, ως προς το εσωτερικό γινόμενο $(\Arg, \Arg)$.
+\end{theorem}
+
+Αυτό έχει ως άμεση συνέπεια το παρακάτω.
+\begin{corollary}
+    \label{cor:specht_irreducible}
+    Τα πρότυπα Specht είναι ανάγωγα.
+\end{corollary}
+\begin{proof}[Απόδειξη]
+    Έστω $\lambda$ μια διαμέριση ακεραίου. Αν $U \neq \{0\}$ είναι υποπρότυπο του $\sS^\lambda$, τότε από το Θεώρημα \ref{thm:james} έπεται ότι 
+    \begin{itemize}
+    \item είτε $U \supseteq \sS^\lambda$ και γι αυτό $U = \sS^\lambda$,      
+    \item είτε $U \subseteq (\sS^\lambda)^\perp$ και γι αυτό $U \subseteq \sS^\lambda \cap (\sS^\lambda)^\perp = \{0\}$, το οποίο είναι αδύνατο καθώς $U \neq \{0\}$. 
+    \end{itemize}
+    Με άλλα λόγια, το $\sS^\lambda$ δεν έχει γνήσια υποπρότυπα διαφορετικά του $\{0\}$ και κατά συνέπεια είναι ανάγωγο.
+\end{proof}
+
+Η απόδειξη του Θεωρήματος \ref{thm:james} βασίζεται στο παρακάτω τεχνικό λήμμα.
+\begin{lemma}
+    \label{lem:james}
+    Έστω $\lambda \vdash n$ και $T, Q$ δύο ταμπλώ σχήματος $\lambda$. 
+    \begin{itemize}
+        \item[(1)] Για κάθε $v, u \in \rmM^\lambda$, ισχύει ότι 
+        \[
+        (\nabla_T^-v, u) = (v, \nabla_T^-u).
+        \]
+        \item[(2)] Αν $\cycle{i,j} \in \rmR(Q) \cap \rmC(T)$, τότε $\nabla_T^-[Q] = 0$.
+        \item[(3)] Αν $\nabla_T^-[Q] \neq 0$, τότε $\nabla_T^-[Q] = \pm \bfe_T$.
+        \item[(4)] Αν $v \in \rmM^\lambda$, τότε 
+        \[
+        \nabla_T^-v = c \, \bfe_T
+        \]
+        για κάποιο $c \in \CC$.
+    \end{itemize}
+\end{lemma}
+
+\begin{proof}[Απόδειξη]
+    Για το (1), υπολογίζουμε 
+    \begin{align*}
+        (\nabla_T^-v, u) 
+        &= \left( \sum_{\pi \in \rmC(T)} \sign(\pi)\pi v, u \right) \\
+        &= \sum_{\pi \in \rmC(T)} \sign(\pi)\left(\pi v, u\right) \\
+        &= \sum_{\pi \in \rmC(T)} \sign(\pi)\left(v,\pi^{-1}u\right) \\
+        &= \left(v,\sum_{\pi \in \rmC(T)} \sign(\pi)\pi^{-1}u\right) \\
+        &= \left(v,\sum_{\pi \in \rmC(T)} \sign(\pi^{-1})\pi^{-1}u\right) \\
+        &= \left(v,\nabla_T^-u\right),
+    \end{align*}
+    όπου η τρίτη ισότητα έπεται από το γεγονός ότι το $(\Arg,\Arg)$ είναι $\fS_n$-αναλλοίωτο (γιατί;).
+
+    Για το (2), αρχικά παρατηρούμε ότι 
+    \begin{equation}
+        \label{eq:james_help}
+        \nabla_T^- = x(\epsilon - \cycle{i,j}),
+    \end{equation}
+    για κάποιο $x \in \CC[\fS_n]$. Πράγματι, έστω $H$ η υποομάδα της $\rmC(T)$ που παράγεται από το $\cycle{i,j}$, το οποίο εξ υποθέσεως είναι στοιχείο της $\rmC(T)$, και $\{x_1, x_2, \dots, x_k\}$ ένα σύνολο αντιπροσώπων των αριστερών κλάσεων της $H$ στην $\rmC(T)$. Τότε 
+    \[
+    \rmC(T) = x_1H \uplus x_2H \uplus \cdots \uplus x_kH
+    \]
+    και γι αυτό 
+    \begin{align*}
+        \nabla_T^- 
+        &= \sum_{\pi \in \rmC(T)} \sign(\pi) \pi \\
+        &= \sum_{i=r}^k \left(\sign(x_r)x_r + \sign(x_r\cycle{i,j})x_r\cycle{i,j}\right) \\
+        &= \left(\underbrace{\sum_{r=1}^k \sign(x_r)x_r}_{= \ x}\right)(\epsilon - \cycle{i,j}).
+    \end{align*}
+    Τώρα, εφαρμόζοντας της Ταυτότητα~\eqref{eq:james_help} παίρνουμε 
+    \[
+    \nabla_T^-[Q] 
+    = x(\epsilon - \cycle{i,j})[Q]
+    = x([Q] - \cycle{i,j}[Q]) 
+    = x([Q]- [Q])
+    =0,
+    \]
+    όπου η τρίτη ισότητα έπεται από την υπόθεση $\cycle{i,j} \in \rmR(Q)$.
+
+    Για το (3), παρατηρούμε ότι κάθε δυο στοιχεία $i$ και $j$ τα οποία ανήκουν στην ίδια γραμμή του $Q$ \emph{δεν μπορούν} να ανήκουν στην ίδια στήλη του $T$, διότι διαφορετικά $\cycle{i,j} \in \rmR(Q) \cap \rmC(T)$ και από το (2) θα είχαμε $\nabla_T^-[Q] = 0$, το οποίο είναι αδύνατο. Αυτό έχει ως αποτέλεσμα την ύπαρξη μιας $\pi \in \rmC(T)$ τέτοια ώστε $[\pi{T}] = [Q]$.
+
+    Για παράδειγμα, αν $\lambda = (4,3,3,1)$ και 
+    \[
+    T = 
+    \ytableausetup{nosmalltableaux,notabloids}
+    \ytableaushort{1234,567,89{10},{11}},
+    \quad 
+    \text{και}
+    \quad
+    Q = \ytableaushort{16{10}4,27{11},389,5}
+    \]
+    τότε \textquote{κοιτάμε} τα στοιχεία κάθε στήλης του $T$ ξεχωριστά για το αν βρίσκονται στην αντίστοιχη γραμμή του $Q$. Αν όχι, τότε τα μεταθέτουμε με ένα στοιχείο της $\rmC(T)$ για να βρεθούν στην \textquote{σωστή} τους θέση. Στο παράδειγμα, στην πρώτη στήλη 
+    \[
+    T = 
+    \begin{ytableau}
+        1 & 2 & 3 & 4 \\
+        *(burntorange)5 & 6 & 7 \\
+        8 & 9 & 10 \\
+        *(burntorange)11
+    \end{ytableau}
+    \quad 
+    \text{και}
+    \quad
+    Q = 
+    \begin{ytableau}
+        1 & 6 & 10 & 4 \\
+        2 & 7 & *(burntorange)11 \\
+        3 & 8 & 9 \\
+        *(burntorange)5
+    \end{ytableau}
+    \]
+    και γι αυτό δρούμε με την $\cycle{5, 11}$. Έπειτα, για τη δεύτερη στήλη 
+    \[
+    \cycle{5, 11}T = 
+    \begin{ytableau}
+        1  & *(iceberg)2 & 3 & 4 \\
+        11 & *(iceberg)6 & 7 \\
+        8  & 9 & 10 \\
+        5
+    \end{ytableau}
+    \quad 
+    \text{και}
+    \quad
+    Q = 
+    \begin{ytableau}
+        1 & *(iceberg)6 & 10 & 4 \\
+        *(iceberg)2 & 7 & 11 \\
+        3 & 8 & 9 \\
+        5
+    \end{ytableau}
+    \]
+    και γι αυτό δρούμε με την $\cycle{2,6}$. Τέλος, για την τρίτη στήλη 
+    \[
+    \cycle{2,6}\cycle{5, 11}T = 
+    \begin{ytableau}
+        1  & 6 & *(applegreen)3 & 4 \\
+        11 & 2 & 7 \\
+        8  & 9 & *(applegreen)10 \\
+        5
+    \end{ytableau}
+    \quad 
+    \text{και}
+    \quad
+    Q = 
+    \begin{ytableau}
+        1 & 6 & *(applegreen)10 & 4 \\
+        2 & 7 & 11 \\
+        *(applegreen)3 & 8 & 9 \\
+        5
+    \end{ytableau}
+    \]
+    και γι αυτό δρούμε με την $\cycle{3,10}$, για να πάρουμε 
+    \[
+    [\cycle{3,10}\cycle{2,6}\cycle{5, 11}T] = 
+    \ytableausetup{tabloids}
+    \begin{ytableau}
+        1  & 6 & 10 & 4 \\
+        11 & 2 & 7 \\
+        8  & 9 & 3 \\
+        5
+    \end{ytableau}
+    = \
+    \begin{ytableau}
+        1 & 6 & 10 & 4 \\
+        2 & 7 & 11 \\
+        3 & 8 & 9 \\
+        5
+    \end{ytableau}
+    = [Q].
+    \]
+
+    Συνεπώς, 
+    \begin{align*}
+        \nabla_T^-[Q] 
+        &= \nabla_T^-[\pi{T}] \\
+        &= \sum_{\sigma \in \rmC(T)} \sign(\sigma) \sigma\pi[T] \\
+        &= \sign(\pi^{-1})\sum_{\sigma \in \rmC(T)} \sign(\sigma\pi) \sigma\pi[T] \\
+        &= \sign(\pi)\sum_{\tau \in \rmC(T)} \sign(\tau) \tau[T] \\
+        &= \sign(\pi)\bfe_{T},
+    \end{align*}
+    όπου η τέταρτη ισότητα έπεται από το ότι η αντιστοιχία $\sigma \mapsto \sigma\pi$ είναι αμφιμονοσήμαντη στο $\rmC(T)$, διότι $\pi \in \rmC(T)$.
+
+    Τέλος, αν $v \in \rmM^\lambda$, τότε 
+    \[
+    v = \sum_{[Q]} c_{[Q]}[Q],
+    \]
+    όπου στο άθροισμα το $[Q]$ διατρέχει όλα τα ταμπλοειδή σχήματος $\lambda$ και $c_{[Q]} \in \CC$. Υπολογίζουμε
+    \begin{align*}
+        \nabla_T^-v 
+        &= \nabla_T^-\left(\sum_{[Q]} c_{[Q]}[Q]\right) \\
+        &= \sum_{[Q]} c_{[Q]}\nabla_T^-[Q] \\
+        &= \sum_{\substack{[Q] \\ \nabla_T^-[Q] \neq 0}} c_{[Q]}\nabla_T^-[Q] \\
+        &= \sum_{\substack{[Q] \\ \nabla_T^-[Q] \neq 0}} c_{[Q]}\left(\pm \bfe_T\right)\\
+        &= \left(\underbrace{\sum_{\substack{[Q] \\ \nabla_T^-[Q] \neq 0}} \pm c_{[Q]}}_{= \, c \ \in \ \CC}\right)\bfe_T,
+    \end{align*}
+    όπου η τέταρτη ισότητα έπεται από το (3) και έτσι ολοκληρώνεται η απόδειξη.
+\end{proof}
+\end{document}
