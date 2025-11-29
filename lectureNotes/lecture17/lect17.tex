@@ -1,0 +1,338 @@
+\documentclass[12pt,a4paper,reqno]{amsart}
+
+% language
+\usepackage[greek,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{alphabeta}
+
+% change default names to greek
+\addto\captionsenglish{
+    \renewcommand{\contentsname}{Περιεχόμενα}
+    \renewcommand{\refname}{Βιβλιογραφία}
+    \renewcommand{\datename}{Ημερομηνία:}
+    \renewcommand{\urladdrname}{Ιστοσελίδα}
+}
+
+% math 
+\usepackage{amsmath,amsthm,amssymb,amscd}
+
+% font
+\usepackage[cal=euler]{mathalfa}
+\usepackage{libertinus-type1}
+% \usepackage{txfonts} % for upright greek letters
+\usepackage{bm} % for bold symbols
+\usepackage{bbm} % for the simply-looking bb symbols
+
+% miscellaneous 
+\usepackage{changepage} %for indenting environments
+\usepackage{csquotes} % example: \textcquote{}
+\usepackage{blkarray}
+\setcounter{MaxMatrixCols}{20} % default for pmatrix is 10!!
+\usepackage{ytableau}
+
+% drawing
+\usepackage{tikz,tikz-cd}
+\usetikzlibrary{shapes.misc, patterns, matrix, calc, intersections,positioning}
+\usepackage{graphics,graphicx}
+\usepackage{float} % provides enhanced control and customization options for floating objects such as figures and tables
+
+% colors
+\usepackage{xcolor}
+\definecolor{darkcandyapplered}{rgb}{0.64, 0.0, 0.0}
+\definecolor{midnightblue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{mylightblue}{HTML}{336699}
+\definecolor{burntorange}{rgb}{0.8, 0.33, 0.0}
+\definecolor{iceberg}{rgb}{0.44, 0.65, 0.82}
+\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
+\definecolor{canaryyellow}{rgb}{1.0, 0.94, 0.0}
+
+% hrefs
+\usepackage{hyperref}
+\usepackage[noabbrev,capitalize]{cleveref}
+\hypersetup{
+    pdftoolbar=true,        
+    pdfmenubar=true,        
+    pdffitwindow=false,     
+    pdfstartview={FitH},  % fits the width of the page to the window
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfnewwindow=true,  % links in new window
+    colorlinks=true,  % false: boxed links; true: colored links
+    linkcolor=darkcandyapplered,   % color of internal links
+    citecolor=midnightblue,  % color of links to bibliography
+    urlcolor=cyan,  % color of external links
+    linktocpage=true  % changes the links from the section body to the page number
+    }
+
+% geometry
+\textwidth=16cm 
+\textheight=21cm 
+\hoffset=-55pt 
+\footskip=25pt
+
+% thm envs (you might need to change the path)
+\input{thmEnvironments_macro.tex}
+
+% math ops (you might need to change the path)
+\input{mathOperators_macro.tex}
+
+% miscellaneous commands
+\newcommand{\defn}[1]{{\color{mylightblue}{#1}}}
+\newcommand{\toDo}{{\bf\color{red} TODO}}
+\newcommand{\toCite}{{\bf\color{green} CITE}}
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}} % for matrices with column vectors
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}} % for matrices with row vectors
+\newcommand{\myblue}[1]{{\color{iceberg}{#1}}}
+\newcommand{\myorange}[1]{{\color{burntorange}{#1}}}
+\newcommand{\mygreen}[1]{{\color{applegreen}{#1}}}
+\newcommand{\myred}[1]{{\color{darkcandyapplered}{#1}}}
+
+% ferrer's diagram
+\newcommand{\fdiagram}[1]{
+    \begin{tikzpicture}[scale=.7]
+        \fill foreach \Z [count=\Y] in {#1}
+        {foreach \X in {1,...,\Z} 
+        {(\X,-\Y) circle[radius=3pt]}};
+    \end{tikzpicture}
+}
+
+%
+\newcommand{\tcbo}[1]{\textcolor{burntorange}{#1}}
+
+% 
+\newenvironment{nouppercase}{%
+  \let\uppercase\relax%
+  \renewcommand{\uppercasenonmath}[1]{}}{}
+
+% titlepage
+\title{Θ2.04: Θεωρία Αναπαραστάσεων και Συνδυαστική}
+\author[Β.~Δ. Μουστακας]{Βασίλης Διονύσης Μουστάκας \\ Πανεπιστήμιο Κρήτης}
+\date{27 Νοεμβρίου 2025}
+% \urladdr{\href{https://sites.google.com/view/vasmous}{https://sites.google.com/view/vasmous}}
+
+\begin{document}
+
+\begingroup
+\def\uppercasenonmath#1{} % this disables uppercase title
+\let\MakeUppercase\relax % this disables uppercase authors
+\maketitle
+\endgroup
+
+\setcounter{section}{13}
+\setcounter{theorem}{0}
+\begin{center}
+    \textbf{13. Κανόνες διακλάδωσης
+} 
+\end{center}
+
+Στο Παράδειγμα 8.7 είδαμε ότι 
+\[
+\sS^{(n-1)}\uparrow_{\fS_{n-1}}^{\fS_n} \cong_{\fS_n} V^\triv\uparrow_{\fS_{n-1}}^{\fS_n} \cong_{\fS_n} V^\rmdef \cong_{\fS_n} V^\triv \oplus V^\std \cong_{\fS_n} \sS^{(n)} \oplus \sS^{(n-1,1)},
+\]
+όπου o τελευταίος ισομορφισμός έπεται από το Παράδειγμα 11.3 (1) και με $V^\triv, V^\rmdef$ και $V^\std$ συμβολίζουμε το πρότυπο της τετριμμένης αναπαράστασης, της αναπαράστασης καθορισμού και της συνήθους αναπαράστασης, αντίστοιχα, για την κατάλληλη συμμετρική ομάδα.  Παρατηρούμε λοιπόν ότι η ισοτυπική διάσπαση της επαγωγής του προτύπου Specht που αντιστοιχεί στην διαμέριση $(n-1)$ στην $\fS_n$ προκύπτει \textquote{επεκτείνοντας} την $(n-1)$ σε διαμέριση του $n$ με όλους τους πιθανούς τρόπους. Συνεπώς, είναι φυσικό να αναρωτηθεί κανείς το εξής.
+\begin{que}
+    Για $\lambda \vdash n$, υπάρχει κάποιος απλός, κατά προτίμηση συνδυαστικός, κανόνας για να υπολογίσουμε τις ισοτυπικές διασπάσεις της επαγωγής και του περιορισμού του $\sS^\lambda$ στην $\fS_{n+1}$ και $\fS_{n-1}$, αντίστοιχα;
+\end{que}
+
+Για ακόμα μια φορά, η απάντηση είναι αναπάντεχα απλή. Διαισθητικά, η επαγωγή και ο περιορισμός ενός προτύπου Specht αντιστοιχούν σε προσθαφαίρεση τετραγώνων στο διάγραμμα Young της αντίστοιχης διαμέρισης.
+\begin{definition}
+    \label{def:inne_outer_corner}
+    Για $\lambda \vdash n$, έστω $\pP^-(\lambda)$ (αντ. $\pP^+(\lambda)$) το σύνολο των διαμερίσεων του $n-1$ (αντ. $n+1$) των οποίων το διάγραμμα Young προκύπτει από το $\rmY_\lambda$ αφαιρώντας (αντ. προσθέτοντας) ακριβώς ένα τετράγωνο, το οποίο ονομάζεται \defn{εσωτερική} (αντ. \defn{εξωτερική}) \defn{γωνία} της $\lambda$.
+\end{definition}
+
+Για παράδειγμα, οι εσωτερικές και εξωτερικές γωνίες της διαμέρισης $(4,2,2,1)$ είναι
+\[
+\ytableausetup{centertableaux}
+\ydiagram{3,2,1}
+*[*(burntorange)]{3+1}
+*[*(burntorange)]{3+0,2+0,1+1}
+*[*(burntorange)]{3+0,2+0,1+0,1}
+\quad \text{και} \quad 
+\ydiagram{4,2,2,1}
+*[*(iceberg)]{4+1}
+*[*(iceberg)]{4+0,2+1}
+*[*(iceberg)]{4+0,2+0,2+0,1+1}
+*[*(iceberg)]{4+0,2+0,2+0,1+0,1}
+\]
+αντίστοιχα, και γι αυτό 
+\begin{align*}
+    \pP^-(4,2,2,1) &= \{(3,2,2,1), (4,2,1,1), (4,2,2)\} \ \subseteq \Par_8 \\
+    \pP^+(4,2,2,1) &= \{(5,2,2,1), (4,3,2,1), (4,2,2,2), (4,2,2,1,1)\} \ \subseteq \Par_{10}. \\
+\end{align*}
+
+\begin{proposition}
+    \label{prop:branching_rule}
+    Για κάθε $\lambda \vdash n$, 
+    \begin{equation}
+        \label{eq:branching_rule_help}
+        f^\lambda = \sum_{\mu \in \pP^-(\lambda)} f^\mu.
+    \end{equation}
+\end{proposition}
+\begin{proof}[Απόδειξη]
+    Παρατηρούμε ότι σε κάθε σύνηθες ταμπλώ περιεχομένου $[n]$, το στοιχείο $n$ καταλαμβάνει μια εσωτερική γωνία του $\lambda$ (γιατί;). Για παράδειγμα, για $\lambda = (4,2,2,1) \vdash 9 = n$, έχουμε 
+    \[
+    \begin{ytableau}
+    \ast & \ast & \ast & 9 \\
+    \ast & \ast  \\
+    \ast & \ast  \\
+    \ast
+    \end{ytableau} 
+    \quad \text{ή} \quad 
+    \begin{ytableau}
+    \ast & \ast & \ast & \ast \\
+    \ast & \ast  \\
+    \ast & 9  \\
+    \ast
+    \end{ytableau} 
+    \quad \text{ή} \quad 
+    \begin{ytableau}
+    \ast & \ast & \ast & \ast \\
+    \ast & \ast  \\
+    \ast & \ast  \\
+    9
+    \end{ytableau} 
+    \]
+    Αν $r_1, r_2, \dots, r_k$ είναι οι πιθανές εσωτερικές γωνίες της $\lambda$, με τις αντίστοιχες διαμερίσεις του $\pP^-(\lambda)$ να είναι $\mu^1, \mu^2, \dots, \mu^k$, τότε αφαιρώντας κάθε εσωτερική γωνία που κατέχει το στοιχείο $n$ και απαριθμώντας τα συνήθη ταμπλώ περιεχομένου $[n-1]$ που προκύπτουν έπεται ότι 
+    \[
+    f^\lambda = f^{\mu^1} + f^{\mu^2} + \cdots + f^{\mu^k}
+    \]
+    το οποίο είναι το ζητούμενο. Στο παράδειγμα, 
+    \[
+    f^{(4,2,2,1)} = f^{(3,2,2,1)} + f^{(4,2,1,1)} + f^{(4,2,2)}.
+    \]
+\end{proof}
+
+\begin{theorem}{\rm(Κανόνες διακλάδωσης)}
+    \label{thm:branching_rules}
+    Για κάθε $\lambda \vdash n$, 
+    \begin{align}
+        \label{eq:branching_restriction}
+        \sS^\lambda\!\downarrow_{\fS_{n-1}}^{\fS_n} 
+        &\cong_{\fS_{n-1}} \bigoplus_{\mu \in \pP^-(\lambda)} \sS^\mu \\
+        \label{eq:branching_induction}
+        \sS^\lambda\!\uparrow_{\fS_n}^{\fS_{n+1}} 
+        &\cong_{\fS_{n+1}} \bigoplus_{\mu \in \pP^+(\lambda)} \sS^\mu. 
+    \end{align}
+\end{theorem}
+
+Για την διαμέριση του τρέχοντος παραδείγματος, οι κανόνες διακλάδωσης μας πληροφορούν ότι 
+\begin{align*}
+    \sS^{(4,2,2,1)}\!\downarrow_{\fS_8}^{\fS_9} 
+    &\cong_{\fS_8} \sS^{(3,2,2,1)} \oplus \sS^{(4,2,1,1)} \oplus \sS^{(4,2,2)}\\
+    \sS^{(4,2,2,1)}\!\uparrow_{\fS_9}^{\fS_{10}}  
+    &\cong_{\fS_{10}} \sS^{(5,2,2,1)} \oplus \sS^{(4,3,2,1)} \oplus \sS^{(4,2,2,2)} \oplus \sS^{(4,2,2,1,1)}.
+\end{align*}
+Η απόδειξη που θα δούμε έχει το πλεονέκτημα ότι είναι ανεξάρτητη από το σώμα πάνω από το οποίο δουλεύουμε.
+\begin{proof}[Απόδειξη του Θεωρήματος~\ref{thm:branching_rules} \rm(Peel 1975)]    
+    Αρχικά, ο νόμος αντιστροφής Frobenius και οι σχέσεις ορθογωνιότητας Ι μας επιτρέπουν να αποδείξουμε την μία από τις δύο ταυτότητες. Πράγματι, ας υποθέσουμε ότι ισχύει η Ταυτότητα~\eqref{eq:branching_restriction}. Αν $\chi^\lambda$ είναι ο χαρακτήρας του $\sS^\lambda$, τότε για κάθε $\nu \vdash n+1$
+    \begin{align*}
+        \left(\chi^\lambda\!\uparrow_{\fS_n}^{\fS_{n+1}}, \chi^\nu\right)_{\fS_{n+1}} 
+        &= \left(\chi^\lambda, \chi^\nu\!\downarrow_{\fS_n}^{\fS_{n+1}}\right)_{\fS_n} \\
+        &= \left(\chi^\lambda, \sum_{\mu \in \pP^-(\nu)} \chi^\mu\right)_{\fS_n} \\
+        &= 
+        \begin{cases}
+            1, &\ \text{αν $\lambda \in \pP^-(\nu)$} \\
+            0, &\ \text{διαφορετικά} 
+        \end{cases} \\ 
+        &= 
+        \begin{cases}
+            1, &\ \text{αν $\nu \in \pP^+(\lambda)$} \\
+            0, &\ \text{διαφορετικά} 
+        \end{cases} \\ 
+    \end{align*}
+    όπου η πρώτη ισότητα έπεται από το Θεώρημα 8.8, η δεύτερη ισότητα από την Ταυτότητα \eqref{eq:branching_restriction} και η τρίτη ισότητα από το Θεώρημα 7.4. Με άλλα λόγια, το ανάγωγο $\fS_{n+1}$-πρότυπο που αντιστοιχεί στην διαμέριση $\nu$ εμφανίζεται στην ισοτυπική διάσπαση του $\sS^\lambda\!\uparrow_{\fS_n}^{\fS_{n+1}}$ αν και μόνο αν $\nu \in \pP^+(\lambda)$ και στην περίπτωση αυτή με πολλαπλότητα 1. Το ζητούμενο έπεται από το Πόρισμα 7.5.
+
+    Αρκεί λοιπόν να αποδείξουμε την Ταυτότητα \eqref{eq:branching_restriction}. Γι αυτό τον σκοπό υποθέτουμε ότι οι εσωτερικές γωνίες της $\lambda$ βρίσκονται στις γραμμές $r_1, r_2, \dots, r_k$ και έστω $\mu^1, \mu^2, \dots, \mu^k \in \pP^-(\lambda)$ οι αντίστοιχες διαμερίσεις του $n-1$ που προκύπτουν αφαιρώντας τες. Η βασική ιδέα είναι ότι αρκεί να βρούμε μια ακολουθία 
+    \[
+    \{0\}=V_0 \subseteq V_1 \subseteq V_2 \subseteq \cdots \subseteq V_k = \sS^\lambda
+    \]
+    υποπροτύπων του $\sS^\lambda$, τα οποία είναι $\fS_{n-1}$-πρότυπα τέτοια ώστε τα διαδοχικά πηλίκα τους να ικανοποιούν 
+    \[
+    V_i / V_{i-1} \ \cong_{\fS_{n-1}} \sS^{\mu^i},
+    \]
+    για κάθε $1 \le i \le k$. Πράγματι, σε αυτή την περίπτωση, από την Άσκηση 3.1 έπεται ότι 
+    \begin{align*}
+        \sS^\lambda 
+        &\cong_{\fS_{n-1}} V_{k-1} \oplus \underbrace{\left(V_k/V_{k-1}\right)}_{\cong_{\fS_{n-1}} \, \sS^{\mu^k}} \\
+        &\cong_{\fS_{n-1}} V_{k-2} \oplus \underbrace{\left(V_{k-1}/V_{k-2}\right)}_{\cong_{\fS_{n-1}} \, \sS^{\mu^{k-1}}} \oplus \ \sS^{\mu^k} \\
+        &\quad\vdots \\
+        &\cong_{\fS_{n-1}} \sS^{\mu^1}  \oplus \cdots \oplus \sS^{\mu^{k-1}} \oplus \sS^{\mu^k},
+    \end{align*}
+    το οποίο είναι το ζητούμενο.
+\end{proof}
+
+Προς αυτή την κατεύθυνση, για κάθε $1 \le i \le k$, θεωρούμε τον υπόχωρο $V_i$ του $\sS^\lambda$ που παράγεται από τα πολυταμπλοειδή $\bfe_T$ για κάθε σύνηθες ταμπλώ σχήματος $\lambda$ με $r_T(n) \in \{r_1, r_2, \dots, r_i\}$. Προφανώς,
+\begin{itemize}
+    \item $\{0\}=V_0 \subseteq V_1 \subseteq V_2 \subseteq \cdots \subseteq V_k = \sS^\lambda$, και 
+    \item κάθε $V_i$ είναι $\fS_{n-1}$-αναλλοίωτο.
+\end{itemize}
+
+Για κάθε $1 \le i \le k$, θεωρούμε την απεικόνιση $\vartheta_i : \rmM^\lambda \to \rmM^{\mu^i}$ η οποία ορίζεται θέτοντας 
+\[
+\vartheta_i([T]) = 
+\begin{cases}
+    [T]\sm{n}, &\ \text{αν $r_T(n) = r_i$} \\
+    0, &\ \text{διαφορετικά}
+\end{cases},
+\]
+όπου με $[T]\sm{n}$ συμβολίζουμε το ταμπλοειδές σχήματος $\mu^i$ που προκύπτει από το $[T]$ διαγράφοντας το $n$. Επεκτείνοντας γραμμικά κάθε $\vartheta_i$ προκύπτει ένας καλά ορισμένος $\fS_{n-1}$-ομομορφισμός, για κάθε $1 \le i \le k$. Διαισθητικά, η $\vartheta_i$ μετατρέπει κάθε ταμπλοειδές σχήματος $\lambda$ σε ένα ταμπλοειδές σχήματος $\mu^i$ \textquote{κοιτώντας} αν το $n$ \textquote{κάθεται} στην γραμμή $r_i$, ενώ διαφορετικά το \textquote{σκοτώνει}.
+
+\begin{claim}
+    Για κάθε $1 \le i \le k$ και κάθε $T \in \SYT(\lambda)$ με $r_T(n) = r_j$ έχουμε 
+    \[
+    \vartheta_i(\bfe_{T}) = 
+    \begin{cases}
+        \bfe_{T\sm{n}}, &\ \text{αν $i = j$} \\
+        0, &\ \text{αν $i < j$}
+    \end{cases},
+    \]
+    όπου με $T\sm{n}$ συμβολίζουμε το σύνηθες ταμπλώ σχήματος $\mu^j$ που προκύπτει από το $T$ διαγράφοντας το $n$. 
+\end{claim}
+
+Ο ισχυρισμός έπεται άμεσα από τον ορισμό της $\vartheta_i$ και το Λήμμα 12.5, το οποίο μας πληροφορεί ότι στα πολυταμπλοειδή του αναπτύγματος του $\bfe_T$ στην βάση των ταμπλοειδών του $\rmM^\lambda$, το $n$ βρίσκεται στην ίδια γραμμή ή βορειότερα απ' ότι στο $[T]$.
+
+Άμεση συνέπεια του ισχυρισμού είναι ότι 
+\begin{itemize}
+    \item[(1)] $\vartheta_i(V_i) = \sS^{\mu^i}$
+    \item[(2)] $\vartheta_i(V_{i-1}) = \{0\}$ και γι αυτό\footnote{Αυτό περιγράφει με σύμβολα αυτό που είπαμε με λόγια στη συζήτηση πριν την διατύπωση του ισχυρισμού.} $V_{i-1} \subseteq \Ker(\vartheta_i)$
+\end{itemize}
+για κάθε $1 \le i \le k$. Συνεπώς, από το πρώτο θεώρημα ισομορφισμού και το (1) έπεται ότι 
+\begin{equation} 
+    \label{eq:branching_rule_help}
+\sS^{\mu^i} \cong_{\fS_{n-1}} V_i / \left(V_i \cap \Ker(\vartheta_i)\right) 
+\end{equation}
+για κάθε $1 \le i \le k$. Από το (2) έπεται ότι μπορούμε να εκλεπτύνουμε την ακολουθία υποπροτύπων μας, προσθέτοντας του όρους $V_i \cap \Ker(\vartheta_i)$, για κάθε $1 \le i \le k$, δηλαδή 
+\[
+\{0\} = V_0 \subseteq V_1 \cap \Ker(\vartheta_1) \subseteq V_1 \subseteq V_2 \cap \Ker(\vartheta_2) \subseteq \cdots \subseteq V_{k-1} \cap \Ker(\vartheta_{k-1}) \subseteq V_k = \sS^\lambda.
+\]
+
+\begin{claim}
+    Για κάθε $1 \le i \le k$, 
+    \[
+    V_i \cap \Ker(\vartheta_i) = V_{i-1}.
+    \]
+\end{claim}
+
+Πράγματι, από την Πρόταση \ref{prop:branching_rule} έπεται ότι 
+\begin{align*}
+    \dim(\sS^\lambda) 
+    &= f^\lambda \\ 
+    &= \sum_{i=1}^k f^{\mu^i} \\ 
+    &= \sum_{i=1}^k \dim(\sS^{\mu^i}) \\ 
+    &= \sum_{i=1}^k \dim\left(V_i/\left(V_i \cap \Ker(\vartheta_i)\right)\right) \\ 
+    &= \sum_{i=1}^k \left(\dim(V_i) - \dim\left(V_i \cap \Ker(\vartheta_i)\right)\right).
+\end{align*}
+Επομένως, το \textquote{βήμα} από το $V_i \cap \Ker(\vartheta_i)$ στο $V_i$ \textquote{καλύπτει} όλη τη διαθέσιμη διάσταση αναγκάζοντας 
+\[
+\dim(V_{i-1}) - \dim\left(V_i \cap \Ker(\vartheta_i)\right) = 0
+\]
+και γι αυτό $V_{i-1} = V_i \cap \Ker(\vartheta_i)$, για κάθε $1 \le i \le k$.
+
+Από τον ισχυρισμό, η Ταυτότητα \eqref{eq:branching_rule_help} γίνεται 
+\[
+\sS^{\mu^i} \cong_{\fS_{n-1}} V_i / \left(V_i \cap \Ker(\vartheta_i)\right) = V_i / V_{i-1}
+\]
+για κάθε $1 \le i \le k$ και η απόδειξη ολοκληρώνεται.
+\end{document}
