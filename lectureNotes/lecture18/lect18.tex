@@ -1,0 +1,398 @@
+\documentclass[12pt,a4paper,reqno]{amsart}
+
+% language
+\usepackage[greek,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{alphabeta}
+
+% change default names to greek
+\addto\captionsenglish{
+    \renewcommand{\contentsname}{Περιεχόμενα}
+    \renewcommand{\refname}{Βιβλιογραφία}
+    \renewcommand{\datename}{Ημερομηνία:}
+    \renewcommand{\urladdrname}{Ιστοσελίδα}
+}
+
+% math 
+\usepackage{amsmath,amsthm,amssymb,amscd}
+
+% font
+\usepackage[cal=euler]{mathalfa}
+\usepackage{libertinus-type1}
+% \usepackage{txfonts} % for upright greek letters
+\usepackage{bm} % for bold symbols
+\usepackage{bbm} % for the simply-looking bb symbols
+
+% miscellaneous 
+\usepackage{changepage} %for indenting environments
+\usepackage{csquotes} % example: \textcquote{}
+\usepackage{blkarray}
+\setcounter{MaxMatrixCols}{20} % default for pmatrix is 10!!
+\usepackage{ytableau}
+
+% drawing
+\usepackage{tikz,tikz-cd}
+\usetikzlibrary{shapes.misc, patterns, matrix, calc, intersections,positioning}
+\usepackage{graphics,graphicx}
+\usepackage{float} % provides enhanced control and customization options for floating objects such as figures and tables
+
+% colors
+\usepackage{xcolor}
+\definecolor{darkcandyapplered}{rgb}{0.64, 0.0, 0.0}
+\definecolor{midnightblue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{mylightblue}{HTML}{336699}
+\definecolor{burntorange}{rgb}{0.8, 0.33, 0.0}
+\definecolor{iceberg}{rgb}{0.44, 0.65, 0.82}
+\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
+\definecolor{canaryyellow}{rgb}{1.0, 0.94, 0.0}
+
+% hrefs
+\usepackage{hyperref}
+\usepackage[noabbrev,capitalize]{cleveref}
+\hypersetup{
+    pdftoolbar=true,        
+    pdfmenubar=true,        
+    pdffitwindow=false,     
+    pdfstartview={FitH},  % fits the width of the page to the window
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfnewwindow=true,  % links in new window
+    colorlinks=true,  % false: boxed links; true: colored links
+    linkcolor=darkcandyapplered,   % color of internal links
+    citecolor=midnightblue,  % color of links to bibliography
+    urlcolor=cyan,  % color of external links
+    linktocpage=true  % changes the links from the section body to the page number
+    }
+
+% geometry
+\textwidth=16cm 
+\textheight=21cm 
+\hoffset=-55pt 
+\footskip=25pt
+
+% thm envs (you might need to change the path)
+\input{thmEnvironments_macro.tex}
+
+% math ops (you might need to change the path)
+\input{mathOperators_macro.tex}
+
+% miscellaneous commands
+\newcommand{\defn}[1]{{\color{mylightblue}{#1}}}
+\newcommand{\toDo}{{\bf\color{red} TODO}}
+\newcommand{\toCite}{{\bf\color{green} CITE}}
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}} % for matrices with column vectors
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}} % for matrices with row vectors
+\newcommand{\myblue}[1]{{\color{iceberg}{#1}}}
+\newcommand{\myorange}[1]{{\color{burntorange}{#1}}}
+\newcommand{\mygreen}[1]{{\color{applegreen}{#1}}}
+\newcommand{\myred}[1]{{\color{darkcandyapplered}{#1}}}
+
+% ferrer's diagram
+\newcommand{\fdiagram}[1]{
+    \begin{tikzpicture}[scale=.7]
+        \fill foreach \Z [count=\Y] in {#1}
+        {foreach \X in {1,...,\Z} 
+        {(\X,-\Y) circle[radius=3pt]}};
+    \end{tikzpicture}
+}
+
+%
+\newcommand{\tcbo}[1]{\textcolor{burntorange}{#1}}
+
+% 
+\newenvironment{nouppercase}{%
+  \let\uppercase\relax%
+  \renewcommand{\uppercasenonmath}[1]{}}{}
+
+% titlepage
+\title{Θ2.04: Θεωρία Αναπαραστάσεων και Συνδυαστική}
+\author[Β.~Δ. Μουστακας]{Βασίλης Διονύσης Μουστάκας \\ Πανεπιστήμιο Κρήτης}
+\date{2 Δεκεμβρίου 2025}
+% \urladdr{\href{https://sites.google.com/view/vasmous}{https://sites.google.com/view/vasmous}}
+
+\begin{document}
+
+\begingroup
+\def\uppercasenonmath#1{} % this disables uppercase title
+\let\MakeUppercase\relax % this disables uppercase authors
+\maketitle
+\endgroup
+
+\setcounter{section}{14}
+\setcounter{theorem}{0}
+\begin{center}
+    \textbf{14. Στοιχεία αλγεβρικής συνδυαστικής: Γεννήτριες συναρτήσεις και τυπικές δυναμοσειρές
+} 
+\end{center}
+
+
+Στην Παράγραφο 9 είδαμε ότι δεν γνωρίζουμε ούτε κλειστό τύπο για το πλήθος $\rmp(n)$ των διαμερίσεων του $n$, αλλά ούτε και αναδρομικό τύπο. Τι μπορούμε να κάνουμε σε αυτή την περίπτωση; Μια ιδέα είναι αντί να ψάχνουμε κάθε $\rmp(1), \rmp(2), \rmp(3), \dots$ ξεχωριστά, να \textquote{οργανώσουμε} όλους αυτούς τους (άπειρους το πλήθος) αριθμούς σε μια συνάρτηση.
+
+\begin{definition}
+    \label{def:generating_function}
+    Έστω $(a_n)_{n\ge0}$ μια ακολουθία (μιγαδικών) αριθμών. Η δυναμοσειρά 
+    \[
+    \sum_{n\ge0} a_n x^n = a_0 + a_1x + a_2x^2 + \cdots 
+    \]
+    ονομάζεται \defn{γεννήτρια συνάρτηση} (generating function) της ακολουθίας $(a_n)_{n\ge0}$.
+\end{definition}
+
+Για παράδειγμα, για κάποιο $n \ge 0$, έστω $a_k = \binom{n}{k}$, για κάθε $k \ge 0$. Η γεννήτρια συνάρτηση της ακολουθίας $(a_k)_{k \ge0}$ δίνεται από 
+\[
+\sum_{k\ge0} \binom{n}{k} x^k = 
+\sum_{k=0}^n \binom{n}{k} x^k = 
+(1+x)^n,
+\]
+όπου η τελευταία ισότητα είναι γνωστή ως \emph{Διωνυμικό Θεώρημα}.
+
+Για ένα ακόμα παράδειγμα, έστω $(a_n)_{n\ge0}$ η ακολουθία αριθμών\footnote{Οι αριθμοί αυτοί ονομάζονται \emph{αριθμοί Fibonacci}.} που ορίζεται από τον αναδρομικό τύπο
+\begin{equation}
+    \label{eq:fibonacci}
+    a_n = a_{n-1} + a_{n-2}, 
+\end{equation}
+για κάθε $n \ge 2$, όπου $a_0=a_1=1$. Αν συμβολίσουμε με $F(x)$ την γεννήτρια συνάρτηση της $(a_n)_{n\ge0}$, τότε 
+\begin{align*}
+    F(x) 
+    &= \sum_{n \ge 0} a_n x^n \\
+    &= 1 + x + \sum_{n \ge 2} a_n x^n \\
+    &= 1 + x + \sum_{n \ge 2} (a_{n-1} + a_{n-2}) x^n \\
+    &= 1 + x + \sum_{n \ge 2} a_{n-1}x^n + \sum_{n\ge 2}a_{n-2} x^n \\
+    &= 1 + x + x\sum_{n \ge 2} a_{n-1}x^{n-1} + x^2\sum_{n\ge 2}a_{n-2} x^{n-2} \\
+    &= 1 + x + x(F(x)-1) + x^2F(x) \\
+    &= 1 + (x + x^2)F(x) \\
+\end{align*}
+και γι αυτό 
+\[
+F(x) = \frac{1}{1-x-x^2} 
+= \frac{1}{x\sqrt{5}}\left(\frac{1}{1-\varphi{x}} + \frac{1}{1-\ol{\varphi}{x}}\right),
+\]
+όπου $\varphi = \frac{1 + \sqrt{5}}{2}$ και $\ol{\varphi} = \frac{1 + \sqrt{5}}{2}$. Άρα, 
+\[
+F(x) = \frac{1}{x\sqrt{5}}\sum_{n\ge0}(\varphi^n - \ol{\varphi}^n)x^n
+\]
+και γι αυτό 
+\[
+a_n = \frac{\varphi^{n+1} - \ol{\varphi}^{n+1}}{\sqrt{5}}.
+\]
+
+Τι ακριβώς είναι μια γεννήτρια συνάρτηση; Μια γεννήτρια συνάρτηση δεν είναι δυναμοσειρά με την αναλυτική έννοια. Πρόκειτα για μια \textquote{τυπική} δυναμοσειρά, δηλαδή μια έκφραση της μορφής 
+\[
+a_0 + a_1x + a_2x^2 + \cdots, 
+\]
+για κάποιους αριθμούς $a_0, a_1, a_2, \dots$. Συνεπώς, εξαρτάται από τους συντελεστές της και δεν είναι (απαραίτητα) ίση με την σειρά Taylor κάποιας συνάρτησης. 
+
+Ας το κάνουμε πιο συγκεκριμένο. Έστω $\bfx = (x_1, x_2, \dots)$ μια (αριθμήσιμα άπειρη) ακολουθία μεταβλητών που μετατίθενται. Αν $\alpha = (\alpha_1, \alpha_2, \dots, \alpha_k)$ είναι μια ακολουθία μη αρνητικών ακεραίων, τότε το 
+\[
+\bfx^\alpha \coloneqq x_1^{\alpha_1}x_2^{\alpha_2}\cdots x_k^{\alpha_k}
+\]
+ονομάζεται \defn{μονώνυμο} με \defn{εκθέτες}  $\alpha_1, \alpha_2, \dots, \alpha_k$.
+\begin{definition}
+\label{def:formal_power_series} 
+Μια έκφραση της μορφής 
+\[
+\sum_{\alpha} c_\alpha \bfx^\alpha
+\]
+για $c_\alpha \in \CC$, όπου στο άθροισμα το $\alpha$ διατρέχει όλες τις ακολουθίες $(\alpha_1, \alpha_2, \dots)$ μη αρνητικών ακεραίων, οι οποίοι είναι όλοι μηδέν, εκτός από το πολύ πεπερασμένο πλήθος αυτών, ονομάζεται \defn{τυπική δυναμοσειρά} (formal power series).
+\end{definition}
+
+Με άλλα λόγια, μια τυπική δυναμοσειρά είναι ένας γραμμικός συνδυασμός (άπειρων το πλήθος) μονωνύμων με συντελεστές στο $\CC$. Το σύνολο $\CC[\![\bfx]\!]$ όλων των τυπικών δυναμοσειρών αποτελεί διανυσματικό χώρο με την προφανή πράξη της πρόσθεσης, δηλαδή 
+\begin{equation}
+    \label{eq:FPS_addition}
+\left(\sum_{\alpha} c_\alpha \bfx^\alpha\right) + 
+\left(\sum_{\alpha} d_\alpha \bfx^\alpha\right) = 
+\sum_{\alpha} (c_\alpha + d_\alpha) \bfx^\alpha.
+\end{equation}
+Επίσης, θέτοντας 
+\begin{equation} 
+    \label{eq:FPS_multiplication}
+\left(\sum_{\alpha} c_\alpha \bfx^\alpha\right) + 
+\left(\sum_{\beta} d_\beta \bfx^\beta\right) = 
+\sum_{\gamma}\left(\sum_{\alpha + \beta = \gamma} c_\alpha c_\beta\right) \bfx^\gamma, 
+\end{equation}
+όπου $\alpha + \beta \coloneqq (\alpha_1 + \beta_1, \alpha_2 + \beta_2, \dots)$ το $\CC[\![\bfx]\!]$ αποκτά την δομή \emph{δακτύλιου}. 
+
+Για παράδειγμα, αν έχουμε μόνο μία μεταβλητή\footnote{Για να κάνουμε τον διαχωρισμό ανάμεσα σε μια ακολουθία μεταβλητών $\bfx$ και σε μια μεμονωμένη μεταβλητή $x$ χρησιμοποιούμε έντονη γραφή.} $x$ οι Ταυτότητες~\eqref{eq:FPS_addition} και \eqref{eq:FPS_multiplication} γίνονται 
+\begin{align*}
+    \left(\sum_{n\ge0} c_n x^n\right) + 
+    \left(\sum_{n\ge0} d_n x^n\right) &= 
+    \sum_{n\ge0} (c_n + d_n) x^n  \\
+    \left(\sum_{n\ge0} c_n x^n\right)\left(\sum_{n\ge0} d_n x^n\right) &= 
+    \sum_{n\ge0}\left(\sum_{k=0}^n c_kd_{n-k}\right) x^n.
+\end{align*}
+
+Οι γεννήτριες συναρτήσεις είναι τυπικές δυναμοσειρές μια μεταβλητής με την έννοια του Ορισμού~\ref{def:formal_power_series}. Το πλεονέκτημα των τυπικών δυναμοσειρών έναντι των \textquote{αναλυτικών} είναι ότι δεν μας απασχολεί πότε ή που συγκλίνουν, αρκεί να είναι καλά ορισμένα στοιχεία του $\CC[\![\bfx]\!]$. 
+
+Για παράδειγμα, μια (αναλυτική) συνάρτηση όπως η $\exp(\Arg)$ μπορεί να θεωρηθεί ως τυπική δυναμοσειρά ορίζοντας 
+\[
+\exp(x) \coloneqq \sum_{n\ge0}\frac{x^n}{n!}.
+\]
+Έτσι, η \textquote{συνάρτηση} $\exp(x)$ μπορεί να θεωρηθεί ως η γεννήτρια συνάρτηση της ακολουθίας $(\frac{1}{n!})_{n\ge0}$. Ομοίως και για άλλες γνωστές (αναλυτικές) συναρτήσεις.
+
+Τέλος, θα θέλαμε να ισχύουν οι γνωστές ταυτότητες των (αναλυτικών) δυναμοσειρών όπως, για παράδειγμα, η 
+\begin{equation}
+    \label{eq:geometric_series}
+1 + x + x^2 + \cdots = \frac{1}{1-x}.
+\end{equation}
+Παρόλα αυτά, το δεξί μέλος της Ταυτότητας~\eqref{eq:geometric_series} δεν έχει (από μόνο του) νόημα στον δακτύλιο $\CC[\![x]\!]$. Όμως, παρατηρούμε ότι 
+\[
+(1-x)(1+x+x^2+\cdots) = 1 + x + x^2 + \cdots - x - x^2 - \cdots = 1.
+\]
+Συνεπώς, το $1-x$ είναι αντιστρέψιμο στο $\CC[\![x]\!]$ και το αντίστροφό του, το οποίο συμβολίζουμε με $\frac{1}{1-x}$, ισούται με το $\sum_{n\ge0}x^n$. 
+
+Επιστρέφοντας στην αρχική συζήτηση αυτής τηε παραγράφου, η γεννήτρια συνάρτηση της $(\rmp(n))_{n\ge0}$, όπου $\rmp(0)\coloneqq 1$ έχει μια απροσδόκητα απλή μορφή.
+
+\begin{theorem}{\rm(Euler 1748)}
+    \label{thm:Euler}
+    Ισχύει ότι 
+    \begin{equation}
+        \label{eq:Euler}
+        \sum_{n\ge0}\rmp(n) x^n = \prod_{i\ge1}\frac{1}{1-x^i}.
+    \end{equation}
+\end{theorem}
+\begin{proof}[Απόδειξη]
+    Θεωρούμε το (άπειρο) σύνολο\footnote{Το συναντήσαμε ξανά στην Παράγραφο 9 ως διάταξη Young.} 
+    \[
+    \Par \coloneqq \bigcup_{n\ge0} \Par(n).
+    \]
+    Το αριστερό μέλος της Ταυτότητας~\eqref{eq:Euler} γράφεται ισοδύναμα 
+    \[
+    \sum_{n\ge0}\rmp(n) x^n = \sum_{\lambda \in \Par} x^{\abs{\lambda}},
+    \]
+    όπου με $\abs{\lambda}$ συμβολίζουμε το άθροισμα των μερών της διαμέρισης $\lambda$. Για παράδειγμα, αν $\lambda = (4,2,2,1)$, τότε $
+    \abs{\lambda} = 4 + 2 + 2 + 1 = 9$.
+
+    Έχουμε δει ότι κάθε διαμέριση $\lambda \vdash n$ μπορεί να παρασταθεί από μία διατεταγμένη $n$-άδα της μορφής $(1^{m_1},2^{m_2},\dots,n^{m_n})$, όπου $m_i$ είναι η πολλαπλότητα εμφάνισης του μέρους $i$ στην $\lambda$, έτσι ώστε
+    \[
+    x^{\abs{\lambda}} = x^{m_1 + 2m_2 + \cdots + nm_n}.
+    \]
+    Η διαμέριση του παραδείγματος αντοιστοιχεί στην ακολουθία 
+    \[
+    (1^1, 2^2, 3^0, 4^1, 5^0, 6^0, 7^0, 8^0, 9^0).
+    \]
+    Γενικότερα, ένα στοιχείο του $\Par$ μπορεί να παρασταθεί ως $(1^{m_1}, 2^{m_2}, \dots)$ για κάποια $m_i \ge 0$, τα οποία είναι όλα μηδέν, εκτός από το πολύ πεπερασμένο πλήθος αυτών.
+    
+    Με άλλα λόγια, έχουμε μια αμφιμονοσήμαντη αντιστοιχία μεταξύ του $\Par$ και του συνόλου 
+    \[
+    \left(\bigcup_{m_1\ge0}(1^{m_1})\right)\times
+    \left(\bigcup_{m_2\ge0}(2^{m_2})\right)\times\cdots.
+    \]
+    Σε επίπεδο γεννητριών συναρτήσεων το $\cup$ (αντ. $\times$) μεταφράζεται σε $\sum$ (αντ. $\prod$) και γι αυτό 
+    \begin{align*} 
+    \sum_{\lambda \in \Par} x^{\abs{\lambda}} 
+    &= \prod_{i\ge1}\left(\sum_{m_i \ge 0} (x^i)^{m_i}\right) \\
+    &= \prod_{i\ge1}\left(1 + x^i + (x^i)^2 + \cdots\right) \\
+    &= \prod_{i\ge1}\frac{1}{1-x^i},\\
+    \end{align*}
+    όπου η τελευταία ισότητα έπεται από την Ταυτότητα~\eqref{eq:geometric_series}.
+\end{proof}
+
+Κάποιος που συναντά για πρώτη φορά τυπικές δυναμοσειρές θα πρέπει να είναι σκεπτικός για το αν το δεξί μέλος της Ταυτότητας~\eqref{eq:Euler} είναι καλώς ορισμένο στοιχείο του $\CC[\![x]\!]$. Όμως, οι όροι $\frac{1}{1-x^i}$ του γινομένου με $i \ge n+1$ στην πραγματικότητα δε συνεισφέρουν στον συντελεστή του $x^n$ και κατά συνέπεια στον υπολογισμό του $\rmp(n)$. Για παράδειγμα, ο συντελεστής του $x^3$ στο 
+\begin{align*}
+\prod_{i\ge1}\frac{1}{1-x^i} &= 
+\left(\frac{1}{1-x}\right)
+\left(\frac{1}{1-x^2}\right)
+\left(\frac{1}{1-x^3}\right)\cdots \\
+&= (\myblue{1} + \mygreen{x} + x^2 + \myorange{x^3} + \cdots)(\myblue{1} + \mygreen{x^2} + x^4 + \cdots)(1 + \myblue{x^3} + x^6 + \cdots)\cdots
+\end{align*}
+ισούται με 3 και γι αυτό $\rmp(3) = 3$. 
+
+Για περισσότερες πληροφορίες σχετικά με την βασική θεωρία των τυπικών δυναμοσειρών παραπέμπουμε τον ενδιαφερόμενο αναγνώστη στο \cite[Ενότητα~1.1.3]{AthAEC}.
+
+\newpage
+
+\setcounter{section}{15}
+\setcounter{theorem}{0}
+\begin{center}
+    \textbf{15. Η άλγεβρα των συμμετρικών συναρτήσεων
+} 
+
+\end{center}
+
+Έστω $\bfx = (x_1, x_2, \dots)$ μια (αριθμήσιμα άπειρη) ακολουθία μεταβλητών που μετατίθενται. Για ένα μονώνυμο $\bfx^\alpha = x_1^{\alpha_1}x_2^{\alpha_2}\cdots{x_k^{\alpha_k}}$, το $\alpha_1 + \alpha_2 + \cdots + \alpha_k$ ονομάζεται \defn{βαθμός}. Μια τυπική δυναμοσειρά $f \in \CC[\![\bfx]\!]$ λέμε ότι είναι \defn{ομογενής βαθμού} $n$ αν κάθε μονώνυμο στο ανάπτυγμά της έχει βαθμό $n$. Για παράδειγμα, η 
+\[
+x_1x_2^2 + x_1x_3^2 + \cdots + x_2x_3^2 + x_2x_4^2 + \cdots
+\]
+είναι ομογενής βαθμού $3$, ενώ η 
+\[
+x_1x_2^4 + x_1^2 + x_3x_4x_7
+\]
+δεν είναι ομογενής.
+
+\begin{definition}
+    \label{def:symmetric_function}
+    Μια ομογενής τυπική δυναμοσειρά $f \in \CC[\![x]\!]$ ονομάζεται \defn{συμμετρική συνά\-ρτηση} αν 
+    \[
+    f(x_{\pi(1)}, x_{\pi(2)}, \dots) = f(x_1, x_2, \dots)
+    \]
+    για κάθε μετάθεση $\pi$ των θετικών ακεραίων, η οποία αφήνει όλα τα στοιχεία σταθερά, εκτός από το πολύ πεπερασμένο πλήθος αυτών.
+\end{definition}
+
+Με άλλα λόγια, η $f$ είναι συμμετρική συνάρτηση αν και μόνο αν ο συντελεστής του 
+\[
+x_{i_1}^{\lambda_{i_1}}x_{i_2}^{\lambda_{i_2}}\cdots x_{i_k}^{\lambda_{i_k}}
+\]
+στην $f$ είναι ο ίδιος για κάθε διακεκριμένους $i_1, i_2, \dots, i_k \in \ZZ_{>0}$ και αυθαίρετους εκθέτες $\lambda_{i_1}, \lambda_{i_2}, \dots, \lambda_{i_k}$ (γιατί;). Για μονώνυμο $\bfx^\alpha$, θα γράφουμε $[\bfx^\alpha]f(\bfx)$ για τον συντελεστή του $\bfx^{\alpha}$ στην $f(\bfx)$.
+
+\begin{example}
+    \label{ex:symmetric_functions}
+    \leavevmode
+    \begin{itemize}
+        \item[(1)] Ένα παράδειγμα συμμετρικής συνάρτησης βαθμού 1 είναι η 
+        \[
+        \sum_{i\ge1} x_i = x_1 + x_2 + \cdots.
+        \]
+        \item[(2)]
+        Παραδείγματα συμμετρικών συναρτήσεων βαθμού 2 αποτελούν οι 
+        \begin{align*}
+            \sum_{i\ge1}x_i^2 &= x_1^2 + x_2^2 + \cdots \\
+            \sum_{1 \le i <j} x_ix_j &= x_1x_2 + x_1x_3 + \cdots + x_2x_3 + x_2x_4 + \cdots.
+        \end{align*}
+        \item[(3)] Η τυπική δυναμοσειρά
+        \[
+        f(\bfx) = x_1x_2^2 + x_1x_3^2 + \cdots + x_2x_3^2 + x_2x_4^2 + \cdots
+        \]
+        που συναντήσαμε στην αρχή της παραγράφου, δεν είναι συμμετρική συνάρτηση, καθώς, για παράδειγμα, αν $\pi = \cycle{1,2}$, τότε 
+        \[
+        [x_{\pi(1)}x_{\pi(2)}^2]f(\bfx) = [x_2x_1^2]f(\bfx) = 0 \neq 1 = [x_1x_2^2]f(\bfx).
+        \] 
+        Ποιά ομογενής τυπική δυναμοσειρά βαθμού 2 \textquote{λείπει} από την $f(\bfx)$ ώστε να γίνει συμμετρική συνάρτηση;
+    \end{itemize}
+\end{example}
+
+Έχοντας την παρατήρηση μετά τον Ορισμό~\ref{def:symmetric_function} κατά νου, ο πιο φυσικός τρόπος να κατα\-σκευάσουμε μια συμμετρική συνάρτηση βαθμού $n$ είναι ο εξής: Θεωρούμε μη αρνητικούς ακεραίους $\lambda_1, \lambda_2, \dots, \lambda_k$, έτσι ώστε $\lambda_1 + \lambda_2 + \cdots + \lambda_k = n$ και συμμετρικοποιούμε το μονώνυμο 
+\[
+x_1^{\lambda_1}x_2^{\lambda_2}\cdots x_k^{\lambda_k}
+\]
+με εκθέτες $\lambda_1, \lambda_2, \dots, \lambda_k$, δηλαδή παίρνουμε το άθροισμα όλων των διακεκριμένων μονωνύμων με αυτούς τους εκθέτες. Για την ακολουθία των εκθετών μπορούμε να υποθέσουμε ότι $\lambda_1 \ge \lambda_2 \ge \cdots \ge \lambda_k$ (γιατί;). Η διαδικασία αυτή οδηγεί στον ακόλουθο ορισμό.
+
+\begin{definition}
+    \label{def:monomial}
+    Έστω $\lambda = (\lambda_1, \lambda_2, \dots, \lambda_k) \vdash n$. Το στοιχείο
+    \[
+    m_\lambda = m_\lambda(\bfx) \coloneqq \sum x_{i_1}^{\lambda_{i_1}}x_{i_2}^{\lambda_{i_2}}\cdots x_{i_k}^{\lambda_{i_k}},
+    \]
+    όπου το άθροισμα διατρέχει όλα τα διακεκριμένα μονώνυμα με εκθέτες $\lambda_1, \lambda_2, \dots, \lambda_k$ ονομάζεται \defn{μονωνυμική συμμετρική συνάρτηση} (monomial symmetric functions) που αντιστοιχεί στην $\lambda$.
+\end{definition}
+
+Στα Παραδείγματα~\ref{ex:symmetric_functions} (1) και (2), είδαμε τα στοιχεία $m_{(1)}, m_{(2)}$ και $m_{(1,1)}$, αντίστοιχα. Για $n=3$, έχουμε 
+\begin{align*}
+    m_{(3)}(\bfx) &= \sum_{i\ge1} x_i^3 = x_1^3 + x_2^3 + \cdots\\
+    m_{(2,1)}(\bfx) &= \sum_{i \neq j} x_i^2x_j \\
+    &= \sum_{i < j}x_i^2x_j + \sum_{i < j}x_ix_j^2 \\
+    &= x_1^2x_2 + x_1^2x_3 + \cdots + x_2^2x_3 + x_2^2x_4 + \cdots  \\
+    &\quad+ x_1x_2^2 + x_1x_3^2 + \cdots + x_2x_3^2 + x_2x_4^2 + \cdots \\
+    m_{(1,1,1)}(\bfx) 
+    &= \sum_{i < j < k} x_ix_jx_k \\
+    &= x_1x_2x_3 + x_1x_2x_4 + \cdots + x_1x_3x_4 + x_1x_3x_5 + \cdots + x_2x_3x_4 + \cdots \\
+\end{align*}
+(γιατί;).
+
+\begin{thebibliography}{99}
+    \bibitem{AthAEC}
+    Χ.~Α.~Αθανασιάδης,
+    \emph{Αλγεβρική και Απαριθµητική Συνδυαστική}, 
+    Σηµειώσεις, Εθνικό και Καποδιστριακό Πανεπιστήµιο Αθηνών. (διαθέσιμο \href{http://users.uoa.gr/~caath/book.pdf}{εδώ})
+\end{thebibliography}
+\end{document}
