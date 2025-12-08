@@ -1,0 +1,361 @@
+\documentclass[12pt,a4paper,reqno]{amsart}
+
+% language
+\usepackage[greek,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{alphabeta}
+
+% change default names to greek
+\addto\captionsenglish{
+    \renewcommand{\contentsname}{Περιεχόμενα}
+    \renewcommand{\refname}{Βιβλιογραφία}
+    \renewcommand{\datename}{Ημερομηνία:}
+    \renewcommand{\urladdrname}{Ιστοσελίδα}
+}
+
+% math 
+\usepackage{amsmath,amsthm,amssymb,amscd}
+
+% font
+\usepackage[cal=euler]{mathalfa}
+\usepackage{libertinus-type1}
+% \usepackage{txfonts} % for upright greek letters
+\usepackage{bm} % for bold symbols
+\usepackage{bbm} % for the simply-looking bb symbols
+
+% miscellaneous 
+\usepackage{changepage} %for indenting environments
+\usepackage{csquotes} % example: \textcquote{}
+\usepackage{blkarray}
+\setcounter{MaxMatrixCols}{20} % default for pmatrix is 10!!
+\usepackage{ytableau}
+
+% drawing
+\usepackage{tikz,tikz-cd}
+\usetikzlibrary{shapes.misc, patterns, matrix, calc, intersections,positioning}
+\usepackage{graphics,graphicx}
+\usepackage{float} % provides enhanced control and customization options for floating objects such as figures and tables
+
+% colors
+\usepackage{xcolor}
+\definecolor{darkcandyapplered}{rgb}{0.64, 0.0, 0.0}
+\definecolor{midnightblue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{mylightblue}{HTML}{336699}
+\definecolor{burntorange}{rgb}{0.8, 0.33, 0.0}
+\definecolor{iceberg}{rgb}{0.44, 0.65, 0.82}
+\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
+\definecolor{canaryyellow}{rgb}{1.0, 0.94, 0.0}
+
+% hrefs
+\usepackage{hyperref}
+\usepackage[noabbrev,capitalize]{cleveref}
+\hypersetup{
+    pdftoolbar=true,        
+    pdfmenubar=true,        
+    pdffitwindow=false,     
+    pdfstartview={FitH},  % fits the width of the page to the window
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfnewwindow=true,  % links in new window
+    colorlinks=true,  % false: boxed links; true: colored links
+    linkcolor=darkcandyapplered,   % color of internal links
+    citecolor=midnightblue,  % color of links to bibliography
+    urlcolor=cyan,  % color of external links
+    linktocpage=true  % changes the links from the section body to the page number
+    }
+
+% geometry
+\textwidth=16cm 
+\textheight=21cm 
+\hoffset=-55pt 
+\footskip=25pt
+
+% thm envs (you might need to change the path)
+\input{thmEnvironments_macro.tex}
+
+% math ops (you might need to change the path)
+\input{mathOperators_macro.tex}
+
+% miscellaneous commands
+\newcommand{\defn}[1]{{\color{mylightblue}{#1}}}
+\newcommand{\toDo}{{\bf\color{red} TODO}}
+\newcommand{\toCite}{{\bf\color{green} CITE}}
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}} % for matrices with column vectors
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}} % for matrices with row vectors
+\newcommand{\myblue}[1]{{\color{iceberg}{#1}}}
+\newcommand{\myorange}[1]{{\color{burntorange}{#1}}}
+\newcommand{\mygreen}[1]{{\color{applegreen}{#1}}}
+\newcommand{\myred}[1]{{\color{darkcandyapplered}{#1}}}
+
+% ferrer's diagram
+\newcommand{\fdiagram}[1]{
+    \begin{tikzpicture}[scale=.7]
+        \fill foreach \Z [count=\Y] in {#1}
+        {foreach \X in {1,...,\Z} 
+        {(\X,-\Y) circle[radius=3pt]}};
+    \end{tikzpicture}
+}
+
+%
+\newcommand{\tcbo}[1]{\textcolor{burntorange}{#1}}
+
+% 
+\newenvironment{nouppercase}{%
+  \let\uppercase\relax%
+  \renewcommand{\uppercasenonmath}[1]{}}{}
+
+% titlepage
+\title{Θ2.04: Θεωρία Αναπαραστάσεων και Συνδυαστική}
+\author[Β.~Δ. Μουστακας]{Βασίλης Διονύσης Μουστάκας \\ Πανεπιστήμιο Κρήτης}
+\date{4 Δεκεμβρίου 2025}
+% \urladdr{\href{https://sites.google.com/view/vasmous}{https://sites.google.com/view/vasmous}}
+
+\begin{document}
+
+\begingroup
+\def\uppercasenonmath#1{} % this disables uppercase title
+\let\MakeUppercase\relax % this disables uppercase authors
+\maketitle
+\endgroup
+
+\setcounter{section}{15}
+\setcounter{theorem}{3}
+\begin{center}
+    \textbf{15. Η άλγεβρα των συμμετρικών συναρτήσεων
+} (Συνέχεια)
+\end{center}
+
+\begin{proposition}
+    \label{prop:monomial_basis}
+    Το σύνολο $\{m_\lambda : \lambda \vdash n\}$ αποτελεί βάση του χώρου\footnote{Συνιθίζεται να συμβολίζεται και με $\Lambda_n$.} $\Sym_n$ των (ομογενών) συμμετρικών συναρτήσεων βαθμού $n$. Ειδικότερα,
+    \[
+    \dim(\Sym_n) = \rmp(n).
+    \]
+\end{proposition}
+
+\begin{proof}
+    Αρκεί να δείξουμε ότι κάθε συμμετρική συνάρτηση βαθμού $n$ μπορεί να γραφεί σαν γραμμικός συνδυασμός μονωνυμικών συμμετρικών συναρτήσεων βαθμού $n$. Αυτό έπεται άμεσα από την παρατήρηση μετά τον Ορισμό 15.1 και την διαδικασία συμμετρικοποίησης όλων των διαφορετικών μονωνύμων που θα εμφανιστούν στο ανάπτυγμα μια συμμετρικής συνάρτησης $f \in \Sym_n$ και γι αυτό 
+    \[
+    f = \sum_{\lambda \vdash n} c_\lambda{m_\lambda}
+    \]
+    για κάποια $c_\lambda \in \CC$.
+\end{proof}
+
+Η Πρόταση 15.4 μας πληροφορεί ότι ο $\Sym_n$ είναι ένας ακόμη διανυσματικός χώρος ο οποίος παραμετρικοποιείται από τις διαμερίσεις του $n$ (ποιόν άλλο έχουμε δει;). 
+
+Κάθε τυπική δυναμοσειρά $f$ μπορεί να γραφεί με μοναδικό τρόπο ως άθροισμα 
+\[
+f = f_0 + f_1 + f_2 + \cdots,
+\]
+όπου $f_n$ είναι μια ομογενής τυπική δυναμοσειρά βαθμού $n$. Με άλλα λόγια, έχουμε μια διάσπαση του διανυσματικού χώρου $\CC[\![\bfx]\!]$ σε ομογενή κομμάτια\footnote{Το ίδιο συμβαίνει και στον χώρο των πολυωνύμων μιας μεταβλητής $x$. Ομογενή πολυώνυμα βαθμού $n$ είναι τα πολλαπλάσια του $x^n$. Συνεπώς, ο διανυσματικός χώρος όλων των πολυωνύμων διασπάται ως $\CC \oplus \CC[x] \oplus \CC[x^2] \oplus \cdots$, όπου $\CC[x^i]$ είναι ο χώρος που παράγεται από το $x^i$.}. Μιμούμενοι αυτό, θέτουμε 
+\[
+\Sym \coloneqq \CC \oplus \Sym_1 \oplus \Sym_2 \oplus \cdots.
+\]
+Το $\Sym$ είναι υποδακτύλιος του $\CC[\![\bfx]\!]$ (γιατί;) με την ιδιότητα
+\[
+f \in \Sym_n \ \text{και} \ g \in \Sym_m \quad \then \quad fg \in \Sym_{n+m}.
+\]
+Αυτό είναι παράδειγμα \emph{διαβαθμισμένης άλγεβρας} (graded algebra) πάνω από το $\CC$. Το $\Sym$ ονομάζεται η άλγεβρα των συμμετρικών συναρτήσεων.
+
+\begin{definition}
+    \label{def:other_bases}
+    Οι συμμετρικές συναρτήσεις 
+    \begin{alignat*}{3}
+    e_n &= e_n(\mathbf{x}) &\coloneqq\;& m_{(1^n)}(\mathbf{x}) 
+        &=\;& \sum_{1 \le i_1 < i_2 < \cdots < i_n} x_{i_1}x_{i_2}\cdots x_{i_n} \\[4pt]
+    h_n &= h_n(\mathbf{x}) &\coloneqq\;& \sum_{\lambda \vdash n} m_\lambda(\mathbf{x}) \
+        &=\;& \sum_{1 \le i_1 \le i_2 \le \cdots \le i_n} x_{i_1}x_{i_2}\cdots x_{i_n} \\[4pt]
+    p_n &= p_n(\mathbf{x}) &\coloneqq\;& m_{(n)}(\mathbf{x})
+        &=\;& \sum_{i \ge 1} x_i^{n}
+    \end{alignat*}
+    ονομάζονται \defn{στοιχειώδεις} (elementary), \defn{πλήρως ομογενείς} (complete homogeneous) και \defn{power sum} συμμετρικές συναρτήσεις.
+\end{definition}
+
+Για παράδειγμα, για $n=3$ έχουμε 
+\begin{align*}
+    e_3(\bfx) &= x_1x_2x_3 + x_1x_2x_4 + \cdots + x_1x_3x_4 + x_1x_3x_5 + \cdots + x_2x_3x_4 + \cdots \\
+    h_3(\bfx) &= m_{(1,1,1)}(\bfx) + m_{(2,1)}(\bfx) + m_{(3)}(\bfx) \\ 
+    p_3(\bfx) &= x_1^3 + x_2^3 + \cdots. 
+\end{align*}
+
+Στόχος μας είναι να δείξουμε ότι για κάθε μια συμμετρική συνάρτηση του Ορισμού \ref{def:other_bases} μπορούμε να βρούμε μια καινούργια βάση του $\Sym_n$. Για τον λόγο αυτό, για $\lambda = (\lambda_1,\lambda_2,\dots)$, θέτουμε 
+\[
+f_\lambda \coloneqq f_{\lambda_1}f_{\lambda_2}\cdots 
+\] 
+για κάθε $f \in \{e, h, p\}$. Αυτές λέγονται \emph{πολλαπλασιαστικές συναρτήσεις}. Παρατηρήστε ότι η μονωνυμική συμμετρική συνάρτηση \emph{δεν} είναι πολλαπλασιαστική.
+
+Για παράδειγμα, για $n=3$ υπολογίζει κανείς 
+\begin{alignat*}{4}
+e_{(1,1,1)} &=\;& m_{(3)}      &+&\; 3m_{(2,1)} &+&\; 6m_{(1,1,1)} \\
+e_{(2,1)}   &=\;&              & &    m_{(2,1)} &+&\; 3m_{(1,1,1)} \\
+e_{(3)}     &=\;&              & &              & &\; m_{(1,1,1)}.
+\end{alignat*}
+Δηλαδή, το σύνολο $\{e_{(1,1,1)}, e_{(2,1)}, e_{(3)}\}$ αποτελεί βάση του $\Sym_3$, διότι ο πίνακας μετάβασης στην βάση $\{m_{(1,1,1)}, m_{(2,1)}, m_{(3)}\}$ είναι άνω τριγωνικός με αντιστρέψιμα στοιχεία στην διαγώνιο. για κάποια ολική διάταξη του $\Par(3)$. Αυτό ισχύει γενικότερα, και μια τέτοια ολική διάταξη συναντήσαμε στην Παράγραφο 11.
+\begin{theorem}
+    \label{thm:elementary_basis}
+    Αν $\lambda \vdash n$, τότε 
+    \begin{equation}
+        \label{eq:elementary_to_monomial}
+        e_\lambda = \sum_{\lambda^\top \tge \mu} c_{\lambda\mu} m_\mu,
+    \end{equation}
+    με\footnote{Με $\lambda^\top$ συμβολίζουμε τη συζυγή διαμέριση της $\lambda$ (βλ. Ορισμό 9.6).} $c_{\lambda\lambda^\top} = 1$. Ειδικότερα, το σύνολο $\{e_\lambda : \lambda \vdash n\}$ αποτελεί βάση του $\Sym_n$.
+\end{theorem}
+
+\begin{proof}[Απόδειξη]
+    Έστω $\lambda = (\lambda_1, \lambda_2, \dots, \lambda_\ell)$ και $\mu = (\mu_1,\mu_2,\dots,\mu_k)$ δυο διαμερίσεις του $n$. Το $c_{\lambda\mu}$ ισούται με τον συντελεστή του μονωνύμου $\bfx^\mu = x_1^{\mu_1}x_2^{\mu_2}\cdots x_k^{\mu_k}$ στο 
+    \[
+    e_\lambda(\bfx) = 
+    \left(\sum_{1 \le i_1^{(1)} < i_2^{(1)} < \cdots < i_{\lambda_1}^{(1)}} x_{i_1^{(1)}}x_{i_2^{(1)}}\cdots x_{i_{\lambda_1}^{(1)}}\right)
+    \cdots
+    \left(\sum_{1 \le i_1^{(\ell)} < i_2^{(\ell)} < \cdots < i_{\lambda_\ell}^{(\ell)}} x_{i_1^{(\ell)}}x_{i_2^{(\ell)}}\cdots x_{i_{\lambda_\ell}^{(\ell)}}\right).
+    \]
+    Αναπτύσσοντας το δεξί μέλος της παραπάνω ισότητας, ένα τέτοιο μονώνυμο προκύπτει διαλέγοντας κάθε $x_i$ ακριβώς $\mu_i$ φορές ώστε το $\bfx^\mu$ να παραγοντοποιηθεί σε $\ell$ μονώνυμα βαθμών $\lambda_1, \lambda_2, \dots, \lambda_\ell$ και εκθετών 0 ή 1 (γιατί;).
+
+    Για παράδειγμα, για $\lambda = (4,2,2,1)$ και $\mu = (3,2,2,1,1)$ είναι δυο διαμερίσεις του $n=9$, ένα παράδειγμα τέτοιας παραγοντοποίησης είναι 
+    \[
+    x_1^3x_2^2x_3^2x_4x_5 = 
+    \left(x_1x_2x_3x_4\right)
+    \left(x_1x_2\right)
+    \left(x_1x_3\right)
+    \left(x_5\right),
+    \]
+    προσδίδοντας +1 στο μέτρημα του $c_{(4,2,2,1)(3,2,2,1,1)}$.
+
+    Αναπαριστούμε κάθε τέτοια παραγοντοποίηση με ένα ταμπλώ σχήματος $\lambda$, του οποίου η $i$-οστή γραμμή περιέχει τους υποδείκτες των μεταβλητών του $i$-οστού παράγοντα. Με άλλα λόγια, οι γραμμές του ταμπλώ αντιστοιχούν στους παράγοντες και οι είσοδοι στις μεταβλητές. Για παράδειγμα, το ταμπλώ που αντιστοιχεί στην παραγοντοποίηση του παραπάνω παραδείγματος είναι 
+    \[
+    \ytableausetup{centertableaux}
+    \ytableaushort{1234,12,13,5} \ .
+    \]
+    Παρατηρούμε ότι για κάθε $i \ge 1$, όλες οι εμφανίσεις του $i$ βρίσκονται στις πρώτες $i$ γραμμές του ταμπλώ και γι αυτό από την Πρόταση~11.8 έπεται ότι $\lambda^\top \tge \mu$ (γιατί;). Στο παράδειγμα, το ανάστροφο ταμπλώ είναι 
+    \[
+    \ytableaushort{1115,223,3,4} \ .
+    \]
+
+    Στην περίπτωση όπου $\mu = \lambda^\top$ έχουμε ακριβώς μια τέτοια παραγοντοίηση, της οποίας το αντίστοιχο ταμπλώ έχει μόνο $i$ στην $i$-οστή του στήλη. Για παράδειγμα, για $\mu = \lambda^\top = (4,3,1,1)$ έχουμε την παραγοντοποίηση
+    \[
+    x_1^4x_2^3x_3x_4 = 
+    \left(x_1x_2x_3x_4\right)
+    \left(x_1x_2\right)
+    \left(x_1x_2\right)
+    \left(x_1\right)
+    \]
+    με αντίστοιχο ταμπλώ 
+    \[
+    \ytableaushort{1234,12,12,1} \ .
+    \]
+    Άρα, $c_{\lambda\lambda^\top} = 1$ και η απόδειξη ολοκληρώνεται θεωρώντας μια γραμμική επέκταση της σχέσης κυριαρχίας στο $\Par(n)$ όπως, για παράδειγμα, την (αντίστροφη) λεξικογραφική διάταξη.
+\end{proof}
+
+\begin{corollary}{\rm(Θεμελιώδες Θεώρημα Συμμετρικών Συναρτήσεων)}
+    \label{cor:FTSF}
+    Η άλγεβρα των συμμετρικών συναρτήσεων παράγεται ως δακτύλιος από τα στοιχεία $e_1, e_2, \dots$.
+\end{corollary}
+
+\begin{proof}[Απόδειξη]
+    Αρκεί να δείξουμε ότι τα στοιχεία $e_1, e_2, \dots$ είναι \emph{αλγεβρικά ανεξάρτητα} στοιχεία του $\Sym$, δηλαδή ότι δεν ικανοποιούν κάποια πολυωνυμική ταυτότητα με συντελεστές από το $\Sym$. Πράγματι, αν υπήρχε μια τέτοια πολυωνυμική ταυτότητα, τότε εξάγοντας τα ομογενή κομμάτια της θα προέκυπτε μια γραμμική σχέση μεταξύ των στοιχειωδών συμμετρικών συ\-ναρτήσεων, το οποίο είναι αδύνατο λόγω του Θεωρήματος \ref{thm:elementary_basis}.
+\end{proof}
+
+Το Πόρισμα~\ref{cor:FTSF} ουσιαστικά μας πληροφορεί ότι η άλγεβρα των συμμετρικών συναρτήσεων είναι ένας πολυωνυμικός δακτύλιος στις \textquote{μεταβλητές} $e_1, e_2, \dots$. Αυτό το αποτέλεσμα έχει σημαντικές εφαρμογές, ειδικά στη Θεωρία Galois, οπου ενδιαφερόμαστε για τις ρίζες των πολυωνύμων.
+
+Μια πρώιμη μορφή του Θεμελιώδους Θεωρήματος των Συμμετρικών Συναρτήσεων έχουμε πιθανώς συναντήσει ήδη από το λύκειο με το όνομα \textquote{Τύπος του Vieta}: Αν $f(x) = a_n + a_{n-1}t + a_{n-2}t^2 + \cdots + a_1t^{n-1} + t^n \in \CC[x]$, τότε οι συντελστές $a_i$ είναι οι στοιχειώδεις συμμετρικές συναρτήσεις στις ρίζες του πολυωνύμου, δηλαδή\footnote{Ο ορισμός της στοιχειώδους συμμετρικής συνάρτησης παραμένει ίδιος για ένα πεπερασμένο πλήθος μεταβλητών, μόνο που αντί να έχουμε τυπικές δυναμοσειρές, έχουμε πολυώνυμα και γι αυτό σε αυτή την περίπτωση αποκαλούνται συμμετρικές συναρτήσεις.} 
+\[
+a_k = (-1)^k \bfe_k(x_1, x_2, \dots, x_n) 
+\]
+για κάθε $1 \le k \le n-1$, όπου $x_1, x_2, \dots, x_n$ είναι οι ρίζες του $f(x)$.
+
+Συνεχίζοντας την αναζήτηση νέων βάσεων της άλγεβρας των συμμετρικών συναρτήσεων, θα δείξουμε ότι οι πλήρως ομογενείς συμμετρικές συναρτήσεις αποτελούν και αυτές βάση του $\Sym$. Θα μπορούσαμε να το κάνουμε με παρόμοιο τρόπο με αυτό του Θεωρήματος~\ref{thm:elementary_basis}, αλλά θα πάρουμε διαφορετικό δρόμο, χρησιμοποιώντας γεννήτριες συναρτήσεις. Για το λόγο αυτό, θεωρούμε τις ακόλουθες γεννήτριες συναρτήσεις 
+\begin{align*}
+    E(\bfx;t) &= \sum_{n\ge0} e_n(\bfx) t^n \\
+    H(\bfx;t) &= \sum_{n\ge0} h_n(\bfx) t^n \\
+\end{align*}
+των στοιχειωδών και των πλήρως ομογενών συμμετρικών συναρτήσεων, αντίστοιχα. Παρα\-τηρούμε ότι $E(\bfx;t), H(\bfx;t) \in \CC[\![\bfx,t]\!]$.
+\begin{lemma}
+    \label{lem:EH_gf}
+    Ισχύει ότι 
+    \begin{align}
+        E(\bfx;t) &= \prod_{i\ge1}(1+x_it)  \label{eq:E_gf}\\
+        H(\bfx;t) &= \prod_{i\ge1}\frac{1}{1-x_it}. \label{eq:H_gf}
+    \end{align}
+\end{lemma}
+\begin{proof}[Απόδειξη]
+    Θα αποδείξουμε την Ταυτότητα~\eqref{eq:E_gf}. Η δεύτερη ταυτότητα αποδεικνύεται με παρόμοιο τρόπο. Έχοντας κατά νου την απόδειξη του Θεωρήματος 14.3, κάθε $e_n(\bfx)$ είναι η γεννήτρια συνάρτηση του συνόλου των διαμερίσεων $\lambda = (\lambda_1, \lambda_2, \dots, \lambda_n)$ μήκους $n$ με \emph{διακεκριμένα} μέρη και \textquote{βάρος} 
+    \[
+    \weight(\lambda) \coloneqq x_{\lambda_1}x_{\lambda_2}\cdots x_{\lambda_n}.
+    \]
+    Πράγματι, 
+    \begin{align*}
+    e_n(\bfx) &= \sum_{1 \le i_1 < i_2 < \cdots < i_n} x_{i_1}x_{i_2}\cdots x_{i_n} \\ 
+    &= \sum_{\lambda_1 > \lambda_2 > \cdots > \lambda_n \ge 1} x_{i_{\lambda_2}}x_{i_{\lambda_2}}\cdots x_{i_{\lambda_n}}  \\ 
+    &= \sum_\lambda \weight(\lambda),
+    \end{align*}
+    όπου το τελευταίο άθροισμα διατρέχει τις διαμερίσεις ακεραίων με διακεκριμένα μέρη. Το τελευταίο σύνολο όμως είναι σε αμφιμονοσήμαντη αντιστοιχία με το σύνολο 
+    \[
+    \left((1^0) \cup (1^1)\right)\times
+    \left((2^0) \cup (2^1)\right)\times\cdots
+    \]
+    (γιατί;). Συνεπώς,
+    \[
+        E(\bfx;t) = \sum_{n\ge0} e_n(\bfx) t^n = \sum_\lambda \weight(\lambda) t^{\ell(\lambda)}  = \prod_{i\ge1} (1 + x_it),
+    \]
+    όπου στο ενδιάμεσο άθροισμα το $\lambda$ διατρέχει \emph{όλες} τις διαμερίσεις με διακεκριμένα μέρη.
+\end{proof}
+
+\begin{theorem}
+    \label{thm:homogeneous_basis}
+    Το σύνολο $\{h_\lambda : \lambda \vdash n\}$ απορελεί βάση του $\Sym_n$. Ειδικότερα, η άλγεβρα των συμμετρικών συναρτήσεων παράγεται ως δακτύλιος από τα στοιχεία $h_1, h_2, \dots$. 
+\end{theorem}
+
+\begin{proof}[Απόδειξη]
+    Ο δεύτερος ισχυρισμός έπεται από τον πρώτο με τον ίδιο τρόπο που αποδείχτηκε το Πόρισμα~\ref{cor:FTSF}. Για τον πρώτο, αρκεί να δείξουμε ότι το σύνολο $\{h_\lambda : \lambda \vdash n\}$ παράγει το $\Sym_n$, διότι ο πληθάριθμος του συνόλου αυτού ισούται με τη διάσταση του $\Sym_n$. Από το Θεώρημα~\ref{thm:elementary_basis}, αρκεί να δείξουμε ότι κάθε στοιχειώδης συμμετρική συνάρτηση είναι γραμμικός συνδυασμός πλήρως ομογενών συμμετρικών συναρτήσεων (γιατί;).
+
+    Παρατηρούμε ότι 
+    \begin{equation}
+        \label{eq:newton}
+        e_n = h_1e_{n-1} - h_2e_{n-2} + \cdots + (-1)^nh_n.
+    \end{equation}
+    Πράγματι, από το Λήμμα~\ref{lem:EH_gf} έπεται ότι 
+    \[
+    Ε(\bfx;t)H(\bfx;-t) = \prod_{i\ge1}(1-x_it)\frac{1}{1-x_it} = 1.
+    \]
+    Εξάγοντας τον συντελεστή του $t^n$ του αριστερού μέλους της παραπάνω ταυτότητας προκύπτει ότι 
+    \begin{equation}
+    \label{eq:newton_alt}
+    \sum_{k=0}^n e_n(-1)^{n-k}h_{n-k} = 0,
+    \end{equation}
+    η οποία είναι ισοδύναμη με την Ταυτότητα~\eqref{eq:newton} (γιατί;).
+
+    Θα δείξουμε ότι κάθε $e_n$ είναι γραμμικός συνδυασμός πλήρως ομογενών συμμετρικών συναρτήσεων κάνοντας ισχυρή επαγωγή ως προς $n$. Για $n=1$, έχουμε $e_1 = h_1$. Υποθέτουμε ότι για κάθε $k < n$, το $e_k$ είναι γραμμικός συνδυασμός πλήρως ομογενών συμμετρικών συναρτήσεων. Συνδυάζοντας την Ταυτότητα~\ref{eq:newton} με την επαγωγική υπόθεση έπεται ότι το $e_n$ είναι γραμμικός συνδυασμός πλήρως ομογενών συμμετρικών συναρτήσεων και η απόδειξη ολοκληρώνεται (γιατί;).
+\end{proof}
+
+Η Ταυτότητα~\eqref{eq:newton}, γνωστή και ως ταυτότητα Newton ή ταυτότητα Jacobi--Trudi, υποννοεί ότι υπάρχει μια δυϊκότητα μεταξύ της βάσης των στοιχειωδών και των πλήρως ομογενών συμμετρικών συναρτήσεων.
+\begin{definition}
+    \label{def:involution_omega}
+    Έστω $\omega : \Sym \to \Sym$ ο ομομορφισμός δακτυλίων που ορίζεται θέτοντας 
+    \[
+    \omega(e_n) \coloneqq h_n,
+    \]
+    για κάθε $n \ge 1$.
+\end{definition}
+
+\begin{proposition}
+    \label{prop:involution_omega}
+    Η απεικόνιση $\omega$ είναι αυτοαντίστροφη απεικόνιση, δηλαδή 
+    \[
+    \omega(\omega(f)) = f
+    \]
+    για κάθε $f \in \Sym$.
+\end{proposition}
+
+\begin{proof}[Απόδειξη]
+    Αρκεί να δείξουμε ότι $\omega(\omega(e_n))= e_n$, για κάθε $n \ge 1$ (γιατί;). Εφαρμόζοντας την επεικόνιση ωμέγα στην Ταυτότητα~\eqref{eq:newton_alt} έχουμε 
+    \begin{align*}
+        0 
+        &= \sum_{k=0}^n h_n(-1)^{n-k}\omega(h_{n-k}) \\
+        &= \sum_{k=0}^n h_{n-k}(-1)^{k}\omega(h_{k}) \\
+        &= (-1)^n\sum_{k=0}^n \omega(h_{k}) (-1)^{n-k} h_{n-k},
+    \end{align*}
+    όπου η δεύτερη ισότητα έπεται από αλλαγή μεταβλητών $k \mapsto n-k$. Συνεπώς, η συμμετρική συνάρτηση $\omega(h_k)$ ικανοποιεί την ίδια πολυωνυμική ταυτότητα στο $\Sym$ με το $e_n$. Άρα, $\omega(h_n) = e_n$ και το ζητούμενο έπεται.
+\end{proof}
+\end{document}
