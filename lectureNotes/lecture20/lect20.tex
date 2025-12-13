@@ -1,0 +1,438 @@
+\documentclass[12pt,a4paper,reqno]{amsart}
+
+% language
+\usepackage[greek,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{alphabeta}
+
+% change default names to greek
+\addto\captionsenglish{
+    \renewcommand{\contentsname}{Περιεχόμενα}
+    \renewcommand{\refname}{Βιβλιογραφία}
+    \renewcommand{\datename}{Ημερομηνία:}
+    \renewcommand{\urladdrname}{Ιστοσελίδα}
+}
+
+% math 
+\usepackage{amsmath,amsthm,amssymb,amscd}
+
+% font
+\usepackage[cal=euler]{mathalfa}
+\usepackage{libertinus-type1}
+% \usepackage{txfonts} % for upright greek letters
+\usepackage{bm} % for bold symbols
+\usepackage{bbm} % for the simply-looking bb symbols
+
+% miscellaneous 
+\usepackage{changepage} %for indenting environments
+\usepackage{csquotes} % example: \textcquote{}
+\usepackage{blkarray}
+\setcounter{MaxMatrixCols}{20} % default for pmatrix is 10!!
+\usepackage{ytableau}
+\usepackage{array} %needed to increase the vertical length in a tabular
+
+% drawing
+\usepackage{tikz,tikz-cd}
+\usetikzlibrary{shapes.misc, patterns, matrix, calc, intersections,positioning}
+\usepackage{graphics,graphicx}
+\usepackage{float} % provides enhanced control and customization options for floating objects such as figures and tables
+
+% colors
+\usepackage{xcolor}
+\definecolor{darkcandyapplered}{rgb}{0.64, 0.0, 0.0}
+\definecolor{midnightblue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{mylightblue}{HTML}{336699}
+\definecolor{burntorange}{rgb}{0.8, 0.33, 0.0}
+\definecolor{iceberg}{rgb}{0.44, 0.65, 0.82}
+\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
+\definecolor{canaryyellow}{rgb}{1.0, 0.94, 0.0}
+
+% hrefs
+\usepackage{hyperref}
+\usepackage[noabbrev,capitalize]{cleveref}
+\hypersetup{
+    pdftoolbar=true,        
+    pdfmenubar=true,        
+    pdffitwindow=false,     
+    pdfstartview={FitH},  % fits the width of the page to the window
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfnewwindow=true,  % links in new window
+    colorlinks=true,  % false: boxed links; true: colored links
+    linkcolor=darkcandyapplered,   % color of internal links
+    citecolor=midnightblue,  % color of links to bibliography
+    urlcolor=cyan,  % color of external links
+    linktocpage=true  % changes the links from the section body to the page number
+    }
+
+% geometry
+\textwidth=16cm 
+\textheight=21cm 
+\hoffset=-55pt 
+\footskip=25pt
+
+% thm envs (you might need to change the path)
+\input{thmEnvironments_macro.tex}
+
+% math ops (you might need to change the path)
+\input{mathOperators_macro.tex}
+
+% miscellaneous commands
+\newcommand{\defn}[1]{{\color{mylightblue}{#1}}}
+\newcommand{\toDo}{{\bf\color{red} TODO}}
+\newcommand{\toCite}{{\bf\color{green} CITE}}
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}} % for matrices with column vectors
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}} % for matrices with row vectors
+\newcommand{\myblue}[1]{{\color{iceberg}{#1}}}
+\newcommand{\myorange}[1]{{\color{burntorange}{#1}}}
+\newcommand{\mygreen}[1]{{\color{applegreen}{#1}}}
+\newcommand{\myred}[1]{{\color{darkcandyapplered}{#1}}}
+
+% ferrer's diagram
+\newcommand{\fdiagram}[1]{
+    \begin{tikzpicture}[scale=.7]
+        \fill foreach \Z [count=\Y] in {#1}
+        {foreach \X in {1,...,\Z} 
+        {(\X,-\Y) circle[radius=3pt]}};
+    \end{tikzpicture}
+}
+
+%
+\newcommand{\tcbo}[1]{\textcolor{burntorange}{#1}}
+
+% 
+\newenvironment{nouppercase}{%
+  \let\uppercase\relax%
+  \renewcommand{\uppercasenonmath}[1]{}}{}
+
+% titlepage
+\title{Θ2.04: Θεωρία Αναπαραστάσεων και Συνδυαστική}
+\author[Β.~Δ. Μουστακας]{Βασίλης Διονύσης Μουστάκας \\ Πανεπιστήμιο Κρήτης}
+\date{9 Δεκεμβρίου 2025}
+% \urladdr{\href{https://sites.google.com/view/vasmous}{https://sites.google.com/view/vasmous}}
+
+\begin{document}
+
+\begingroup
+\def\uppercasenonmath#1{} % this disables uppercase title
+\let\MakeUppercase\relax % this disables uppercase authors
+\maketitle
+\endgroup
+
+\setcounter{section}{15}
+\setcounter{theorem}{11}
+\begin{center}
+    \textbf{15. Η άλγεβρα των συμμετρικών συναρτήσεων
+} (Συνέχεια)
+\end{center}
+
+Για $\lambda, \mu \vdash n$, έστω $\varphi^\lambda(\mu)$ η τιμή του χαρακτήρα του προτύπου Young $\rmM^\lambda$ στην κλάση συζυγίας της $\fS_n$ που αντιστοιχεί στη διαμέριση $\mu$.
+\begin{theorem}
+    \label{thm:p_to_h}
+    Αν $\lambda \vdash n$, τότε 
+    \[
+    p_\lambda = \sum_{\mu \, \tge \lambda} \varphi^\mu(\lambda) m_\mu.
+    \]
+\end{theorem}
+
+\begin{proof}[Απόδειξη]
+    Έστω $\ell(\lambda) = \ell$ και $\ell(\mu) = k$. Ο συντελεστής του $\bfx^\mu = x_1^{\mu_1}x_2^{\mu_2}\cdots x_k^{\mu_k}$ στο ανάπτυγμα του δεξιού μέλους της 
+    \[
+    p_\lambda(\bfx) = 
+    \left(
+        x_1^{\lambda_1} + x_2^{\lambda_1} + \cdots
+    \right)
+    \left(
+        x_1^{\lambda_2} + x_2^{\lambda_2} + \cdots
+    \right) 
+    \cdots 
+    \left(
+        x_1^{\lambda_\ell} + x_2^{\lambda_\ell} + \cdots
+    \right) 
+    \]
+    ισούται με το πλήθος των παραγοντοποιήσεων του $\bfx^\mu$ ως $x_{i_1}^{\lambda_1}x_{i_2}^{\lambda_2}\cdots x_{i_\ell}^{\lambda_\ell}$. Για παράδειγμα, για $\lambda = (2,1,1,1)$ και $\mu = (3,2)$, έχουμε τις τέσσερις παραγοντοποιήσεις 
+    \[
+    x_1^3x_2^2 
+    = x_1^2x_1x_2x_2
+    = x_1^2x_2x_1x_2
+    = x_1^2x_2x_2x_1
+    = x_2^2x_1x_1x_1.
+    \]
+
+    Αναπαριστούμε κάθε τέτοια παραγοντοποίηση με ένα \emph{ταμπλοειδές} σχήματος $\mu$ έτσι ώστε οι αριθμοί 
+    \[
+    [\lambda_1 + \lambda_2 + \cdots + \lambda_{j-1}+1, 
+    \lambda_1 + \lambda_2 + \cdots + \lambda_j]
+    \]
+    να βρίσκονται στην $i_j$-οστή γραμμή, για κάθε $1 \le j \le \ell$. Με άλλα λόγια, οι γραμμές του ταμπλοειδούς αντιστοιχούν στις μεταβλητές $x_1, x_2, \dots, x_k$, ενώ τα στοιχεία του ταμπλοειδούς αντιστοιχούν στη θέση που καταλαμβάνει κάθε μεταβλητή στο ανάπτυγμα. Τα ταμπλοειδή που αντιστοιχούν στις παραγοντοποιήσεις του παραδείγματος είναι 
+    \[
+    \ytableausetup{centertableaux,tabloids}
+    \ytableaushort{123,45} \ , \ 
+    \ytableaushort{124,35} \ , \ 
+    \ytableaushort{125,34} \ , \ 
+    \ytableaushort{345,12} \ , \ 
+    \]
+    αντίστοιχα.
+
+    Τα ταμπλοειδή που αντιστοιχούν στις παραγοντοποιήσεις αυτές είναι ακριβώς τα ταμπλοειδή σχήματος $\mu$ που μένουν σταθερά από τη δράση της μετάθεσης 
+    \[
+    \cycle{1,2,\cdots,\lambda_1}
+    \cycle{\lambda_1+1,\lambda_1+2,\cdots,\lambda_1+\lambda_2}
+    \cdots 
+    \cycle{\lambda_1+\lambda_2+\cdots+\lambda_{\ell-1}+1,\cdots,n},
+    \]
+    η οποία έχει κυκλικό τύπο $\lambda$ (γιατί;). Άρα, ο συντελεστής του $\bfx^\mu$ στο $p_\lambda$ ισούται με $\varphi^\lambda(\mu)$. Τέλος, από το Πρόταση~11.11, αν $\varphi^\lambda(\mu) \neq 0$, τότε $\mu \tge \lambda$ και το ζητούμενο έπεται.
+\end{proof}
+
+\begin{corollary}
+    Αν $\lambda \vdash n$, τότε 
+    \[
+    \varphi^\lambda(\lambda) = \prod_{i=1}^n m_i!,
+    \]
+    όπου $m_i$ είναι η πολλαπλότητα εμφάνισης του $i$ στα μέρη της $\lambda$. Ειδικότερα, το σύνολο $\{p_\lambda : \lambda \vdash n\}$ αποτελεί βάση του $\Sym_n$ και ο $\Sym$ παράγεται ως δακτύλιος από τα $p_1, p_2, \dots$.
+\end{corollary}
+
+\begin{proof}[Απόδειξη]
+    Από την απόδειξη του Θεωρήματος~\ref{thm:p_to_h}, προκύπτει ότι η τιμή του $\varphi^\lambda(\lambda)$ ισούται με το πλήθος των ταμπλοειδών σχήματος $\lambda$ των οποίων η $i$-οστή γραμμή περιέχει τους αριθμούς 
+    \[
+    [\lambda_1 + \lambda_2 + \cdots + \lambda_{i-1}+1, \lambda_1 + \lambda_2 + \cdots + \lambda_i]
+    \]
+    για κάθε $i \ge 1$ (γιατί;) και ο πρώτος ισχυρισμός έπεται (γιατί;). Ο δεύτερος ισχυρισμός έπεται με τον ίδιο τρόπο όπως στο Πόρισμα 15.7.
+
+    Για παράδειγμα, αν $\lambda = (2,1,1,1)$, τότε έχουμε τα εξής ταμπλοειδή της παραπάνω μορφής 
+    \[
+    \ytableaushort{12,3,4,5} \ , \
+    \ytableaushort{12,3,5,4} \ , \
+    \ytableaushort{12,4,3,5} \ , \
+    \ytableaushort{12,4,5,3} \ , \
+    \ytableaushort{12,5,3,4} \ , \
+    \ytableaushort{12,5,4,3} \ , 
+    \]
+    και γι αυτό $\varphi^\lambda(\lambda) = 6$. (Ποιές είναι οι αντίστοιχες παραγοντοποιήσεις του $x_1^2x_2x_3x_4$;)
+\end{proof}
+
+Για $n=3$, υπολογίζουμε
+\begin{alignat*}{4}
+p_{(1,1,1)} &=\;& 6m_{(1,1,1)} &+&\; 3m_{(2,1)} &+&\; m_{(3)} \\
+p_{(2,1)}   &=\;&              & &    m_{(2,1)} &+&\; m_{(3)}\\
+p_{(3)}     &=\;&              & &              & &\; m_{(3)}.
+\end{alignat*}
+Σε αντίθεση με την βάση των στοιχειωδών συμμετρικών συναρτήσεων, όπου στην κύρια διαγώνιο είχαμε 1, εδώ οι πίνακες μετάβασης είναι αντιστρέψιμοι πάνω από το $\QQ$. Για παράδειγμα, 
+\[
+m_{(1,1)} = \frac{1}{2}(p_{(1,1)} + p_{(2)}).
+\]
+
+\newpage
+
+\setcounter{section}{16}
+\setcounter{theorem}{0}
+\begin{center}
+    \textbf{16. Οι συναρτήσεις Schur
+} 
+\end{center}
+
+Στην Παράγραφο 15 είδαμε τέσσερις βάσεις του χώρου των συμμετρικών συναρτήσεων: την μονωνυμική, την στοιχειώδη, την πλήρως ομογενή και την power sum. Η πρώτη από αυτές προέκυψε με φυσικό τρόπο από τη διαδικασία συμμετρικοποίησης ενός μονωνύμου. Οι υπόλοιπες τρεις σχετίζονται με την μονωνυμική και αποτελούν παραδείγματα πολλαπλασιαστικών συμμετρικών συναρτήσεων.
+
+Σε αυτή την παράγραφο θα δούμε ένα ακόμα παράδειγμα, ίσως το πιο σημαντικό, βάσης του χώρου των συμμετρικών συναρτήσεων. Η βάση αυτή θα προκύψει\footnote{Υπάρχουν διάφοροι ισοδύναμοι τρόποι να εισαγάγει κανείς τις συναρτήσεις Schur. Εδώ παρουσιάζεται ο πιο συνδυαστικός.} ως η \textquote{γεννήτρια συνάρτηση} μιας οικογένειας συνδυαστικών αντικειμένων με κάποιο κατάλληλο \textquote{βάρος}. 
+
+\begin{definition}
+    \label{def:SSYT}
+    Έστω $\lambda$ μια διαμέριση ακεραίου. \defn{Ημισύνηθες Young ταμπλώ} (semistandard Young tableau) σχήματος $\lambda$ ονομάζεται μια αμφιμονοσήμαντη αντιστοιχία του συνόλου των τετραγώνων του $\rmY_\lambda$ και του $\ZZ_{>0}$, τέτοια ώστε 
+    \begin{itemize}
+        \item τα στοιχεία κάθε γραμμής να αυξάνουν \emph{ασθενώς} από τα αριστερά προς τα δεξιά 
+        \item τα στοιχεία κάθε στήλης να αυξάνουν \emph{αυστηρά} από πάνω προς τα κάτω. 
+    \end{itemize}
+    Το σύνολο όλων των ημισυνήθων ταμπλώ σχήματος $\lambda$ συμβολίζεται με $\SSYT(\lambda)$.
+\end{definition}
+
+Ένα παράδειγμα ημισυνήθους ταμπλώ σχήματος $\lambda = (4,2,2,1)$ είναι το εξής 
+\[
+\ytableausetup{notabloids}
+\ytableaushort{1133,22,34,6} \ .
+\]
+
+Για $T \in \SSYT(\lambda)$, έστω $\cont(T) = (\alpha_1, \alpha_2, \dots)$, όπου $\alpha_i$ είναι η πολλαπλότητα εμφάνισης του ακεραίου $i$ στο $T$. Το $\cont(T)$ ονομάζεται \defn{τύπος} του $T$. Ο τύπος του ημισυνήθους ταμπλώ του παραδείγματος είναι 
+\[
+(2, 2, 3, 1, 0, 1, 0, 0, \dots).
+\]
+Παρατηρούμε ότι $2 + 2 + 3 + 1 + 0 + 1 + 0 + \cdots = 9$, δηλαδή το πλήθος των τετραγώνων του $\rmY_{(4,2,2,1)}$ ή ισοδύναμα το $\abs{\lambda} = 9$. Αν $\lambda \vdash n$, τότε ο τύπος ενός ημισυνήθους ταμπλώ σχήματος $\lambda$ είναι παράδειγμα \emph{ασθενούς σύνθεσης}\footnote{Μια ακολουθία $(\alpha_1, \alpha_2, \dots)$ μη αρνητικών ακεραίων τέτοια ώστε $\alpha_1 + \alpha_2 + \cdots = n$ ονομάζεται \defn{ασθενής σύνθεση} (weak composition) του $n$ (συγκρίνετε με τον Ορισμό~9.8).} του $n$. Σε κάθε ομογενή τυπική δυναμοσειρά βαθμού $n$, η ακολουθία των εκθετών  είναι επίσης παράδειγμα ασθενούς σύνθεσης του $n$.
+
+Το παρακάτω αποτέλεσμα, η απόδειξη του οποίου παραλλείπεται, παρέχει μια συνδυαστική ερμηνεία των αριθμών Kostka, δηλαδή των πολλαπλοτήτων εμφάνισης των ανάγωγων αναπαραστάσεων στην ισοτυπική διάσπαση του προτύπου Young, που αφορά ημισυ\-νήθη ταμπλώ.
+\begin{theorem}{\rm(Κανόνας του Young)}
+    \label{thm:young_rule}
+    Για κάθε $\mu \vdash n$, 
+    \begin{equation}
+        \label{eq:young_rule}
+        \rmM^\mu \cong_{\fS_n} \bigoplus_{\lambda \vdash n}\, (\sS^\lambda)^{\rmK_{\lambda\mu}},
+    \end{equation}
+    όπου 
+    \[
+    \rmK_{\lambda\mu} = \abs{\{T \in \SSYT(\lambda) : \cont(\lambda)=\mu\}}.
+    \]
+\end{theorem}
+
+Για παράδειγμα, από το Πόρισμα 11.13, για $\mu = (2,2,1) \vdash 5$, γνωρίζουμε ότι 
+\[
+\rmM^{(2,2,1)} \cong_{\fS_5} (\sS^{(5)})^a \oplus (\sS^{(4,1)})^b \oplus (\sS^{(3,2)})^c \oplus (\sS^{(3,1,1)})^d \oplus \sS^{(2,2,1)}.
+\]
+για κάποια $a, b, c, d \in \NN$. Όμως, 
+\[
+\ytableausetup{smalltableaux}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\extrarowheight}{8pt}
+\begin{tabular}{c|c|cc|cc|c|c}
+\lambda & (5) & \multicolumn{2}{c|}{(4,1)} & \multicolumn{2}{c|}{(3,2)} & (3,1,1) & (2,2,1) \\
+\hline
+$T$     
+& \ytableaushort{11223} 
+& \ytableaushort{1122,3}  & \ytableaushort{1123,2}  
+& \ytableaushort{112,23}  & \ytableaushort{113,22} 
+& \ytableaushort{112,2,3} & \ytableaushort{11,22,3} 
+\end{tabular}
+\]
+και από τον Κανόνα του Young βρίσκουμε
+\[
+\rmM^{(2,2,1)} \cong_{\fS_5} \sS^{(5)} \oplus (\sS^{(4,1)})^2 \oplus (\sS^{(3,2)})^2 \oplus \sS^{(3,1,1)} \oplus \sS^{(2,2,1)}.
+\]
+
+Παρατηρούμε τα εξής:
+\begin{itemize}
+    \item 
+    $\rmK_{\mu\mu} =1$, για κάθε $\mu \vdash n$, σε συμφωνία με τον ισχυρισμό του Πορίσματος~11.13. 
+    \item 
+    $\rmK_{(n)\mu} = 1$, για κάθε $\mu \vdash n$, σε συμφωνία με το γεγονός ότι η αναπαράσταση συ\-μπλόκου της υποομάδας Young $\fS_\mu$ περιέχει ακριβώς ένα αντίγραφο της τετριμμένης αναπαράστασης της $\fS_n$.
+    \item 
+    Ένα ημισύνηθες ταμπλώ σχήματος $\lambda$ και περιεχομένου $(1^n)$ δεν είναι άλλο παρά ένα σύνηθες ταμπλώ (γιατί;) και γι αυτό $\rmK_{\lambda(1^n)} = f^\lambda$, για κάθε $\lambda \vdash n$. Συνεπώς, από τον Κανόνα του Young, έπεται ότι
+\[
+\rmM^{(1^n)} \cong_{\fS_n} \bigoplus_{\lambda \vdash n} \, (\sS^\lambda)^{f^\lambda},
+\]
+σε συμφωνία με τον υπολογισμό στην αρχή της Παραγράφου~11.
+\end{itemize}
+Τι μας πληροφορεί ο Κανόνας του Young για την περίπτωση $\mu = (n-1,1)$;
+
+Επιστρέφοντας στον \text{κόσμο} των συμμετρικών συναρτήσεων, για $T \in \SSYT(\lambda)$ τύπου $\cont(T) = (\alpha_1, \alpha_2, \dots)$ θεωρούμε το μονώνυμο
+\[
+\bfx^T \coloneqq x_1^{\alpha_1}x_2^{\alpha_2}\cdots.
+\]
+Για παράδειγμα, το μονώνυμο που αντιστοιχεί στο ημισύνηθες ταμπλώ 
+\[
+\ytableausetup{nosmalltableaux}
+Τ = \ytableaushort{1133,22,34,6} \ \in \ \SSYT(4,2,2,1)
+\]
+είναι 
+\[
+\bfx^T = x_1^2x_2^2x_3^3x_4x_6.
+\]
+\begin{definition}
+    \label{def:schur_function}
+    Έστω $\lambda \vdash n$. Η τυπική δυναμοσειρά 
+    \[
+    s_\lambda = s_\lambda(\bfx) \coloneqq \sum_{T \in \SSYT(\lambda)} \bfx^T
+    \]
+    ονομάζεται \defn{συνάρτηση Schur} που αντιστοιχεί στην $\lambda$.
+\end{definition}
+
+Με άλλα λόγια, η συνάρτηση Schur είναι η \textquote{γεννήτρια συνάρτηση} των ημισυνήθων Young ταμπλώ $T$ ως προς το \textquote{βάρος} $\bfx^T$. Σε αντίθεση με όλα τα προηγούμενα παραδείγματα οικογενειών συμμετρικών συναρτήσεων που είδαμε μέχρι στιγμής, οι συναρτήσεις Schur δεν έχουν εκ των προτέρων κανένα λόγο να είναι συμμετρικές. 
+
+Για ασθενή σύνθεση $\alpha$, έστω $\lambda(\alpha)$ η διαμέριση που προκύπτει από την $\alpha$ ξεχνώντας τα μηδενικά και αναδιατάσσοντας τα μέρη της σε (ασθενώς) αύξουσα σειρά.
+
+\begin{example}
+    \label{ex:schur}
+    \leavevmode
+    \begin{itemize}
+        \item[(1)] Έχουμε $s_{(n)} = h_n$ και $s_{(1^n)} = e_n$. Συνεπώς η συνάρτηση Schur παρεμβάλλεται μεταξύ της πλήρους ομογενούς και της στοιχειώδους συμμετρικής συνάρτησης.
+        \item[(2)] Έστω ότι
+        \[
+        s_{(2,1)} = c_{(3)}m_{(3)} + c_{(2,1)}m_{(2,1)} + c_{(1,1,1)}m_{(1,1,1)}
+        \]
+        για κάποια $c_\mu \in \CC$. Ας υπολογίσουμε τα $c_\mu$ του παραπάνω αναπτύγματος.
+
+        Παρατηρούμε ότι δεν υπάρχει ημισύνηθες ταμπλώ σχήματος $(2,1)$ και τύπου $\alpha$ με $\lambda(\alpha) = (3)$ (γιατί;) και γι αυτό $c_{(3)} = 0$. Αν $0 < a < b < c$, τότε υπάρχουν ακριβώς δυο διαφορετικά ημισυνήθη ταμπλώ σχήματος $(2,1)$ και τύπου $\alpha$ με $\lambda(\alpha) = (1,1,1)$:
+        \[
+        \ytableaushort{ab,c}  \quad \text{και} \quad \ytableaushort{ac,b}
+        \]
+        και γι αυτό $c_{(1,1,1)} = 2$. Τέλος, αν $a\neq b$ δυο θετικοί ακέραιοι, τότε υπάρχει ακριβώς ένα ημισύνηθες ταμπλώ $(2,1)$ και τύπου $\alpha$ με $\lambda(\alpha) = (2,1)$:
+        \[
+        \begin{cases}
+            \ \ytableaushort{aa,b}\, , &\ \text{αν $a < b$}, \vspace{10pt}\\
+            \ \ytableaushort{bb,a}\, , &\ \text{αν $b < a$}
+        \end{cases}
+        \]
+        και γι αυτό $c_{(2,1)} = 1$. Συμπερασματικά, λοιπόν, έχουμε 
+        \[
+        s_{(2,1)} = m_{(2,1)} + 2m_{(1,1,1)}
+        \]
+        \item[(3)] Γενικεύοντας τον υπολογισμό του $c_{(2,1)}$ στο (2), ο συντελεστής του $x_1x_2\cdots{x_n}$ στην συνάρτηση Schur που αντιστοιχεί στην διαμέριση $\lambda \vdash n$ ισούται με $f^\lambda$ (γιατί;).
+    \end{itemize}
+\end{example}
+
+Όπως υποννοεί το παράδειγμα~\ref{ex:schur}, οι συναρτήσεις Schur είναι συμμετρικές και \textquote{γνωρίζουν} πολλά από αυτά που έχουμε δει μέχρι στιγμής.
+\begin{theorem}
+    \label{thm:schur_symmetric}
+    Για κάθε $\lambda \vdash n$, $s_\lambda \in \Sym_n$.
+\end{theorem}
+
+Θα δούμε δύο αποδείξεις του Θεωρήματος~\ref{thm:schur_symmetric}: μια αλγεβρική και μια συνδυαστική. Για την αλγεβρική, θυμίζουμε ότι το πρότυπο Young $\rmM^\lambda$ είναι ισόμορφο με την επαγωγή της τετριμμένης αναπαράστασης $V^\triv$ της υποομάδας Young $\fS_\lambda$ στην $\fS_n$ (βλ. Πρόταση~10.4). Όμως, $\fS_\alpha \cong \fS_{\lambda(\alpha)}$ για κάθε ασθενή σύνθεση $\alpha$ του $n$, όπου $\fS_0 \coloneqq \{\epsilon\}$ και γι αυτό 
+\[
+V^\triv\uparrow_{\fS_\alpha}^{\fS_n} \cong_{\fS_n} 
+V^\triv\uparrow_{\fS_{\lambda(\alpha)}}^{\fS_n} \cong_{\fS_n}
+\rmM^{\lambda(\alpha)}.  
+\]
+
+\begin{proof}[Απόδειξη του Θεωρήματος~\ref{thm:schur_symmetric} (Αλγεβρική)]
+    Από τον Ορισμό~\ref{def:schur_function},
+    \[
+    s_\lambda = \sum_\alpha \rmK_{\lambda\alpha} m_\alpha,
+    \]
+    όπου στο άθροισμα το $\alpha$ διατρέχει όλες τις ασθενείς συνθέσεις του $n$. Αρκεί, λοιπόν, να δείξουμε ότι 
+    \[
+    \rmK_{\lambda\alpha} = \rmK_{\lambda\lambda(\alpha)}
+    \]
+    για κάθε ασθενή σύνθεση $\alpha$ του $n$. Το ζητούμενο έπεται από την συζήτηση που προηγείται της απόδειξης, τον Κανόνα του Young και την μοναδικότητα της ισοτυπικής διάσπασης (γιατί;).
+\end{proof}
+
+Για την συνδυαστική απόδειξη, θα επαληθεύσουμε τον Ορισμό~15.1, δηλαδή θα δείξουμε ότι η συνάρτηση Schur είναι αναλλοίωτη από οποιαδήποτε μετάθεση των μεταβλητών της. Από την Άσκηση 3.5 (1), αρκεί να εξετάσουμε την δράση κάθε γειτονικής αντιμεταθέσης $\cycle{i, i+1}$ για $i \ge 1$.
+\begin{proof}[Απόδειξη του Θεωρήματος~\ref{thm:schur_symmetric} (Συνδυαστική)]
+    Από την συζήτηση που προηγήθηκε αρκεί να δείξουμε ότι 
+    \[
+    \rmK_{\lambda\alpha} = \rmK_{\lambda\hat{\alpha}},
+    \]
+    όπου $\hat{\alpha} = (\alpha_1, \dots, \alpha_{i+1}, \alpha_i, \dots, )$ για κάθε ασθενή σύνθεση $\alpha = (\alpha_1, \alpha_2, \dots)$ του $n$. Για τον λόγο αυτό αρκεί να βρούμε μια αμφιμονοσήμαντη αντιστοιχία 
+    \[
+    \{T \in \SSYT(\lambda) : \cont(T) = \alpha\} \to 
+    \{T \in \SSYT(\lambda) : \cont(T) = \hat{\alpha}\}.  
+    \]
+
+    Έστω $T \in \SSYT(\lambda)$ με τύπο $\alpha$. Θεωρούμε τις εμφανίσεις των $i$ και $i+1$ σε κάθε γραμμή του $T$, αγνοώντας εκείνες όπου τα $i$ και $i+1$ βρίσκονται διαδοχικά στην ίδια στήλη, δηλαδή 
+    \[
+    \ytableaushort{i,{\scriptstyle i+1}}\, ,
+    \]
+    καθώς αυτά δεν μπορούν να εναλλαγούν (γιατί;). Για παράδειγμα, για $\lambda = (9,5,4,3,2)$ και $i=5$ έχουμε 
+    \[
+    Τ = \
+    \begin{ytableau}
+        1 & 1 & 1 & 2 & 3 & *(iceberg) 5 & *(applegreen) 6 & *(applegreen) 6 & *(applegreen) 6 \\
+        2 & 3 & 4 & *(iceberg) 5 & *(applegreen) 6 \\
+        3 & 4 & *(burntorange) 5 & 7 \\ 
+        4 & *(applegreen) 6 & *(burntorange) 6 \\
+        *(iceberg) 5 & 7
+    \end{ytableau}
+    \]
+    με $\cont(T) = (3,2,3,3, \textcolor{iceberg}{3} + \textcolor{burntorange}{1}, \textcolor{applegreen}{5} + \textcolor{burntorange}{1}, 2)$.
+
+    Έστω $\phi(T)$ το ταμπλώ που προκύπτει από το $T$ εναλλάσσοντας σε κάθε γραμμή το πλήθος των εμφανίσεων του $i$ με το πλήθος των εμφανίσεων του $i+1$. Το $\phi(T)$ είναι ένα ημισύνηθες ταμπλώ σχήματος $\lambda$ και τύπου $\hat{\alpha}$ (γιατί;) και η απεικόνιση $\phi$ είναι η ζητούμενη αμφιμονοσήμαντη αντιστοιχία (γιατί;). Στο παράδειγμα, έχουμε 
+    \[
+    \phi(Τ) = \
+    \begin{ytableau}
+        1 & 1 & 1 & 2 & 3 & *(applegreen) 5 & *(applegreen) 5 & *(applegreen) 5 & *(iceberg) 6 \\
+        2 & 3 & 4 & *(applegreen) 5 & *(iceberg) 6 \\
+        3 & 4 & *(burntorange) 5 & 7 \\ 
+        4 & *(applegreen) 5 & *(burntorange) 6 \\
+        *(iceberg) 6 & 7
+    \end{ytableau}
+    \]
+    με $\cont(\phi(T)) = (3,2,3,3, \textcolor{applegreen}{5} + \textcolor{burntorange}{1}, \textcolor{iceberg}{3} + \textcolor{burntorange}{1}, 2)$.
+\end{proof}
+\end{document}
