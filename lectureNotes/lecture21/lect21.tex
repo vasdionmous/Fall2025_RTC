@@ -1,0 +1,368 @@
+\documentclass[12pt,a4paper,reqno]{amsart}
+
+% language
+\usepackage[greek,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{alphabeta}
+
+% change default names to greek
+\addto\captionsenglish{
+    \renewcommand{\contentsname}{Περιεχόμενα}
+    \renewcommand{\refname}{Βιβλιογραφία}
+    \renewcommand{\datename}{Ημερομηνία:}
+    \renewcommand{\urladdrname}{Ιστοσελίδα}
+}
+
+% math 
+\usepackage{amsmath,amsthm,amssymb,amscd}
+
+% font
+\usepackage[cal=euler]{mathalfa}
+\usepackage{libertinus-type1}
+% \usepackage{txfonts} % for upright greek letters
+\usepackage{bm} % for bold symbols
+\usepackage{bbm} % for the simply-looking bb symbols
+
+% miscellaneous 
+\usepackage{changepage} %for indenting environments
+\usepackage{csquotes} % example: \textcquote{}
+\usepackage{blkarray}
+\setcounter{MaxMatrixCols}{20} % default for pmatrix is 10!!
+\usepackage{ytableau}
+\usepackage{array} %needed to increase the vertical length in a tabular
+
+% drawing
+\usepackage{tikz,tikz-cd}
+\usetikzlibrary{shapes.misc, patterns, matrix, calc, intersections,positioning}
+\usepackage{graphics,graphicx}
+\usepackage{float} % provides enhanced control and customization options for floating objects such as figures and tables
+
+% colors
+\usepackage{xcolor}
+\definecolor{darkcandyapplered}{rgb}{0.64, 0.0, 0.0}
+\definecolor{midnightblue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{mylightblue}{HTML}{336699}
+\definecolor{burntorange}{rgb}{0.8, 0.33, 0.0}
+\definecolor{iceberg}{rgb}{0.44, 0.65, 0.82}
+\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
+\definecolor{canaryyellow}{rgb}{1.0, 0.94, 0.0}
+
+% hrefs
+\usepackage{hyperref}
+\usepackage[noabbrev,capitalize]{cleveref}
+\hypersetup{
+    pdftoolbar=true,        
+    pdfmenubar=true,        
+    pdffitwindow=false,     
+    pdfstartview={FitH},  % fits the width of the page to the window
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfnewwindow=true,  % links in new window
+    colorlinks=true,  % false: boxed links; true: colored links
+    linkcolor=darkcandyapplered,   % color of internal links
+    citecolor=midnightblue,  % color of links to bibliography
+    urlcolor=cyan,  % color of external links
+    linktocpage=true  % changes the links from the section body to the page number
+    }
+
+% geometry
+\textwidth=16cm 
+\textheight=21cm 
+\hoffset=-55pt 
+\footskip=25pt
+
+% thm envs (you might need to change the path)
+\input{thmEnvironments_macro.tex}
+
+% math ops (you might need to change the path)
+\input{mathOperators_macro.tex}
+
+% miscellaneous commands
+\newcommand{\defn}[1]{{\color{mylightblue}{#1}}}
+\newcommand{\toDo}{{\bf\color{red} TODO}}
+\newcommand{\toCite}{{\bf\color{green} CITE}}
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}} % for matrices with column vectors
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}} % for matrices with row vectors
+\newcommand{\myblue}[1]{{\color{iceberg}{#1}}}
+\newcommand{\myorange}[1]{{\color{burntorange}{#1}}}
+\newcommand{\mygreen}[1]{{\color{applegreen}{#1}}}
+\newcommand{\myred}[1]{{\color{darkcandyapplered}{#1}}}
+
+% ferrer's diagram
+\newcommand{\fdiagram}[1]{
+    \begin{tikzpicture}[scale=.7]
+        \fill foreach \Z [count=\Y] in {#1}
+        {foreach \X in {1,...,\Z} 
+        {(\X,-\Y) circle[radius=3pt]}};
+    \end{tikzpicture}
+}
+
+%
+\newcommand{\tcbo}[1]{\textcolor{burntorange}{#1}}
+
+% 
+\newenvironment{nouppercase}{%
+  \let\uppercase\relax%
+  \renewcommand{\uppercasenonmath}[1]{}}{}
+
+% titlepage
+\title{Θ2.04: Θεωρία Αναπαραστάσεων και Συνδυαστική}
+\author[Β.~Δ. Μουστακας]{Βασίλης Διονύσης Μουστάκας \\ Πανεπιστήμιο Κρήτης}
+\date{11 Δεκεμβρίου 2025}
+% \urladdr{\href{https://sites.google.com/view/vasmous}{https://sites.google.com/view/vasmous}}
+
+\begin{document}
+
+\begingroup
+\def\uppercasenonmath#1{} % this disables uppercase title
+\let\MakeUppercase\relax % this disables uppercase authors
+\maketitle
+\endgroup
+
+
+\setcounter{section}{16}
+\setcounter{theorem}{5}
+\setcounter{equation}{1}
+\begin{center}
+    \textbf{16. Οι συναρτήσεις Schur
+} (Συνέχεια)
+\end{center}
+
+\begin{corollary}
+    \label{cor:schur_basis}
+    Αν $\lambda \vdash n$, τότε 
+    \begin{equation}
+        \label{eq:s_to_m}
+        s_\lambda = \sum_{\mu \tle \lambda} \rmK_{\lambda\mu} m_\mu.
+    \end{equation}
+    Ειδικότερα, το σύνολο $\{s_\lambda : \lambda \vdash n\}$ αποτελεί βάση του $\Sym_n$.
+\end{corollary}
+
+\begin{proof}[Απόδειξη]
+    Από το Θεώρημα~16.5 έπεται ότι 
+    \[
+    s_\lambda = \sum_{\mu \vdash n} \rmK_{\lambda\mu} m_\mu.
+    \]
+    Το ζητούμενο έπεται από τον Κανόνα του Young και το Πόρισμα 11.13.
+\end{proof}
+
+Για $\lambda, \mu \vdash n$, έστω $\chi^\lambda(\mu)$ η τιμή του χαρακτήρα του προτύπου Specht $\sS^\lambda$ στην κλάση συζυγίας της $\fS_n$ που αντιστοιχεί στη διαμέριση $\mu$.
+\begin{theorem}
+    \label{thm:s_to_p}
+    Αν $\lambda \vdash n$, τότε 
+    \begin{equation}
+        \label{eq:s_to_p}
+    s_\lambda 
+    = \sum_{\mu\vdash{n}} \frac{1}{\rmz_\mu}\chi^\lambda(\mu)p_\mu
+    = \frac{1}{n!}\sum_{\pi \in \fS_n}\chi^\lambda(\pi)p_{\ct(\pi)},
+    \end{equation}
+    όπου $\ct(\pi)$ είναι ο κυκλικός τύπος της $\pi$.
+\end{theorem}
+
+\begin{proof}[Απόδειξη]
+    Η δεύτερη ισότητα έπεται από την Πρόταση~9.5. Για την πρώτη ισότητα, από τον Κανόνα του Young έπεται ότι 
+    \begin{equation}
+        \label{eq:s_to_p_help}
+        \rmK_{\lambda\mu} = (\varphi^\mu, \chi^\lambda) = \sum_{\nu \vdash n} \frac{1}{\rmz_\nu} \varphi^\mu(\nu)\chi^\lambda(\nu),
+    \end{equation}
+    όπου η δεύτερη ισότητα έπεται από την Ταυτότητα~(7.3) και το γεγονός ότι μια μετάθεση και η αντίστροφή της έχουν τον ίδιο κυκλικό τύπο (γιατί;). Υπολογίζουμε,
+    \begin{align*}
+        s_\lambda
+        &= \sum_{\mu \vdash n} \rmK_{\lambda\mu} m_\mu \\
+        &= \sum_{\mu \vdash n} \left(\sum_{\nu \vdash n} \frac{1}{\rmz_\nu} \varphi^\mu(\nu)\chi^\lambda(\nu)\right) m_\mu \\
+        &= \sum_{\nu \vdash n} \frac{1}{\rmz_\nu}\chi^\lambda(\nu)\left(\sum_{\mu \vdash n}\varphi^\mu(\nu)m_\mu\right) \\
+        &= \sum_{\nu \vdash n} \frac{1}{\rmz_\nu}\chi^\lambda(\nu)p_\nu,
+    \end{align*}
+    όπου η πρώτη και δεύτερη ισότητα έπονται από τις Ταυτότητες~\eqref{eq:s_to_m} και \eqref{eq:s_to_p_help}, αντίστοιχα, ενώ η τελευταία ισότητα έπεται από το Θεώρημα~15.12. 
+\end{proof}
+
+Το Θεώρημα~\ref{thm:s_to_p} μετατρέπει το πρόβλημα υπολογισμού του χαρακτήρα μιας ανάγωγης αναπαράστασης της $\fS_n$ σε πρόβλημα εξαγωγής συντελεστών του αναπτύγματος των συνα\-ρτήσεων Schur στην βάση των power sum συμμετρικών συναρτήσεων. Το παρακάτω αποτέ\-λεσμα έπεται άμεσα από την Ταυτότητα~\eqref{eq:s_to_p} και το Παράδειγμα~16.4 (1).
+
+\begin{corollary}
+    \label{cor:hnen_to_p}
+    Ισχύουν οι εξής ταυτότητες 
+    \begin{align*}
+        h_n &= \sum_{\mu \vdash n} \frac{1}{\rmz_\mu} p_\mu \\
+        e_n &= \sum_{\mu \vdash n} \frac{\sign(\mu)}{\rmz_\mu} p_\mu, 
+    \end{align*}
+    όπου $\sign(\mu) \coloneqq (-1)^{n - \ell(\mu)}$.
+\end{corollary}
+
+\newpage 
+
+\setcounter{section}{17}
+\setcounter{theorem}{0}
+\setcounter{equation}{0}
+\begin{center}
+    \textbf{17. Η χαρακτηριστική απεικόνιση Frobenius
+} 
+\end{center}
+
+Η συζήτηση των προηγούμενων παραγράφων υποδεικνύει ότι υπάρχει μια σύνδεση μεταξύ των αναπαραστάσεων της συμμετρικής ομάδας και των συμμετρικών συναρτήσεων. Αυτή παίρνει μορφή μέσω της παρακάτω απεικόνισης. Έστω $\rmCF_n \coloneqq \rmCF(\fS_n)$.
+
+\begin{definition}
+    \label{def:frob_char}
+    Η απεικόνιση\footnote{Συχνά συμβολίζεται και ως $\mathrm{Frob}$.} $\ch_n : \rmCF_n \to \Sym_n$ που ορίζεται θέτοντας 
+    \begin{equation}
+        \label{eq:frob_char}
+        \ch_n(f) \coloneqq \frac{1}{n!} \sum_{\pi\in\fS_n}f(\pi)p_{\ct(\pi)} = \sum_{\mu \vdash n} \frac{1}{\rmz_\mu}f(\mu) p_\mu,
+    \end{equation}
+    για κάθε $f \in \rmCF_n$, όπου $f(\mu)$ είναι η τιμή της $f$ στην κλάση συζυγίας της $\fS_n$ που αντιστοιχεί στην $\mu$, ονομάζεται \defn{χαρακτηριστική Frobenius}.
+\end{definition}
+
+Η χαρακτηριστική απεικόνιση Frobenius είναι προφανώς γραμμική και από το Θεώρημα 16.7 έπεται ότι 
+\[
+\ch_n(\chi^\lambda) = s_\lambda
+\]
+για κάθε $\lambda \vdash n$. Με άλλα λόγια, απεικονίζει την βάση των ανάγωγων χαρακτήρων του $\rmCF_n$ στην βάση των συναρτήσεων Schur του $\Sym_n$ και γι αυτό είναι γραμμικός ισομορφισμός. Ειδικότερα, 
+\[
+\ch_n(\chi^\triv) = h_n \quad \text{και} \quad \ch_n(\chi^\sign) = e_n,
+\]
+όπου $\chi^\triv$ και $\chi^\sign$ είναι οι χαρακτήρες της τετριμμένης αναπαράστασης και της αναπαράστασης προσήμου της $\fS_n$, αντίστοιχα.
+
+Επιπλέον, θεωρώντας το (μοναδικό) εσωτερικό γινόμενο\footnote{Αυτό συνήθως ονομάζεται \defn{εσωτερικό γινόμενο Hall}.} $(\Arg, \Arg) : \Sym_n\times\Sym_n \to \CC$ για το οποίο 
+\[
+(s_\lambda, s_\mu) = 
+\begin{cases}
+    1, &\ \text{αν $\lambda = \mu$} \\
+    0, &\ \text{διαφορετικά}, 
+\end{cases}
+\]
+και επεκτείνοντας γραμμικά ως προς την πρώτη μεταβλητή και συζυγώς-γραμμικά ως προς την δεύτερη, τότε η χαρακτηριστική απεικόνιση Frobenius είναι ισομετρία (γιατί;).
+
+\begin{example}
+    \label{ex:ch_1}
+    Για $\lambda \vdash n$, θεωρούμε την χαρακτηριστική συνάρτηση $1_\lambda$ της κλάσης συζυγίας της $\fS_n$ που αντιστοιχεί στην $\lambda$, δηλαδή 
+    \[
+    1_\lambda(\mu) = 
+    \begin{cases}
+        1, &\ \text{αν $\lambda = \mu$} \\
+        0, &\ \text{διαφορετικά}
+    \end{cases}
+    \]
+    (βλ. συζύτηση πριν τον Ορισμό~5.4). Τότε 
+    \[
+    \ch_n(1_\lambda) = \sum_{\mu\vdash n}\frac{1}{\rmz_\mu}1_\lambda(\mu) p_\mu = \frac{1}{\rmz_\lambda}p_\lambda.
+    \]
+    Συνεπώς, για κάθε $\lambda, \mu \vdash n$, 
+    \begin{align*}
+        (p_\lambda, p_\mu)_{\Sym_n}
+        &= \left(
+            \rmz_\lambda\ch_n(1_\lambda), \rmz_\mu\ch_n(1_\mu)
+        \right)_{\Sym_n} \\
+        &= \rmz_\lambda\rmz_\mu \left(
+            \ch_n(1_\lambda), \ch_n(1_\mu)
+        \right)_{\Sym_n} \\ 
+        &= \rmz_\lambda\rmz_\mu \left(
+            1_\lambda, 1_\mu
+        \right)_{\rmCF_n} \\
+        &= \rmz_\lambda\rmz_\mu \sum_{\nu \vdash n} \frac{1}{\rmz_\nu} 1_\lambda(\nu)1_\mu(\nu) \\
+        &= \begin{cases}
+            \rmz_\lambda, &\ \text{αν $\lambda = \mu$} \\
+            0, &\ \text{διαφορετικά}
+        \end{cases},
+    \end{align*}
+    όπου η τρίτη ισότητα έπεται από το ότι η χαρακτηριστική Frobenius είναι ισομετρία. Άρα, το σύνολο των power sum συμμετρικών συναρτήσεων αποτελεί \emph{ορθογώνια} βάση του $\Sym_n$ ως προς το εσωτερικό γινόμενο Hall.
+\end{example}
+
+Θεωρούμε τον (διαβαθμισμένο) διανυσματικό χώρο 
+\[
+\rmCF \coloneqq \CC \oplus \rmCF_1 \oplus \rmCF_2 \oplus \cdots.
+\]
+Επεκτείνοντας την χαρακτηριστική Frobenius στο $\rmCF$ με το να θέσουμε 
+\[
+\ch(f_0 + f_1 + f_2 + \cdots) \coloneqq f_0 + \ch_1(f_1) + \ch_2(f_2) + \cdots 
+\]
+για κάθε $f = f_0 + f_1 + f_2 + \cdots \in \rmCF$, προκύπτει ένας γραμμικός ισομορφισμός $\ch : \rmCF \to \Sym$. Επεκτείνοντας και το εσωτερικό γινόμενο Hall στο $\rmCF$, θέτοντας $(f, g) = 0$ αν $f \in \rmCF_n$ και $g \in \rmCF_m$ με $n\neq m$, τότε η $\ch$ είναι ισομετρία.
+
+Όπως είδαμε στην Παράγραφο 15, ο χώρος των συμμετρικών συναρτήσεων $\Sym$ διαθέτει έναν \textquote{φυσικό} πολλαπλασιασμό που τον καθιστά δακτύλιο. Πως θα μπορούσαμε να πολλαπλασιάσουμε δυο $f \in \rmCF_n$ και $g \in \rmCF_m$ έτσι ώστε το γινόμενό τους να είναι ένα στοιχείο $f\circ{g} \in \rmCF_{n+m}$;
+
+\begin{digression_a}
+Έστω $G$ και $G'$ δυο πεπερασμένες ομάδες. Αν $V$ και $V'$ είναι $G$- και $G'$-πρότυπα αντίστοιχα, τότε το τανυστικό τους γινόμενο $V \otimes V'$ γίνεται $G\times{G'}$-πρότυπο θέτοντας 
+\[
+(g, g') \cdot v \otimes v' \coloneqq gv \otimes g'v'
+\]
+(γιατί;). Σε αντίθεση με την καταστασκευή της Παραγράφου 6, εδώ το $V \otimes V'$ δέχεται δομή προτύπου από δυο διαφορετικές ομάδες. Γι αυτό τον λόγο συχνά ονομάζεται \emph{εξωτερικό τανυστικό γινόμενο} (outer tensor product). Γι αυτά τα πρότυπα ισχούν τα παρακάτω.
+\begin{itemize}
+    \item $\chi^{V\otimes{V'}}(g,g') = \chi^V(g)\chi^{V'}(g')$
+    \item $\left(\chi^{V_1\otimes{V_1'}}, \chi^{V_2\otimes{V_2'}}\right)_{G\times{G'}} = \left(
+        \chi^{V_1},\chi^{V_2}
+    \right)_G\left(
+        \chi^{V_1'},\chi^{V_2'}
+    \right)_{G'}$
+    \item Αν $\{V_1, V_2, \dots, V_n\}$ και $\{V_1', V_2', \dots, V_m'\}$ είναι σύνολα ανά δύο διακεκριμένων ανάγωγων προτύπων της $G$ και $G'$, αντίστοιχα, τότε το \[\{V_i \otimes V_j' : 1\le i\le n, 1 \le j \le m\}\] είναι ένα σύνολο ανά δύο μη ισόμορφων ανάγωγων $G\times{G'}$-προτύπων.
+\end{itemize}
+\end{digression_a}
+
+Έστω $\chi$ και $\psi$ (ανάγωγοι) χαρακτήρες της $\fS_n$ και $\fS_m$, αντίστοιχα. Από την παραπάνω συζήτηση προκύπτει ότι η απεικόνιση $\chi\times\psi : \fS_n\times\fS_m \to \CC$ που ορίζεται θέτοντας 
+\[
+\chi\times\psi(\pi,\sigma) \coloneqq \chi(\pi)\psi(\sigma)
+\]
+για κάθε $(\pi,\sigma) \in \fS_n\times\fS_m$ είναι χαρακτήρας της $\fS_n\times\fS_m$. Τώρα, μπορούμε να \textquote{ανέβουμε} στην $\fS_{n+m}$ θεωρώντας την επαγωγή αυτού του χαρακτήρα:
+\[
+\chi\circ\psi \coloneqq \left(\chi\times\psi\right)\uparrow_{\fS_n\times\fS_m}^{\fS_{n+m}}.
+\]
+Αυτό ονομάζεται \defn{γινόμενο επαγωγής} (induction product) των $\chi$ και $\psi$. Επεκτείνοντας διγραμμικά το $\circ$ σε ολόκληρο το $\rmCF$ αυτό παίρνει τη δομή δακτύλιου.
+
+\begin{theorem}
+    \label{thm:frobenius}
+    Η χαρακτηριστική απεικόνιση Frobenius $\ch : \rmCF \to \Sym$ είναι ισομορφισμός δακτυλίων.
+\end{theorem}
+
+Για την απόδειξη του Θεωρήματος~\ref{thm:frobenius} χρειαζόμαστε μια γενικότερη μορφή του νόμου αντιστροφής Frobenius (βλ. Θεωρήμα~8.8), η οποία αποδεικνύεται ουσιαστικά με τον ίδιο τρόπο.
+\begin{lemma}
+    \label{lem:frobenius_reciprocity_law}
+    Έστω $G$ πεπερασμένη ομάδα και $H$ υποομάδα της. Αν $A$ είναι μια άλγεβρα πάνω από το $\CC$ και $\chi : G \to A$ μια συνάρτηση η οποία έχει σταθερή τιμή στις κλάσεις συζυγίας της $G$, τότε 
+    \[
+    \left(
+        \psi\uparrow_H^G, \chi
+    \right)_G' =
+    \left(
+        \psi, \chi\downarrow_H^G
+    \right)_H'
+    \]
+    για κάθε $\psi : H \to A$, όπου 
+    \begin{itemize}
+        \item για κάθε $h \in H$, $\chi\downarrow_H^G(h) \coloneqq \chi(h)$,
+        \item για κάθε $g \in G$, $\psi\uparrow_H^G(g) \coloneqq \frac{1}{\abs{H}}\sum_{x^{-1}gx \in H} \psi(x^{-1}gx)$
+        \item για κάθε $\alpha, \beta : G \to A$, $(\alpha,\beta)' \coloneqq \frac{1}{\abs{G}}\sum_{g \in G} \ol{\alpha(g)}\beta(g)$.
+    \end{itemize}
+\end{lemma}
+
+\begin{proof}[Απόδειξη του Θεωρήματος~\ref{thm:frobenius}]
+    Αρκεί να αποδείξουμε ότι η $\ch$ είναι ομομορφισμός δακτυλίων. Γι αυτό, παρατηρούμε ότι 
+    \begin{align*}
+    \ch_n(\chi) 
+    &= \frac{1}{n!} \sum_{\pi \in \fS_n} \chi(\pi) p_{\ct(\pi)} \\
+    &= \frac{1}{n!} \sum_{\pi \in \fS_n} \chi(\pi^{-1}) p_{\ct(\pi^{-1})} \\
+    &= \frac{1}{n!} \sum_{\pi \in \fS_n} \ol{\chi(\pi)} p_{\ct(\pi)} \\
+    &= (\chi, P)_{\fS_n}', 
+    \end{align*}
+    όπου $P : \fS_n \to \Sym$ είναι η συνάρτηση που ορίζεται θέτοντας $P(\pi) \coloneqq p_{\ct(\pi)}$. Προφανώς, η συνάρτηση $P$ έχει σταθερή τιμή στις κλάσεις συζυγίας της $\fS_n$. Συνεπώς, για $f \in \rmCF_n$ και $g \in \rmCF_m$ υπολογίζουμε 
+    \begin{align*}
+        \ch(f \circ g)
+        &= \ch_{n+m}(\left(
+            f\times{g}
+        \right)\uparrow_{\fS_n\times\fS_m}^{\fS_{n+m}}) \\ 
+        &= \left(\left(
+            f\times{g}
+        \right)\uparrow_{\fS_n\times\fS_m}^{\fS_{n+m}}, P
+        \right)_{\fS_{n+m}}' \\
+        &= \left(
+            f\times{g}, P\downarrow_{\fS_n\times\fS_m}^{\fS_{n+m}}
+        \right)'_{\fS_n\times\fS_m} \\
+        &= \frac{1}{n!m!} \sum_{(\pi, \sigma) \in \fS_n\times\fS_m} \ol{f\times{g}(\pi,\sigma)} P(\pi,\sigma) \\
+        &= \frac{1}{n!m!} \sum_{(\pi, \sigma) \in \fS_n\times\fS_m} \ol{f(\pi)}\ol{g(\sigma)} p_{\ct(\pi,\sigma)} \\
+        &=  \left(
+            \frac{1}{n!}\sum_{\pi\in\fS_n} \ol{f(\pi)}p_{\ct(\pi)}
+        \right)
+        \left(
+            \frac{1}{m!}\sum_{\sigma\in\fS_m} \ol{g(\sigma)}p_{\ct(\sigma)}
+        \right) \\
+        &= \ch_n(f)\ch_m(g),
+    \end{align*}
+    όπου η τρίτη ισότητα έπεται από το Λήμμα~\ref{lem:frobenius_reciprocity_law} και η προτελευταία ισότητα έπεται από την πολλαπλασιαστικότητα των power sum συμμετρικών συναρτήσεων και το γεγονός ότι ο κυκλικός τύπος του στοιχείου $(\pi,\sigma)$ όταν το βλέπουμε ως μετάθεση της $\fS_{n+m}$ είναι ουσιαστικά\footnote{Για παράδειγμα, αν $\pi = \cycle{1,2}\cycle{3} \in \fS([3])\cong\fS_3$ με κυκλικό τύπο $(2,1)$ και $\sigma = \cycle{4,5} \in \fS([4,5])\cong \fS_2$ με κυκλικό τύπο $(2)$, τότε το στοιχείο $(\pi,\sigma)$ ταυτίζεται με την μετάθεση $\cycle{1,2}\cycle{3}\cycle{4,5}$ στην $\fS_5$ και γι αυτό έχει κυκλικό τύπο $(2,2,1)$. Συνεπώς, $p_{\ct(\pi,\sigma)} = p_{(2,2,1)} = p_2p_2p_1 = p_{(2,1)}p_{(2)} = p_{\ct(\pi)}p_{\ct(\sigma)}$.} η \textquote{ένωση} των κυκλικών τύπων της $\pi$ και της $\sigma$.
+\end{proof}
+\end{document}
