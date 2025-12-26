@@ -1,0 +1,650 @@
+\documentclass[12pt,a4paper,reqno]{amsart}
+
+% language
+\usepackage[greek,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{alphabeta}
+
+% change default names to greek
+\addto\captionsenglish{
+    \renewcommand{\contentsname}{Περιεχόμενα}
+    \renewcommand{\refname}{Βιβλιογραφία}
+    \renewcommand{\datename}{Ημερομηνία:}
+    \renewcommand{\urladdrname}{Ιστοσελίδα}
+}
+
+% math 
+\usepackage{amsmath,amsthm,amssymb,amscd}
+
+% font
+\usepackage[cal=euler]{mathalfa}
+\usepackage{libertinus-type1}
+% \usepackage{txfonts} % for upright greek letters
+\usepackage{bm} % for bold symbols
+\usepackage{bbm} % for the simply-looking bb symbols
+
+% miscellaneous 
+\usepackage{changepage} %for indenting environments
+\usepackage{csquotes} % example: \textcquote{}
+\usepackage{blkarray}
+\setcounter{MaxMatrixCols}{20} % default for pmatrix is 10!!
+\usepackage{ytableau}
+\usepackage{array} %needed to increase the vertical length in a tabular
+
+% drawing
+\usepackage{tikz,tikz-cd}
+\usetikzlibrary{shapes.misc, patterns, matrix, calc, intersections,positioning}
+\usepackage{graphics,graphicx}
+\usepackage{float} % provides enhanced control and customization options for floating objects such as figures and tables
+
+% colors
+\usepackage{xcolor}
+\definecolor{darkcandyapplered}{rgb}{0.64, 0.0, 0.0}
+\definecolor{midnightblue}{rgb}{0.1, 0.1, 0.44}
+\definecolor{mylightblue}{HTML}{336699}
+\definecolor{burntorange}{rgb}{0.8, 0.33, 0.0}
+\definecolor{iceberg}{rgb}{0.44, 0.65, 0.82}
+\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
+\definecolor{canaryyellow}{rgb}{1.0, 0.94, 0.0}
+
+% hrefs
+\usepackage{hyperref}
+\usepackage[noabbrev,capitalize]{cleveref}
+\hypersetup{
+    pdftoolbar=true,        
+    pdfmenubar=true,        
+    pdffitwindow=false,     
+    pdfstartview={FitH},  % fits the width of the page to the window
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfnewwindow=true,  % links in new window
+    colorlinks=true,  % false: boxed links; true: colored links
+    linkcolor=darkcandyapplered,   % color of internal links
+    citecolor=midnightblue,  % color of links to bibliography
+    urlcolor=cyan,  % color of external links
+    linktocpage=true  % changes the links from the section body to the page number
+    }
+
+% geometry
+\textwidth=16cm 
+\textheight=21cm 
+\hoffset=-55pt 
+\footskip=25pt
+
+% thm envs (you might need to change the path)
+\input{thmEnvironments_macro.tex}
+
+% math ops (you might need to change the path)
+\input{mathOperators_macro.tex}
+
+% miscellaneous commands
+\newcommand{\defn}[1]{{\color{mylightblue}{#1}}}
+\newcommand{\toDo}{{\bf\color{red} TODO}}
+\newcommand{\toCite}{{\bf\color{green} CITE}}
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}} % for matrices with column vectors
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}} % for matrices with row vectors
+\newcommand{\myblue}[1]{{\color{iceberg}{#1}}}
+\newcommand{\myorange}[1]{{\color{burntorange}{#1}}}
+\newcommand{\mygreen}[1]{{\color{applegreen}{#1}}}
+\newcommand{\myred}[1]{{\color{darkcandyapplered}{#1}}}
+
+% ferrer's diagram
+\newcommand{\fdiagram}[1]{
+    \begin{tikzpicture}[scale=.7]
+        \fill foreach \Z [count=\Y] in {#1}
+        {foreach \X in {1,...,\Z} 
+        {(\X,-\Y) circle[radius=3pt]}};
+    \end{tikzpicture}
+}
+
+%
+\newcommand{\tcbo}[1]{\textcolor{burntorange}{#1}}
+
+% 
+\newenvironment{nouppercase}{%
+  \let\uppercase\relax%
+  \renewcommand{\uppercasenonmath}[1]{}}{}
+
+% titlepage
+\title{Θ2.04: Θεωρία Αναπαραστάσεων και Συνδυαστική}
+\author[Β.~Δ. Μουστακας]{Βασίλης Διονύσης Μουστάκας \\ Πανεπιστήμιο Κρήτης}
+\date{18 Δεκεμβρίου 2025}
+% \urladdr{\href{https://sites.google.com/view/vasmous}{https://sites.google.com/view/vasmous}}
+
+\begin{document}
+
+\begingroup
+\def\uppercasenonmath#1{} % this disables uppercase title
+\let\MakeUppercase\relax % this disables uppercase authors
+\maketitle
+\endgroup
+
+\setcounter{section}{18}
+\setcounter{theorem}{3}
+\setcounter{equation}{1}
+\begin{center}
+    \textbf{18. Ο κανόνας Murnaghan--Nakayama
+} (Συνέχεια)
+\end{center}
+
+Για την απόδειξη του κανόνα Murnaghan--Nakayama, θα χρειαστούμε τον κλασικό ορισμό της συνάρτησης Schur. Για τον λόγο αυτό περιορίζουμε τον αριθμό των μεταβλητών σε $x_1, x_2, \dots, x_n$ και θεωρούμε τον δακτύλιο των πολυωνύμων $\CC[x_1, x_2, \dots, x_n]$.  Η συμμετρική ομάδα $\fS_n$ δρα στο $\CC[x_1, x_2, \dots, x_n]$ θέτοντας 
+\[
+\pi\cdot{f(x_1,x_2, \dots, x_n)} \coloneqq f(x_{\pi(1)},x_{\pi(2)},\dots, x_{\pi(n)})
+\]
+για κάθε $\pi \in \fS_n$ και $f \in \CC[x_1, x_2, \dots, x_n]$. Τα σταθερά σημεία αυτής της δράσης ονομάζονται \defn{συμμετρικά πολυώνυμα}. Η άλγεβρα των συμμετρικών πολυωνύμων ορίζεται με τον ίδιο τρόπο όπως και στην περίπτωση των συμμετρικών συναρτήσεων και διαθέτει τις ίδιες βασικές ιδιότητες, δηλαδή σχηματίζει μια διαβαθμισμένη άλγεβρα, κάθε ομογενές κομμάτι της οποίας παραμετρικοποιείται από διαμερίσεις ακεραίων και ισχύουν τα περισσότερα αποτελέσματα (αν όχι όλα) των προηγούμενων παραγράφων.
+
+Ένα μειονέκτημα που έχει το να δουλεύουμε με πεπερασμένο το πλήθος μεταβλητές είναι, για παράδειγμα, ότι 
+\[
+m_\lambda(x_1, x_2, \dots, x_n) = 0
+\]
+για κάθε διαμέριση $\lambda$ με $\ell(\lambda) > n$, παρόλο που ταυτότητες που αφορούν συμμετρικές συνα\-ρτήσεις, όπως αυτή που πρηγείται της Ταυτότητας~(15.5), παραμένουν αληθείς. Για τον λόγο αυτό προτιμάμε να δουλεύουμε στον δακτύλιο των τυπικών δυναμοσειρών. Σε κάθε περίπτω\-ση, μια ταυτότητα συμμετρικών συναρτήσεων η οποία ισχύει για ένα (αρκετά μεγάλο) πεπε\-ρασμένο πλήθος μεταβλητών ισχύει και για άπειρες μεταβλητές και το αντίστροφο.
+
+% \begin{remark}
+%     Ο χώρος των (ομογενών) πολυωνύμων βαθμού $d$ στις μεταβλητές $x_1, x_2, \dots, x_n$ έχει διάσταση ίση με το πλήθος των ασθενών συνθέσεων $\alpha$ του $d$ (γιατί;). Η δράση της $\fS_n$ στο $\CC[x_1, x_2, \dots, x_n]$ είναι μια \emph{αριστερή} δράση\footnote{Οι δράσεις του Ορισμού 1.2 ονομάζονται αριστερές δράσεις.}. Από την άλλη, δρα στο σύνολο όλων των ασθενών συνθέσεων θέτοντας 
+%     \[
+%     \pi \cdot (\alpha_1, \alpha_2, \dots, \alpha_k) \coloneqq
+%     (\alpha_{\pi^{-1}(1)}, \alpha_{\pi^{-1}(2)},\dots, \alpha_{\pi^{-1}(k)}).
+%     \]
+%     Αυτό είναι παράδειγμα \emph{δεξιάς} δράσης. 
+% \end{remark}
+
+Ένα πολυώνυμο $f \in \CC[x_1, x_2, \dots, x_n]$ ονομάζεται \defn{αντισυμμετρικό} (skew symmetric) αν 
+\[
+\pi\cdot{f} \coloneqq \sign(\pi)f
+\]
+για κάθε $\pi \in \fS_n$. Ειδικότερα, 
+\[
+f(x_1, \dots, x_{i+1},x_i, \dots, x_n) = - f(x_1, \dots, x_i, x_{i+1}, \dots, x_n)
+\]
+για κάθε αντισυμμετρικό πολυώνυμο $f$. 
+
+Με τον ίδιο τρόπο που η συμμετρικοποίηση ενός μονωνύμου οδηγεί στον ορισμό της μονωνυμικής συμμετρικής συνάρτησης, έτσι μπορούμε να αντισυμμετρικοποιήσουμε ένα μονώ\-νυμο 
+\[
+\bfx^\alpha \coloneqq x_1^{\alpha_1}x_2^{\alpha_2}\cdots x_k^{\alpha_k}
+\]
+για κάθε $\alpha = (\alpha_1, \alpha_2, \dots, \alpha_k) \in \NN^k$, ώστε να κατασκευάσουμε ένα \textquote{μονωνυμικό αντισυμμετρικό πολυώνυμο}. Θεωρούμε\footnote{Αυτό το πολυώνυμο συνήθως ονομάζεται \emph{alternant}.}, λοιπόν, 
+\[
+    a_\alpha = a_\alpha(x_1, x_2, \dots, x_n)
+    \coloneqq \sum_{\pi \in \fS_n} \sign(\pi) \, \pi\cdot \bfx^\alpha 
+    = \begin{vmatrix}
+        x_1^{\alpha_1} & x_2^{\alpha_1} & \cdots & x_n^{\alpha_1} \\ 
+        x_1^{\alpha_2} & x_2^{\alpha_2} & \cdots & x_n^{\alpha_2} \\ 
+        \vdots         & \vdots         &        & \vdots          \\ 
+        x_1^{\alpha_n} & x_2^{\alpha_n} & \cdots & x_n^{\alpha_n}
+    \end{vmatrix}
+\]
+όπου η τελευταία ισότητα έπεται από τον ορισμό της ορίζουσας. Για παράδειγμα, για $\alpha = (5,3,2)$ έχουμε 
+\[
+a_{(5,3,2)}(x_1, x_2, x_3) =
+x_1^5x_2^3x_3^2 -
+x_1^5x_2^2x_3^3 -
+x_1^3x_2^5x_3^2 -
+x_1^2x_2^3x_3^5 + 
+x_1^2x_2^5x_3^3 +
+x_1^3x_2^2x_3^5.
+\]
+
+Προφανώς, το $a_\alpha$ είναι αντισυμμετρικό πολυώνυμο (γιατί;). Επιπλέον, για κάθε αναδιάταξη $\tl{\alpha}$ των μερών της $\alpha$ ισχύει ότι 
+\[
+a_{\tl{\alpha}} = \pm a_\alpha
+\]
+(γιατί;). Συνεπώς, αρκεί να επικεντρωθούμε σε εκείνες τις ακολουθίες $\alpha$ για τις οποίες $\alpha_1 \ge \alpha_2 \ge \cdots \ge \alpha_n$. Όμως, αν η $\alpha$ έχει δυο ίσα μέρη, τότε $a_\alpha = 0$ (γιατί;). Συνεπώς, αρκεί να επικεντρωθούμε σε εκείνες τις ακολουθίες $\alpha$ για τις οποίες $\alpha_1 > \alpha_2 > \cdots > \alpha_n \ge 0$. Κάθε τέτοια ακολουθία έχει την μορφή 
+\[
+\alpha = \lambda + \delta_n,
+\]
+όπου η πρόσθεση ακολουθιών γίνεται κατά συντεταγμένες και\footnote{Η \textquote{διαμέριση} $\delta_n$ ονομάζεται \emph{staircase shape}.} 
+\[
+\delta_n \coloneqq (n-1, n-2, \dots, 1, 0).
+\]
+Η ακολουθία του παραδείγματος γράφεται 
+\[
+\alpha = (5,3,2) = (3,2,2) + \delta_2 = (3,2,2) + (2,1,0).
+\]
+
+Παρατηρούμε ότι 
+\[
+a_{\delta_n} = 
+\begin{vmatrix}
+        x_1^{n-1} & x_2^{n-1} & \cdots & x_n^{n-1} \\ 
+        x_1^{n-2} & x_2^{n-2} & \cdots & x_n^{n-2} \\ 
+        \vdots    & \vdots    &        & \vdots          \\ 
+        x_1       & x_2       & \cdots & x_n \\
+        1         & 1         & \cdots & 1
+    \end{vmatrix} =
+    \prod_{1 \le i < j \le n}(x_i -x_j),
+\]
+όπου η τελευταία ισότητα έπεται από τον υπολογισμό της \emph{ορίζουσας Vandermonde}. Αφού η $a_\alpha$ είναι αντισυμμετρική έπεται ότι $(x_i - x_{i+1})\mid a_\alpha$, για κάθε $1 \le i \le n-1$ (γιατί;) και κατ' επέκταση 
+\[
+\frac{a_{\lambda + \delta_n}}{a_{\delta_n}} \ \in \ \ZZ[x_1, x_2, \dots, x_n].
+\]
+Το πολυώνυμο αυτό, ως πηλίκο δυο αντισυμμετρικών πολυωνύμων, είναι ομογενές συμμετρικό πολυώνυμο βαθμού $\abs{\lambda}$. Παραδόξως, αυτό το συμμετρικό πολυώνυμο μας είναι γνώριμο.
+
+\begin{theorem}
+    \label{thm:schur}
+    Για κάθε διαμέριση $\lambda$ με $\ell(\lambda) \le n$, 
+    \[
+    \frac{a_{\lambda + \delta_n}(x_1, x_2, \dots, x_n)}{a_{\delta_n}(x_1, x_2, \dots, x_n)} = s_\lambda(x_1, x_2, \dots, x_n).
+    \]
+\end{theorem}
+
+\begin{proof}[Απόδειξη]
+    Εφαρμόζοντας την απεικόνιση $\omega$ στην Ταυτότητα~(17.5) προκύπτει ότι 
+    \[
+    e_\mu = \omega(h_\mu) = \sum_\lambda \rmK_{\lambda\mu}\omega(s_\lambda) = \sum_\lambda \rmK_{\lambda\mu} s_{\lambda^\top} = \sum_{\lambda} \rmK_{\lambda^\top\mu} s_\lambda
+    \]
+    όπου η τρίτη ισότητα έπεται από την Ταυτότητα~(17.10). Συνεπώς, αρκεί να δείξουμε ότι 
+    \begin{equation} 
+        \label{eq:schur_help}
+    a_{\delta_n}(x_1,x_2,\dots,x_n)e_\mu(x_1,x_2,\dots,x_n) = \sum_{\substack{\lambda\vdash\abs{\mu} \\ \ell(\lambda) \le n}} \rmK_{\lambda^\top\mu}a_{\lambda+\delta_n}(x_1,x_2, \dots, x_n),
+    \end{equation}
+    για κάθε διαμέριση $\mu$ με $\ell(\mu) \le n$. Ισοδύναμα, αρκεί να δείξουμε ότι ο συντελεστής του $\bfx^{\lambda+\delta_n}$ στο αριστερό μέλος της Ταυτότητας \eqref{eq:schur_help} ισούται με $\rmK_{\lambda^\top\mu}$ (γιατί;).
+
+    Ο συντελεστής αυτός ισούται με το πλήθος των παραγοντοποιήσεων του $\bfx^{\lambda+\delta_n}$ ως 
+    \[
+    \bfx^{\delta_n}\bfx^{\alpha^{(1)}}\bfx^{\alpha^{(2)}}\cdots\bfx^{\alpha^{(\ell(\mu))}}
+    \]
+    όπου κάθε μονώνυμο $\bfx^{(\alpha^{(i)})}$ είναι όρος του $e_{\mu_i}$ τέτοιος ώστε η ακολουθία των εκθετών σε κάθε βήμα της παραγοντοποίησης 
+    $\bfx^{\delta_n}\bfx^{\alpha^{(1)}}\bfx^{\alpha^{(2)}}\cdots\bfx^{\alpha^{(j)}}$ να είναι γνησίως φθίνουσα, για κάθε $1 \le j \le \ell(\mu)$.
+
+    Πράγματι, για να προκύψει ο όρος $\bfx^{\lambda+\delta_n}$ ξεκινάμε από το $\bfx^{\delta_n}$ και πολλαπλασιάζουμε διαδοχικά με μονώνυμα $\bfx^{\alpha^{(1)}}, \bfx^{\alpha^{(2)}}, \cdots, \bfx^{\alpha^{(\ell(\mu))}}$ από τα $e_{\mu_1}, e_{\mu_2}, \dots, e_{\mu_{\ell(\mu)}}$ ώστε κάθε φορά το μονώνυμο που προκύπτει να έχει γνησίως φθήνουσα ακολουθία εκθετών, διαφορετικά σε περίπτωση που δύο εκθέτες είναι ίσοι παίρνουμε 0 (γιατί;). 
+    
+    Για παράδειγμα, για $n=3$ και $\lambda = \mu = (2,2,1)$ έχουμε 
+    \[
+    a_{\delta_3}e_2e_2e_1 = (x_1-x_2)(x_1-x_3)(x_2-x_3)(x_1x_2+x_1x_3+x_2x_3)^2(x_1+x_2+x_3).
+    \]
+    Ξεκινάμε από το $\bfx^{\delta_3} = x_1^2x_2$ και πολλαπλασιάζουμε με το $e_2(x_1, x_2, x_3) = x_1x_2+x_1x_3+x_2x_3$, για να προκύψουν οι όροι
+    \[
+    x_1^2x_2(x_1x_2), \quad x_1^2x_2(x_1x_3), \quad x_1^2x_2(x_2x_3)
+    \]
+    από τους οποίους κρατάμε μόνο τον πρώτο (γιατί;). Συνεχίζοντας, έχουμε τον όρο $x_1^3x_2^2$ και πολλαπλασιάζουμε με το $e_2(x_1, x_2, x_3) = x_1x_2+x_1x_3+x_2x_3$ για να προκύψουν οι όροι 
+    \[
+    x_1^3x_2^2(x_1x_2), \quad x_1^3x_2^2(x_1x_3), \quad x_1^3x_2^2(x_2x_3)
+    \]
+    από τους οποίους κρατάμε τους πρώτους δύο (γιατί;). Τέλος, έχουμε τους όρους $x_1^4x_2^3$ και $x_1^4x_2^2x_3$ και πολλαπλασιάζουμε με το $e_1(x_1,x_2,x_3) = x_1 + x_2 + x_3$ για να προκύψουν οι όροι 
+    \begin{align*}
+        x_1^4x_2^3(x_1), &\quad x_1^4x_2^3(x_2), \quad x_1^4x_2^3(x_3), \\
+        x_1^4x_2^2x_3(x_1), &\quad x_1^4x_2^2x_3(x_2), \quad x_1^4x_2^2x_3(x_3),
+    \end{align*}
+    από τους οποίους κρατάμε τον τρίτο και τον πέμπτο (γιατί;). Άρα, έχουμε τις παραγοντοποιήσεις
+    \[
+    x_1^2x_2(x_1x_2)(x_1x_2)(x_3) \quad \text{και} \quad x_1^2x_2(x_1x_2)(x_1x_3)(x_2).
+    \]
+
+    Αναπαριστούμε κάθε τέτοια παραγοντοποίηση με ένα ημισύνηθες ταμπλώ $T$ του οποίου η $j$-οστή στήλη περιέχει τους υποδείκτες του μονωνύμου $\bfx^{\alpha^{(j)}}$, για κάθε $1 \le j \le \ell(\mu)$. Οι παραγοτνοποιήσεις του παραδείγματος αντιστοιχούν στα ταμπλώ 
+    \[
+    \ytableausetup{centertableaux}
+    \begin{ytableau}
+        1 & 1 & 3 \\
+        2 & 2 
+    \end{ytableau} \, \quad \text{και} \quad 
+    \begin{ytableau}
+        1 & 1 & 2 \\
+        2 & 3 
+    \end{ytableau}
+    \]
+    Παρατηρούμε ότι $T \in \SSYT(\lambda^\top)$ και $\cont(T) = \mu$ (γιατί;). Η διαδικασία αυτή αντιστρέφεται με τον προφανή τρόπο και το ζητούμενο έπεται.
+\end{proof}
+
+\begin{theorem}{\rm(Littlewood--Richardson 1934)}
+    \label{thm:sp_to_s} 
+    Έστω $\mu$ μια διαμέριση.
+    \begin{itemize}
+        \item[(1)] Για κάθε $k \in \NN$,
+        \begin{equation}
+            \label{eq:spk_to_s}
+            s_\mu p_k = \sum_\lambda (-1)^{\height(\lambda/\mu)} s_\lambda,
+        \end{equation}
+        όπου στο άθροισμα το $\lambda$ διατρέχει όλες τις διαμερίσεις για τις οποίες $\mu \subseteq \lambda$ τέτοιες ώστε η λοξή διαμέριση $\lambda/\mu$ είναι λωρίδα με $k$ τετράγωνα.
+        \item[(2)]
+        Για κάθε ασθενή σύνθεση $\alpha$ του $n$,
+        \begin{equation}
+            \label{eq:spmu_to_s}
+            s_\mu p_\alpha = 
+            \sum_{\substack{\lambda \vdash n + \abs{\mu} \\ \mu \subseteq \lambda}}\left(
+                \sum_{\substack{T \in \RT(\lambda/\mu)\\ \cont(T) = \alpha}} (-1)^{\height(\lambda/\mu)}
+            \right) s_\lambda.
+        \end{equation}
+    \end{itemize}
+\end{theorem}
+
+Για παράδειγμα, για $\mu = (3,2,1) \vdash 6$ και $\alpha = (2,2) \vDash 4$ έχουμε τα εξής ταμπλώ λωρίδων
+\[
+\ytableausetup{smalltableaux}
+\begin{ytableau}
+    *(gray!40) & *(gray!40) & *(gray!40) \\
+    *(gray!40) & *(gray!40)  \\
+    *(gray!40)  \\
+    1 \\
+    1 \\
+    2 \\
+    2
+\end{ytableau}\, , \quad 
+\begin{ytableau}
+    *(gray!40) & *(gray!40) & *(gray!40) \\
+    *(gray!40) & *(gray!40)  \\
+    *(gray!40) & 2 \\
+    1          & 2\\
+    1 
+\end{ytableau}\, , \quad
+    \begin{ytableau}
+    *(gray!40) & *(gray!40) & *(gray!40) & 1 & 1\\
+    *(gray!40) & *(gray!40)  \\
+    *(gray!40)  \\
+    2 \\
+    2
+\end{ytableau} \, , \quad
+    \begin{ytableau}
+    *(gray!40) & *(gray!40) & *(gray!40) & 2 & 2\\
+    *(gray!40) & *(gray!40)  \\
+    *(gray!40)  \\
+    1 \\
+    1
+\end{ytableau} \, , \quad
+\begin{ytableau}
+    *(gray!40) & *(gray!40) & *(gray!40) & 1 & 1\\
+    *(gray!40) & *(gray!40) & 2          & 2 \\
+    *(gray!40) 
+\end{ytableau} \, , \quad 
+\begin{ytableau}
+    *(gray!40) & *(gray!40) & *(gray!40) & 1 & 1 & 2 & 2\\
+    *(gray!40) & *(gray!40)  \\
+    *(gray!40)  
+\end{ytableau}
+\]
+σχήματος $\lambda/\mu$, τύπου $\alpha$ με ύψη $2, 2, 1, 1, 0$ και $0$, αντίστοιχα, και γι αυτό η Ταυτότητα~\eqref{eq:spmu_to_s} γίνεται
+\[
+s_{321}p_{22} = s_{321} + s_{32221} - 2s_{521} + s_{541} + s_{721}.
+\]
+
+\begin{proof}[Απόδειξη του Θεωρήματος~\ref{thm:sp_to_s}]
+    Η Ταυτότητα~\eqref{eq:spmu_to_s} έπεται άμεσα από την Ταυτότητα \eqref{eq:spk_to_s} (γιατί;). Αρκεί να αποδείξουμε την τελευταία. Όμοια με την απόδειξη του Θεωρήματος \ref{thm:schur}, εργαζόμαστε με πεπερασμένες μεταβλητές $x_1, x_2, \dots, x_n$ και αρκεί να αποδείξουμε ότι για κάθε διαμέριση $\mu$ με $\ell(\mu) \le n$, 
+    \begin{equation}
+        \label{eq:sp_to_s_help}
+        a_{\mu + \delta_n}(x_1,x_2, \dots, x_n)p_k(x_1, x_2, \dots, x_n) =
+         \sum_\lambda (-1)^{\height(\lambda/\mu)} a_{\lambda+\delta_n}(x_1,x_2, \dots, x_n),
+    \end{equation}
+    όπου στο άθροισμα το $\lambda$ διατρέχει όλες τις διαμερίσεις για τις οποίες $\mu \subseteq \lambda$ τέτοιες ώστε η λοξή διαμέριση $\lambda/\mu$ είναι λωρίδα με $k$ τετράγωνα.
+
+    Αν $\alpha = \mu + \delta_n$, και $\epsilon_j$ είναι η ακολουθία που στην $j$-οστή θέση έχει 1 και παντού αλλού 0, τότε 
+    \begin{align*}
+        a_\alpha p_k 
+        &= \sum_{\pi \in \fS_n} \sign(\pi) x_{\pi_1}^{\alpha_1}x_{\pi_2}^{\alpha_2}\cdots x_{\pi_n}^{\alpha_n} \left(x_1^k + x_2^k + \cdots + x_n^k\right) \\
+        &= \sum_{\pi \in \fS_n} \sign(\pi) x_{\pi_1}^{\alpha_1}x_{\pi_2}^{\alpha_2}\cdots x_{\pi_n}^{\alpha_n} \left(x_{\pi_1}^k + x_{\pi_2}^k + \cdots + x_{\pi_n}^k\right)  \\
+        &= \sum_{\pi \in \fS_n} \sign(\pi)\left(
+            \pi\cdot\bfx^{\alpha + k\epsilon_1} + \pi\cdot\bfx^{\alpha + k\epsilon_2} + \cdots + \pi\cdot\bfx^{\alpha + k\epsilon_n}
+        \right) \\
+        &= \sum_{j=1}^n\left(
+            \sum_{\pi \in \fS_n} \sign(\pi)\pi\cdot\bfx^{\alpha + k\epsilon_j}
+        \right) \\
+        &= \sum_{j=0}^n a_{\alpha+k\epsilon_j}.
+    \end{align*}
+    Θέλουμε, λοιπόν, να αναδιατάξουμε τα μέρη κάθε ακολουθίας $\alpha+k\epsilon_j$ σε γνησίως φθίνουσα σειρά. Οι ακολουθίες $\alpha$ και $\alpha + k\epsilon_j$ διαφέρουν (πιθανώς) μόνο στην $j$-οστή θέση και κατά συνέπεια για να το κάνουμε αυτό πρέπει να μετακινήσουμε τον $j$-οστό όρο 
+    \[
+    \left(\alpha + k\epsilon_j\right)_j = \mu_j + n - j + k 
+    \]
+    στην \textquote{σωστή} του θέση. 
+    
+    Αν η ακολουθία $\alpha + k\epsilon_j$ έχει δυο μέρη ίσα, τότε $a_{\alpha+k\epsilon_j}=0$ (γιατί;). Διαφορετικά, υπάρχει $1 \le i \le j$ τέτοιο ώστε 
+    \[
+    \alpha_{i-1} > \left(\alpha + k\epsilon_j\right)_j > \alpha_i
+    \]
+    ή ισοδύναμα 
+    \[
+    \mu_{i-1} + n - (i-1) > \mu_j + n - j + k > \mu_i  + n - i,
+    \]
+    όπου αν $i=1$, τότε αγνοούμε την πρώτη ανισότητα.
+
+    Για παράδειγμα, για $n=3, \mu = (3,2,1)$ και $k=3$ έχουμε 
+    \[
+    \alpha = \mu + \delta_3 = (3,2,1) + (2,1,0) = (5,3,1)
+    \]
+    και 
+    \[
+    a_{(5,3,1)}p_3 = a_{(8,3,1)} + a_{(5,6,1)} + a_{(5,3,4)}.
+    \]
+    Στον πρώτο όρο δε χρειάζεται να κάνουμε κάτι. Για τον δεύτερο όρο $a_{(5,6,1)}$ πρέπει να μετακινήσουμε τον $\alpha_2+3=6$ στην θέση $i=1$ και για τον τρίτο όρο $a_{(5,3,4)}$ πρέπει να μετακινήσουμε τον $\alpha_3+3=4$ στη θέση $i=2$.
+
+    Συνεπώς, αναδιατάσσοντας τα μέρη της $\alpha + k\epsilon_j$ σε γνησίως φθίνουσα σειρά ουσιαστικά μετακινούμε (αν χρειαστεί) το $j$-οστό μέρος στη θέση $i$ πηγαίνοντας μια θέση δεξιά τα μέρη $\alpha_i, \alpha_{i+1}, \dots, \alpha_{j-1}$. Με άλλα λόγια, \textquote{δρούμε} με έναν $(j-i+1)$-κύκλο και γι αυτό 
+    \[
+    a_{\mu+\delta_n+k\epsilon_j} = (-1)^{j-i}a_{\lambda+\delta_n},
+    \]
+    όπου 
+    \[
+    \lambda + \delta_n = (\alpha_1, \dots, \alpha_{i-1}, \alpha_j + k, \alpha_i, \alpha_{i+1}, \dots, \alpha_{j-1}, \alpha_{j+1}, \dots, \alpha_n),
+    \]
+    ή ισοδύναμα 
+    \[
+    \lambda = (\mu_1, \dots, \mu_{i-1}, \mu_j+i-j+k, \mu_i+1, \dots, \mu_{j-1}+1, \mu_{j+1}, \dots, \mu_n).
+    \]
+    Στο τρέχον παράδειγμα, 
+    \begin{align*}
+        a_{(5,6,1)} &= (-1)^1 a_{(6,5,1)} = - a_{(4,4,1) + (2,1,0)} \\
+        a_{(5,3,4)} &= (-1)^1 a_{(5,4,3)} = - a_{(3,3,3) + (2,1,0)},
+    \end{align*}
+    για να προκύψει το ανάπτυγμα 
+    \[
+    a_{(5,3,1)}p_3 = a_{(8,3,1)} - a_{(6,5,1)} - a_{(5,4,3)}.
+    \]
+    
+    Οι διαμερίσεις $\lambda$ που προκύπτουν έχουν την ιδιότητα των διαμερίσεων του αθροίσματος στο δεξί μέλος της Ταυτότητας \eqref{eq:spk_to_s}, δηλαδή περιέχουν την $\mu$ και η λοξή διαμέριση $\lambda/\mu$ είναι λωρίδα με $k$ τετράγωνα (γιατί;). Το ακόλουθο λήμμα ισχυρίζεται ότι ισχύει και το αντίστροφο, ολοκληρώνοντας την απόδειξη.
+\end{proof}
+
+\begin{lemma}
+    \label{lem:sp_to_s_help}
+    Αν $\mu, \lambda$ είναι διαμερίσεις τέτοιες ώστε η $\lambda$ προκύπτει από την $\mu$ \textquote{επισυνάπτοντας} μια λωρίδα $R$ ως εξής: η $R$ καταλαμβάνει τις γραμμές $i, i+1, \dots, j$ και $\lambda_k = \mu_k$ για $k \in [1,i-1] \cup [j+1,\ell(\lambda)]$, τότε
+    \begin{itemize}
+        \item $\lambda_i \in [\mu_i+1, \mu_{i-1}]$, και 
+        \item $\lambda_k = \mu_{k-1} + 1$, για κάθε $i+1 \le k \le j$.
+    \end{itemize}
+\end{lemma}
+
+Οι διαμερίσεις του λήμματος έχουν την εξής μορφή 
+\[
+\ytableausetup{smalltableaux}
+\ydiagram[*(gray!50)]{11,9,8,4,4,2,2,2,2,1,1}
+*[*(burntorange)]{11,9,8,4+3,4+1,2+3,2+1,2,2,1,1}
+\]
+όπου $i=4$ και $j=7$ με 
+\begin{itemize}
+    \item $\lambda_4 = 7 \, \in \, \{\mu_4+1=5,6,7,8=\mu_3\}$
+    \item $\lambda_5 = 5 = 4 + 1 = \mu_4 + 1$
+    \item $\lambda_6 = 5 = 4 + 1 = \mu_5 + 1$
+    \item $\lambda_7 = 3 = 2 + 1 = \mu_6 + 1$.
+\end{itemize}
+
+\begin{proof}[Απόδειξη του Λήμματος~\ref{lem:sp_to_s_help}]
+    Για τον πρώτο ισχυρισμό παρατηρούμε ότι $\lambda_i \le \lambda_{i-1} = \mu_{i-1}$. Από την άλλη μεριά, $\lambda_i > \mu_i$, διότι το $\lambda_i$ προκύπτει από το $\mu_i$ προσθέτοντας τουλάχιστον ένα τετράγωνο. Συνεπώς, $\mu_{i}+1 \le \lambda_i \le \mu_{i-1}$.
+
+    Ο δεύτερος ισχυρισμός ουσιαστικά μας πληροφορεί ότι το τελευταίο τετράγωνο της $k$-οστής γραμμής του διαγράμματος Young της $\lambda$ βρίσκεται μια στήλη δεξιά και μια στήλη κάτω από το τελευταίο τετράγωνο της $(k-1)$-οστής γραμμής του διαγράμματος Young της $\mu$. Πράγματι, σε οποιαδήποτε άλλη περίπτωση η $R$ δε θα ήταν συνεκτική ή θα περιείχε ένα $(2\times2)$ τετράγωνο, αντίστοιχα, πράγμα αδύνατο (γιατί;).
+\end{proof}
+
+\begin{remark}
+    Τα διαγράμματα Young των διαμερίσεων που προέκυψαν στο παράδειγμα της απόδειξης του Θεωρήματος~\ref{thm:sp_to_s} είναι 
+    \[
+    \begin{ytableau}
+        *(gray!40) & *(gray!40) & *(gray!40) &  *(burntorange) &  *(burntorange) &  *(burntorange)\\
+        *(gray!40) & *(gray!40)\\
+        *(gray!40)
+    \end{ytableau} \, , \quad
+    \begin{ytableau}
+        *(gray!40) & *(gray!40) & *(gray!40)     &  *(burntorange)\\
+        *(gray!40) & *(gray!40) & *(burntorange) &  *(burntorange)\\
+        *(gray!40)
+    \end{ytableau} \, \quad \text{και} \quad 
+    \begin{ytableau}
+        *(gray!40) & *(gray!40)     & *(gray!40)   \\
+        *(gray!40) & *(gray!40)     & *(burntorange)          \\
+        *(gray!40) & *(burntorange) & *(burntorange)
+    \end{ytableau}
+    \]
+    αντίστοιχα, όπου με πορτοκαλί υποδεικνύεται η λωρίδα $\lambda/\mu$. Η Ταυτότητα~\eqref{eq:spk_to_s} προβλέπει την ύπαρξη δύο ακόμα διαμερίσεων
+    \[
+    \begin{ytableau}
+        *(gray!40)     & *(gray!40) & *(gray!40)  \\
+        *(gray!40)     & *(gray!40) \\
+        *(gray!40)     & *(burntorange) \\
+        *(burntorange) & *(burntorange)
+    \end{ytableau} \, \quad \text{και} \quad 
+    \begin{ytableau}
+        *(gray!40) & *(gray!40)     & *(gray!40)   \\
+        *(gray!40) & *(gray!40)        \\
+        *(gray!40) \\
+        *(burntorange) \\
+        *(burntorange) \\
+        *(burntorange)
+    \end{ytableau} \, 
+    \]
+    ώστε να προκύψει το ανάπτυγμα 
+    \[
+    s_{(3,2,1)}p_3 = s_{(6, 2, 1)} - s_{(4, 4, 1)} - s_{(3, 3, 3)} - s_{(3, 2, 2, 2)} + s_{(3, 2, 1, 1, 1, 1)}.
+    \]
+    Τι έγινε με αυτές τις δύο διαμερίσεις; Στον υπολογισμό υποθέσαμε ότι $n=3$, ενώ οι διαμερίσεις $(3,2,2,2)$ και $(3,2,1,1,1,1)$ έχουν μήκη $4$ και $6$, αντίστοιχα, και γι αυτό 
+    \[
+    s_{(3, 2, 2, 2)}(x_1,x_2,x_3) = s_{(3, 2, 1, 1, 1, 1)}(x_1,x_2,x_3) = 0,
+    \]
+    όπως έχουμε ήδη συζητήσει στην αρχή της παραγράφου. Αυτό είναι ένα παράδειγμα που δείχνει το πλεονέκτημα του να \textquote{δουλεύουμε} με άπειρες μεταβλητές.
+\end{remark}
+
+Τώρα, είμαστε σε θέση να αποδείξουμε τον κανόνα Murnaghan--Nakayama.
+\begin{proof}[Απόδειξη του Θεωρήματος~18.3]
+    Εφαρμόζοντας την Ταυτότητα~\ref{eq:spmu_to_s} για $\mu = \emptyset$ παίρνουμε 
+    \[
+    p_\alpha = \sum_{\lambda\vdash n}
+            \left(
+                \sum_{\substack{T \in \RT(\lambda/\mu)\\ \cont(T) = \alpha}} (-1)^{\height(\lambda/\mu)}
+            \right) s_\lambda.
+    \]
+    Το ζητούμενο έπεται από την Πρόταση~17.11.
+\end{proof}
+
+Οι επόμενες δύο ταυτότητες αποδεικνύονται με τρόπο παρόμοιο με το Θεώρημα~\ref{thm:sp_to_s} και παίζουν σημαντικό ρόλο στην αλγεβρική γεωμετρία.
+%manivel 1.2.5
+\begin{theorem}{\rm(Κανόνες Pieri)}
+    \label{thm:pieri_rules}
+    Για κάθε διαμέριση $\mu$ και $k \in \NN$
+    \begin{align}
+        \label{eq:sh_to_s}
+        s_\mu h_k &= \sum_{\lambda} s_\lambda
+        \\
+        \label{eq:se_to_s}
+        s_\mu e_k &= \sum_{\lambda} s_\lambda,
+    \end{align}
+    όπου στο πρώτο (αντ. δεύτερο) άθροισμα η $\lambda$ διατρέχει όλες τις διαμερίσεις\footnote{Αυτές ονομάζονται \emph{οριζόντιες} και \emph{κάθετες} λωρίδες αντίστοιχα.} του $\abs{\mu}+k$ των οποίων το διάγραμμα Young προκύπτει από το $\rmY_\mu$ προσθέτοντας $k$ τετράγωνα ανά δύο όχι στην ίδια στήλη (αντ. γραμμή).
+\end{theorem}
+
+Για παράδειγμα, για $\lambda = (3,2,1)$ και $k=3$ έχουμε τις εξής οριζόντιες λωρίδες:
+\[
+\ytableausetup{smalltableaux}
+\ydiagram[*(gray!50)]{3,2}
+*[*(burntorange)]{3,2+1,1} \, , \quad 
+\ydiagram[*(gray!50)]{3,2}
+*[*(burntorange)]{3+1,2,2} \, , \quad
+\ydiagram[*(gray!50)]{3,2}
+*[*(burntorange)]{3+1,2+1,1} \, , \quad 
+\ydiagram[*(gray!50)]{3,2}
+*[*(burntorange)]{3+2,2,1} \, , \quad
+\ydiagram[*(gray!50)]{3,2}
+*[*(burntorange)]{3+2,2+1} \, , \quad  
+\ydiagram[*(gray!50)]{3,2}
+*[*(burntorange)]{3+3,2} \, . 
+\]
+και γι αυτό η Ταυτότητα~\eqref{eq:sh_to_s} γίνεται
+\[
+s_{32}h_3 = 
+s_{332} + s_{422} + s_{431} + s_{521} + s_{53} + s_{62}
+\]
+και τις εξής κάθετες λωρίδες:
+\[
+\ytableausetup{smalltableaux}
+\ydiagram[*(gray!50)]{3,2}
+*[*(burntorange)]{3,2,1,1,1} \, , \quad
+\ytableausetup{smalltableaux}
+\ydiagram[*(gray!50)]{3,2}
+*[*(burntorange)]{3,2+1,1,1} \, , \quad
+\ytableausetup{smalltableaux}
+\ydiagram[*(gray!50)]{3,2}
+*[*(burntorange)]{3+1,2,1,1} \, , \quad
+\ytableausetup{smalltableaux}
+\ydiagram[*(gray!50)]{3,2}
+*[*(burntorange)]{3+1,2+1,1} \, , \quad    
+\]
+και γι αυτό η Ταυτότητα~\eqref{eq:se_to_s} γίνεται
+\[
+s_{32}e_3 = 
+s_{32111} + s_{3311} + s_{4211} + s_{431}
+\]
+
+Σε επίπεδο θεωρίας αναπαραστάσεων οι κανόνες Pieri μας πληροφορούν την ισοτυπική διάσταση των προτύπων
+\[
+\left(
+    \sS^\mu \otimes \sS^{(k)}
+\right)\!\uparrow_{\fS_\mu\times\fS_k}^{\fS_{\abs{\mu}+k}}, \quad \text{και} \quad 
+\left(
+    \sS^\mu \otimes \sS^{(1^k)}
+\right)\!\uparrow_{\fS_\mu\times\fS_k}^{\fS_{\abs{\mu}+k}},
+\]
+(γιατί;) οι οποίες εξειδικεύονται για $k =1$ στους κανόνες διακλάδωσης (βλ. Θεώρημα~13.3).
+
+Γενικότερα, για διαμερίσεις $\mu$ και $\nu$ έχουμε 
+\[
+s_\mu s_\nu = \sum_{\lambda \vdash \abs{\mu} + \abs{\nu}} c_{\mu\nu}^\lambda s_\lambda,
+\]
+για κάποιους $c_{\mu\nu}^\lambda \in \NN$. Οι αριθμοί αυτοί ονομάζονται \defn{συντελεστές Littlewood--Richardson} και επιδέχονται μια πληθώρα ερμηνειών. Για παράδειγμα, ο $c_{\mu\nu}^\lambda$,
+\begin{itemize}
+    \item στη \emph{θεωρία αναπαραστάσεων}, είναι η πολλαπλότητα εμφάνισης του προτύπου Specht $\sS^\lambda$ στην ισοτυπική διάσπαση του προτύπου $\left(
+    \sS^\mu \otimes \sS^\nu 
+\right)\!\uparrow_{\fS_\mu\times\fS_\nu}^{\fS_{\abs{\mu}+\abs{\nu}}}$,
+    \item  στην \emph{αλγεβρική συνδυαστική}, είναι η πολλαπλασιαστική σταθερά (structure constant) της άλγεβρας $\Sym$ των συμμετρικών συναρτήσεων,
+    \item στην \emph{αλγεβρική γεωμετρία}, περιγράφει τα intersection numbers των πολλαπλοτήτων Grassmannian. 
+\end{itemize}
+Θα ολοκληρώσουμε αυτή την παράγραφο διατυπώνοντας μια απλή συνδυαστική ερμηνεία των συντελεστών Littlewood-Richardson.
+
+Για $T \in \SSYT(\lambda/\mu)$, έστω $w_\row(T)$ η λέξη που προκύπτει \textquote{διαβάζοντας} τα στοιχεία του $T$ αρχίζοντας από την τελευταία γραμμή, κινούμενοι από τα αριστερά προς τα δεξιά και συνεχίζοντας βόρεια με τον ίδιο τρόπο. Για παράδειγμα, για $\lambda/\mu = (4,4,2,1)/(2,1)$
+\[
+\ytableausetup{nosmalltableaux}
+w_\row\left( 
+    \   
+    \begin{ytableau}
+        \none & \none & 1 & 1 \\
+        \none & 1     & 2 & 2 \\
+        1     & 3  \\
+        2
+    \end{ytableau}
+    \
+\right)
+=
+(2,1,3,1,2,2,1,1).
+\]
+
+Μια ακολουθία $w = (w_1, w_2, \dots, w_n) \in \ZZ_{>0}^n$ ονομάζεται \defn{πλεγματική λέξη} (lattice word) αν για κάθε $i \ge 1$, το $i$ εμφανίζεται στην $(w_1, w_2, \dots, w_j)$ τουλάχιστον τόσες φορές όσες και το $i+1$, για κάθε $1 \le j \le n$.  Για παράδειγμα, η 
+\[
+(1, 1, 2, 2, 1, 3, 1, 2)
+\]
+είναι πλεγματική λέξη μήκους 8. Τέλος, η ακολουθία $(w_n, \dots, w_2, w_1)$ ονομάζεται \defn{ανάστροφη} της $w$. Η παραπάνω πλεγματική λέξη είναι η ανάστροφη της $w_\row(T)$ του προηγούμενου παραδείγματος.
+\begin{theorem}{\rm(Κανόνας Littlewood--Richardson)}
+    \label{thm:LR_rule}
+    Για κάθε διαμέριση $\lambda, \mu$ και $\nu$, το $c_{\mu\nu}^\lambda$ ισούται με το πλήθος των $T \in \SSYT(\lambda/\mu)$ τύπου $\nu$ τέτοια ώστε η ανάστροφη της $w_\row(T)$ είναι πλεγματική λέξη.
+\end{theorem}
+
+Για παράδειγμα, για $\lambda = (4,4,2,1), \mu = (2,1)$ και $\nu = (4,3,1)$, τα ταμπλώ που ικανοποιούν τη συνθήκη του κανόνα Littlewood--Richardson είναι 
+\[
+\begin{ytableau}
+        \none & \none & 1 & 1 \\
+        \none & 1     & 2 & 2 \\
+        1     & 3  \\
+        2
+    \end{ytableau} \, , \quad \text{και} \quad
+    \begin{ytableau}
+        \none & \none & 1 & 1 \\
+        \none & 1     & 2 & 2 \\
+        1     & 2  \\
+        3
+    \end{ytableau} \, 
+\]
+και γι αυτό 
+\[
+c_{21 \, 431}^{4421} = 2.
+\]
+\end{document}
